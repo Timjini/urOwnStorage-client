@@ -16,7 +16,11 @@ const RenterView = () => {
   }, []);
 
   const renderItem = ({ item }: any) => (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card}
+      activeOpacity={0.9}
+      onPress={() => navigation.navigate('booking', { space: item })}
+    >
       <View style={styles.imageWrapper}>
         <Image 
           source={{ uri: item.image_urls?.[0] || 'https://images.unsplash.com/photo-1513512147375-5357c3d39655?w=500' }} 
@@ -35,22 +39,24 @@ const RenterView = () => {
           <View style={styles.specBadge}>
             <Text style={styles.specText}>{item.width}x{item.length} {item.size_unit}</Text>
           </View>
-          <View style={[styles.specBadge, { backgroundColor: '#ECFDF5' }]}>
-            <Text style={[styles.specText, { color: '#059669' }]}>⚡ Instant Book</Text>
-          </View>
+          {item.instant_booking && (
+            <View style={[styles.specBadge, { backgroundColor: '#ECFDF5' }]}>
+              <Text style={[styles.specText, { color: '#059669' }]}>⚡ Instant</Text>
+            </View>
+          )}
         </View>
 
-        <TouchableOpacity style={styles.bookButton}>
-          <Text style={styles.bookButtonText}>Reserve Space</Text>
-        </TouchableOpacity>
+        <View style={styles.bookButton}>
+          <Text style={styles.bookButtonText}>View Availability</Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerSub}>Berlin, Germany</Text>
+        <Text style={styles.headerSub}>BERLIN, GERMANY</Text>
         <Text style={styles.headerTitle}>Find your{"\n"}Safe Space</Text>
       </View>
 
@@ -62,7 +68,7 @@ const RenterView = () => {
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           contentContainerStyle={styles.listContent}
-          ListEmptyComponent={<Text style={styles.empty}>No listings found at this IP.</Text>}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </SafeAreaView>
