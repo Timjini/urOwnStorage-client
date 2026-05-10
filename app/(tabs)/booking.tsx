@@ -7,8 +7,8 @@ import {
   Text,
   View
 } from 'react-native';
-import RecentBooking from '../components/booking/RecentBooking';
-import SearchBox from '../components/booking/SearchBox';
+import RecentBooking from '@/components/booking/RecentBooking';
+import SearchBox from '@/components/booking/SearchBox';
 
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';

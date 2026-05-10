@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import { StorageCard } from '../components/storageSpace/StorageCard';
+import { StorageCard } from '@/components/storageSpace/StorageCard';
 
 export default function Index() {
   return (

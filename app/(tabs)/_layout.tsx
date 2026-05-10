@@ -7,8 +7,8 @@ import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { DashboardHeader } from "../components/DashboardHeader";
-import { LocationBanner } from "../components/LocationBanner";
+import { DashboardHeader } from "@/components/DashboardHeader";
+import { LocationBanner } from "@/components/LocationBanner";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() ?? "light";
