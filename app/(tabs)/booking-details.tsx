@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import UniversalDatePicker from '@/components/booking/UniversalDatePicker';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
@@ -41,24 +41,11 @@ export default function BookingDetailsScreen() {
               <Text style={styles.listingLocation}>3500 Franklin Pike, Nashville</Text>
             </View>
           </View>
-
           <Text style={styles.sectionTitle}>Select Dates</Text>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.datePickerBox}>
-              <Text style={styles.dateLabel}>Start Date</Text>
-              <View style={styles.dateValueRow}>
-                <Ionicons name="calendar-outline" size={18} color={brandBlue} />
-                <Text style={styles.dateValue}>May 12, 2026</Text>
-              </View>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.datePickerBox}>
-              <Text style={styles.dateLabel}>End Date</Text>
-              <View style={styles.dateValueRow}>
-                <Ionicons name="calendar-outline" size={18} color={brandBlue} />
-                <Text style={styles.dateValue}>Jun 12, 2026</Text>
-              </View>
-            </TouchableOpacity>
+          <View style={styles.row}>
+             <UniversalDatePicker />
+             <UniversalDatePicker />
           </View>
 
           <Text style={styles.sectionTitle}>Your Details</Text>
@@ -72,6 +59,26 @@ export default function BookingDetailsScreen() {
             />
           </View>
 
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Email</Text>
+            <TextInput 
+              style={styles.input}
+              placeholder="example@email.com"
+              value={fullName}
+              onChangeText={setFullName}
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Phone</Text>
+            <TextInput 
+              style={styles.input}
+              placeholder="+1 234 567 890"
+              value={fullName}
+              onChangeText={setFullName}
+            />
+          </View>
+          
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Items to be stored</Text>
             <View style={styles.selectRow}>
