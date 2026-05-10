@@ -2,12 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { NotificationDrawer } from "./SideDrawer";
+import { useRouter } from "expo-router";
 
 const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 export const DashboardHeader = () => {
   const [notifVisible, setNotifVisible] = useState(false);
+  const router = useRouter();
   return (
     <>
       <View style={styles.headerContainer}>
@@ -26,7 +28,7 @@ export const DashboardHeader = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.bellButton}>
+        <TouchableOpacity style={styles.bellButton} onPress={()=> {router.push('/notifications')}}>
           <Ionicons name="notifications-outline" size={26} color={brandBlue} />
           <View style={styles.badge} />
         </TouchableOpacity>

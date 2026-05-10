@@ -82,6 +82,33 @@ export default function TabLayout() {
             href: null, 
           }}
         />
+        <Tabs.Screen
+          name="notifications"
+          options={{
+            href: null, 
+          }}
+        />
+
+        <Tabs.Screen
+          name="storage-space"
+          options={{
+            href: null, 
+          }}
+        />
+
+        <Tabs.Screen
+          name="login"
+          options={{
+            href: null, 
+          }}
+        />
+
+        <Tabs.Screen
+          name="register"
+          options={{
+            href: null, 
+          }}
+        />
       </Tabs>
     </View>
   );
