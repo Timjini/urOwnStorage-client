@@ -5,6 +5,7 @@ import { PrimaryRoutingButton } from '@/components/ui/primary-button';
 import { Theme } from '@/constants/theme';
 import { StorageSpace } from '../types';
 import { ROOT } from '@/constants/appGlobal';
+import { getFullImageUrl } from '@/utils/imageHelpers';
 
 type CardProps = {
   space:  StorageSpace
@@ -19,7 +20,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
       params: { id: space.id }
     });
   };
-  console.log("data ====> storage space Card", space);
+
   return (
     <TouchableOpacity 
       activeOpacity={0.9} 
@@ -28,7 +29,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
     >
       <View style={styles.imageContainer}>
         <Image 
-          source={{ uri: `${ROOT}${space.imageUrls[0]}` }} 
+          source={{ uri: getFullImageUrl(space.imageUrls?.[0]) }}
           style={styles.image} 
         />
         <View style={styles.badge}>
@@ -53,7 +54,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
         <View style={styles.detailsRow}>
           <View style={styles.detailItem}>
             <Ionicons name="cube-outline" size={16} color={Theme.colors.secondary} />
-            <Text style={styles.detailText}>10x10 ft</Text>
+            <Text style={styles.detailText}>{space.height}x{space.width}x{space.length} {space.sizeUnit}</Text>
           </View>
           <View style={styles.detailItem}>
             <Ionicons name="shield-checkmark-outline" size={16} color={Theme.colors.secondary} />
@@ -64,7 +65,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
         <View style={styles.footer}>
           <View>
             <Text style={styles.priceLabel}>Monthly</Text>
-            <Text style={styles.priceValue}>$85<Text style={styles.priceUnit}>/mo</Text></Text>
+            <Text style={styles.priceValue}>${space.pricePerMonth}<Text style={styles.priceUnit}>/mo</Text></Text>
           </View>
 
           <View style={styles.actionGroup}>

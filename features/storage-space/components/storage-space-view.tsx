@@ -12,6 +12,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StorageSpace } from "../types";
+import { getFullImageUrl } from "@/utils/imageHelpers";
+import CustomBadge from "@/components/ui/badge";
 
 const { width } = Dimensions.get("window");
 const brandOrange = "#C83803";
@@ -19,11 +21,11 @@ const brandBlue = "#0a7ea4";
 const mutedText = "#687076";
 
 interface StorageSpaceProps {
-  space: StorageSpace
+  space: StorageSpace;
 }
-const StorageSpaceView = ({space}: StorageSpaceProps) => {
-
+const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   const router = useRouter();
+
   return (
     <>
       <ScrollView bounces={false} contentContainerStyle={styles.scrollContent}>
@@ -34,10 +36,10 @@ const StorageSpaceView = ({space}: StorageSpaceProps) => {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
           >
-            {space.imageUrls.map((img, index) => (
+            {space.imageUrls?.map((img, index) => (
               <Image
                 key={index}
-                source={{ uri: img }}
+                source={{ uri: getFullImageUrl(img) }}
                 style={styles.mainImage}
               />
             ))}
@@ -57,24 +59,32 @@ const StorageSpaceView = ({space}: StorageSpaceProps) => {
           </View>
 
           <View style={styles.imageCounter}>
-            <Text style={styles.counterText}>1 / {images.length}</Text>
+            <Text style={styles.counterText}>1 / {space.imageUrls.length}</Text>
           </View>
         </View>
 
         {/* 2. Listing Info Header */}
         <View style={styles.infoSection}>
           <View style={styles.badgeRow}>
-            <View style={styles.instantBadge}>
-              <Ionicons name="flash" size={12} color="#fff" />
-              <Text style={styles.badgeText}>INSTANT BOOK</Text>
-            </View>
+            {space.instantBooking ? (
+              <CustomBadge
+                icon="flash"
+                text="INSTANT BOOK"
+                badgeStyle={styles.instantBadge}
+                textStyle={styles.badgeText}
+                iconColor="#fff"
+              />
+            ) : (
+              <View>On Request</View>
+            )}
+
             <View style={styles.ratingRow}>
               <Ionicons name="star" size={14} color="#FFB000" />
               <Text style={styles.ratingText}>4.9 (24 reviews)</Text>
             </View>
           </View>
 
-          <Text style={styles.title}>Secure Climate-Controlled Basement</Text>
+          <Text style={styles.title}>{space.title}</Text>
           <View style={styles.locationRow}>
             <Ionicons name="location-outline" size={16} color={brandBlue} />
             <Text style={styles.addressText}>
@@ -92,7 +102,7 @@ const StorageSpaceView = ({space}: StorageSpaceProps) => {
             {/* Fake Map Placeholder - Replace with react-native-maps in production */}
             <Image
               source={{
-                uri: "https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-s+C83803(-86.7816,36.1627)/-86.7816,36.1627,14/600x300@2x?access_token=YOUR_TOKEN",
+                uri: `https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-s+C83803(-86.7816,36.1627)/-86.7816,36.1627,14/600x300@2x?access_token=${process.env.MAPBOX_API_KEY}`,
               }}
               style={styles.mapPlaceholder}
             />
@@ -126,7 +136,7 @@ const StorageSpaceView = ({space}: StorageSpaceProps) => {
       <View style={styles.bottomBar}>
         <View>
           <View style={styles.priceRow}>
-            <Text style={styles.price}>$85</Text>
+            <Text style={styles.price}>${space.pricePerMonth}</Text>
             <Text style={styles.perMonth}>/ month</Text>
           </View>
           <Text style={styles.availability}>Available now</Text>
@@ -292,6 +302,5 @@ const styles = StyleSheet.create({
   },
   bookBtnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
 });
-
 
 export default StorageSpaceView;
