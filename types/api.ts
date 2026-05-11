@@ -7,3 +7,7 @@ export interface JsonApiResource<T> {
 export interface JsonApiResponse<T> {
   data: JsonApiResource<T>[];
 }
+
+export interface JsonApiSingleResponse<T> {
+  data: JsonApiResource<T>;
+}

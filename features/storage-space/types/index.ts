@@ -1,7 +1,11 @@
+export interface StorageSpaceResponse {
+  storageSpace: StorageSpace
+}
+
 export interface StorageSpace{
-  id: number
+  id: string
   userId: number
-  tile: string
+  title: string
   description: string
   pricePerMonth: number
   sizeValue: number

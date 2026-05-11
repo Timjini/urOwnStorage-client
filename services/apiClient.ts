@@ -4,11 +4,12 @@ interface RequestOptions extends Omit<RequestInit, 'body'> {
 
 async function apiRequest<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, headers = {}, ...customConfig } = options;
+
   const config: RequestInit = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      'Accept':'application/json',
       ...headers,
     },
     ...customConfig,
@@ -16,31 +17,25 @@ async function apiRequest<T>(endpoint: string, options: RequestOptions = {}): Pr
 
   if (body) config.body = JSON.stringify(body);
 
-  try {
-    const response = await fetch(`${endpoint}`, config);
-    
-    if (response.status === 204) return {} as T;
+  const response = await fetch(`${endpoint}`, config);
 
-    const data = await response.json();
+  // if (response.status === 401) {
+  //   if (typeof window !== 'undefined') window.location.href = '/auth/login';
+  //   return Promise.reject("Unauthorized");
+  // }
 
-    console.log("------apiClient data-----", data);
-    if (!response.ok) {
-      throw new Error(data.message || `API Error: ${response.status}`);
-    }
+  if (response.status === 204) return {} as T;
 
-    return data as T;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.log("------apiClient error-----", error.message);
-    } else {
-      console.log("An unexpected error occurred", String(error));
-    }
+  const data = await response.json();
 
-    throw error; 
+  if (!response.ok) {
+    throw new Error(data.message || 'API Error');
   }
+
+  return data as T;
 }
 
-export const apiClient = {
+export const api = {
   get: <T>(endpoint: string, options?: RequestOptions) => 
     apiRequest<T>(endpoint, { ...options, method: 'GET' }),
 
