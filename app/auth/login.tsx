@@ -1,16 +1,16 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 
 const brandBlue = "#0a7ea4";
 const brandOrange = "#C83803";
@@ -71,15 +71,15 @@ export default function LoginScreen() {
 
             <TouchableOpacity
               style={styles.primaryBtn}
-              onPress={() => router.replace("/(tabs)")}
+              onPress={() => router.replace("./(tabs)")}
             >
               <Text style={styles.primaryBtnText}>Log In</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => router.push("/register")}>
+            <Text style={styles.footerText}>Don&apos;t have an account? </Text>
+            <TouchableOpacity onPress={() => router.push("/auth/register")}>
               <Text style={styles.linkText}>Register</Text>
             </TouchableOpacity>
           </View>
@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 12,
     alignItems: "center",
-    justifyCenter: "center",
     justifyContent: "center",
   },
   primaryBtnText: { color: "#fff", fontSize: 18, fontWeight: "700" },

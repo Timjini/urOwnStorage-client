@@ -1,11 +1,10 @@
-import { useRouter } from 'expo-router';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { PrimaryRoutingButton } from '@/components/ui/primary-button';
 import { Theme } from '@/constants/theme';
-import { StorageSpace } from '../types';
-import { ROOT } from '@/constants/appGlobal';
 import { getFullImageUrl } from '@/utils/imageHelpers';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StorageSpace } from '../types';
 
 type CardProps = {
   space:  StorageSpace
@@ -65,7 +64,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
         <View style={styles.footer}>
           <View>
             <Text style={styles.priceLabel}>Monthly</Text>
-            <Text style={styles.priceValue}>${space.pricePerMonth}<Text style={styles.priceUnit}>/mo</Text></Text>
+            <Text style={styles.priceValue}>{space.formattedPrice}<Text style={styles.priceUnit}>/{space.billingInterval}</Text></Text>
           </View>
 
           <View style={styles.actionGroup}>

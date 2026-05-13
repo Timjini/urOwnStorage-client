@@ -7,7 +7,10 @@ export interface StorageSpace{
   userId: number
   title: string
   description: string
-  pricePerMonth: number
+  formattedPrice: string
+  amount: number
+  billingInterval: string
+  currency: string
   sizeValue: number
   height: number
   width: number

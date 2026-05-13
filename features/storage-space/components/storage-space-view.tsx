@@ -133,8 +133,8 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
       <View style={styles.bottomBar}>
         <View>
           <View style={styles.priceRow}>
-            <Text style={styles.price}>${space.pricePerMonth}</Text>
-            <Text style={styles.perMonth}>/ month</Text>
+            <Text style={styles.price}>{space.formattedPrice}</Text>
+            <Text style={styles.perMonth}>/ {space.billingInterval}</Text>
           </View>
           <Text style={styles.availability}>Available now</Text>
         </View>

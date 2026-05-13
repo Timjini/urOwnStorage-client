@@ -1,14 +1,14 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  TouchableOpacity, 
-  SafeAreaView 
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';
@@ -42,14 +42,14 @@ export default function ProfileScreen() {
           <View style={styles.authButtonGroup}>
             <TouchableOpacity 
               style={styles.loginBtn}
-              onPress={() => router.push('/login')}
+              onPress={() => router.push('/auth/login')}
             >
               <Text style={styles.loginBtnText}>Login</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.registerBtn}
-              onPress={() => router.push('/register')}
+              onPress={() => router.push('/auth/register')}
             >
               <Text style={styles.registerBtnText}>Create Account</Text>
             </TouchableOpacity>
