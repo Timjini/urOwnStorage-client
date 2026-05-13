@@ -3,12 +3,14 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { DashboardHeader } from "@/components/DashboardHeader";
 import { HapticTab } from "@/components/haptic-tab";
+import { LocationBanner } from "@/components/LocationBanner";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import { LocationBanner } from "@/components/LocationBanner";
+import Feather from '@expo/vector-icons/Feather';
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() ?? "light";
@@ -42,11 +44,11 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="booking"
+          name="search-booking"
           options={{
             title: "Booking",
             tabBarIcon: ({ color }) => (
-              <IconSymbol size={28} name="calendar" color={color} />
+              <Feather size={28} name="search" color={color} />
             ),
           }}
         />

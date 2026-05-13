@@ -1,7 +1,12 @@
 import * as storageSpaceApi from '../api';
 import { StorageSpace } from '../types';
 
-export const storageSpaceService = {
+interface IStorageSpaceService {
+  getAvailableSpaces(searchQuery?: string) : Promise<StorageSpace[]>;
+  getSpaceDetails(id: string): Promise<StorageSpace>;
+}
+
+export const StorageSpaceService: IStorageSpaceService = {
 
   getAvailableSpaces: async (searchQuery?: string): Promise<StorageSpace[]> => {
     try {
