@@ -1,10 +1,7 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+echo "🤘 Just Checking... 🐶"
 
-echo "🚀 Running pre-push checks..."
-
-# 1. Run Linting on staged files
+# run lint 
 npx lint-staged
 
-# 2. Run Tests
-npm test
+# run test
+npm test -- --watchAll=false --passWithNoTests
