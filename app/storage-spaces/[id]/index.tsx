@@ -1,7 +1,7 @@
 import StorageSpaceView from '@/features/storage-space/components/storage-space-view';
 import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
-import { useLocalSearchParams } from 'expo-router';
-import { View, StyleSheet,Text, ActivityIndicator } from 'react-native';
+import { Stack, useLocalSearchParams } from 'expo-router';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 export default function StorageSpaceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -12,6 +12,7 @@ export default function StorageSpaceScreen() {
   
   return (
       <View style={styles.container}>
+        <Stack.Screen options={{ headerShown: false }} />
         <StorageSpaceView space={data} />
       </View>
   );

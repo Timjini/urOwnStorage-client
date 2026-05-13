@@ -1,16 +1,15 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ImageBackground, 
-  TouchableOpacity, 
-  SafeAreaView, 
-  Image 
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { Theme } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import {
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -27,8 +26,7 @@ export default function WelcomeScreen() {
           <View style={styles.topSection}>
             {/* Replace with your actual logo file */}
             <View style={styles.logoContainer}>
-              <Ionicons name="cube" size={50} color={Theme.colors.secondary} />
-              <Text style={styles.logoText}>SHARE<Text style={{color: '#fff'}}>SPACE</Text></Text>
+              <Text style={styles.logoText}>UR <Text style={{color: Theme.colors.primary}}>OWN</Text> <Text style={{color: '#fff'}}>STORAGE</Text></Text>
             </View>
             <Text style={styles.tagline}>Safe, local storage right in your neighborhood.</Text>
           </View>

@@ -1,19 +1,19 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  Platform,
-} from "react-native";
+import CustomBadge from "@/components/ui/badge";
+import { getFullImageUrl } from "@/utils/imageHelpers";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import React from "react";
+import {
+  Dimensions,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { StorageSpace } from "../types";
-import { getFullImageUrl } from "@/utils/imageHelpers";
-import CustomBadge from "@/components/ui/badge";
 
 const { width } = Dimensions.get("window");
 const brandOrange = "#C83803";
@@ -66,17 +66,14 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
         {/* 2. Listing Info Header */}
         <View style={styles.infoSection}>
           <View style={styles.badgeRow}>
-            {space.instantBooking ? (
+            {!!space?.instantBooking && (
               <CustomBadge
                 icon="flash"
                 text="INSTANT BOOK"
                 badgeStyle={styles.instantBadge}
                 textStyle={styles.badgeText}
                 iconColor="#fff"
-              />
-            ) : (
-              <View>On Request</View>
-            )}
+              />)}
 
             <View style={styles.ratingRow}>
               <Ionicons name="star" size={14} color="#FFB000" />
