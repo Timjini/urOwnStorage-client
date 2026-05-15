@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import CheckoutScreen from './checkout';
 
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';
@@ -125,10 +126,12 @@ export default function BookingDetailsScreen() {
           <Text style={styles.bottomPrice}>$90.00</Text>
           <Text style={styles.bottomSub}>Total for 30 days</Text>
         </View>
-        <TouchableOpacity style={styles.confirmButton} onPress={() => router.push('/booking-confirmation')}>
+        <TouchableOpacity style={styles.confirmButton} onPress={() => router.push('/checkout')}>
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
       </View>
+
+      <CheckoutScreen />
     </View>
   );
 }
