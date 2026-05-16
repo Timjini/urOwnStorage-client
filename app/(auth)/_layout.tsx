@@ -1,0 +1,53 @@
+import { Redirect, Stack } from 'expo-router';
+// import { useAuth } from '@/context/AuthContext';
+import { ActivityIndicator, View } from 'react-native';
+
+export default function AuthLayout() {
+  // const { user, isLoading } = useAuth();
+
+  let isLoading = false;
+  let user = null;
+
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <ActivityIndicator size="large" color="#0a7ea4" />
+      </View>
+    );
+  }
+
+  if (user) {
+    return <Redirect href="/" />; 
+  }
+
+  return (
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#fff',
+        },
+        headerTintColor: '#151718',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        animation: 'slide_from_right', 
+      }}
+    >
+      <Stack.Screen 
+        name="login" 
+        options={{ 
+          title: 'Welcome Back',
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="register" 
+        options={{ 
+          title: 'Create Account',
+          headerBackTitle: 'Login',
+        }} 
+      />
+    </Stack>
+  );
+}

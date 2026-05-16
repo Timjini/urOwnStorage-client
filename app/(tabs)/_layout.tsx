@@ -71,19 +71,6 @@ export default function TabLayout() {
             ),
           }}
         />
-
-        <Tabs.Screen
-          name="booking-details"
-          options={{
-            href: null, 
-          }}
-        />
-        <Tabs.Screen
-          name="booking-confirmation"
-          options={{
-            href: null, 
-          }}
-        />
         <Tabs.Screen
           name="notifications"
           options={{
@@ -97,7 +84,6 @@ export default function TabLayout() {
             href: null, 
           }}
         />
-
 
       </Tabs>
     </View>

@@ -22,6 +22,7 @@ export interface StorageSpace{
   features: string[]
   imageUrls: string[]
   address: Address;
+  currencySymbol: string
 }
 
 export interface Address  {

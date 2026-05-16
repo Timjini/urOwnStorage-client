@@ -80,7 +80,7 @@ export default function RegisterScreen() {
 
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
             <Text style={{ color: '#687076' }}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => router.push('/login')}>
+            <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
               <Text style={{ color: '#C83803', fontWeight: '700' }}>Log In</Text>
             </TouchableOpacity>
           </View>

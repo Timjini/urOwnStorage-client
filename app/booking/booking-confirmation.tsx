@@ -21,7 +21,7 @@ export default function ConfirmationScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        
+
         {/* 1. Success Animation Area */}
         <View style={styles.successHeader}>
           <View style={styles.iconCircle}>
@@ -34,7 +34,7 @@ export default function ConfirmationScreen() {
         </View>
 
         <View style={styles.ticket}>
-          
+
           <TouchableOpacity style={styles.ticketSection}>
             <Text style={styles.label}>Booking Reference</Text>
             <Text style={styles.refNumber}>{referenceNumber}</Text>
@@ -79,7 +79,7 @@ export default function ConfirmationScreen() {
           <View style={styles.footer}>
             <TouchableOpacity 
               style={styles.primaryButton}
-              onPress={() => router.replace('/(tabs)')}
+              onPress={() => router.replace('./(tabs)')}
             >
               <Text style={styles.primaryButtonText}>Back to Dashboard</Text>
             </TouchableOpacity>

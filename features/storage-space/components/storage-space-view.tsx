@@ -25,7 +25,12 @@ interface StorageSpaceProps {
 }
 const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   const router = useRouter();
-
+  const handleBooking = () => {
+    router.push({
+      pathname: "/storage-spaces/[id]/booking",
+      params: { id: space.id }
+    });
+  }
   return (
     <>
       <ScrollView bounces={false} contentContainerStyle={styles.scrollContent}>
@@ -141,7 +146,7 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
 
         <TouchableOpacity
           style={styles.bookBtn}
-          onPress={() => router.push("/booking-details")}
+          onPress={handleBooking}
         >
           <Text style={styles.bookBtnText}>Reserve Space</Text>
         </TouchableOpacity>

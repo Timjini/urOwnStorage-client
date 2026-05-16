@@ -1,19 +1,21 @@
-import UniversalDatePicker from '@/components/booking/UniversalDatePicker';
-import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import {
-    ActivityIndicator,
-  Image,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View
 } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
+import { BookingStorageInfoCard } from '@/features/booking/components/booking-storage-info-card';
+import BookingForm from '@/features/booking/components/booking-form';
+import { PriceBreakDown } from '@/features/booking/components/price-break-down';
+import { TotalToPay } from '@/features/booking/components/total-to-pay';
+
 
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';
@@ -22,133 +24,37 @@ const lightBorder = '#ECEDEE';
 export default function BookingDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data, isLoading } = useStorageSpaceDetails(id);
-  const [fullName, setFullName] = useState('');
-  const [notes, setNotes] = useState('');
   const router = useRouter();
-
-  console.log("space storage in booking screen ===> ", data);
 
   if (isLoading) {
     return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+      <View style={[styles.container, { justifyContent: 'center' }]}>
         <ActivityIndicator size="large" color={brandBlue} />
       </View>
     );
   }
 
-  if (!data) {
-    return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <Text>Space not found</Text>
-      </View>
-    );
-  }
+  if (!data) return <Text>Space not found</Text>;
 
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
-
-          <View style={styles.listingPreview}>
-            <Image 
-              source={{ uri: 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?q=80&w=200' }} 
-              style={styles.previewImage} 
-            />
-            <View style={styles.previewText}>
-              <Text style={styles.listingTitle}>Climate Controlled Basement</Text>
-              <Text style={styles.listingLocation}>3500 Franklin Pike, Nashville</Text>
-            </View>
-          </View>
-          <Text style={styles.sectionTitle}>Select Dates</Text>
-
-          <View style={styles.row}>
-             <UniversalDatePicker />
-             <UniversalDatePicker />
-          </View>
-
-          <Text style={styles.sectionTitle}>Your Details</Text>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Full Name</Text>
-            <TextInput 
-              style={styles.input}
-              placeholder="John Doe"
-              value={fullName}
-              onChangeText={setFullName}
-            />
-          </View>
-
-          {/* Note: Fix your Email and Phone value/onChangeText bindings here too if needed, 
-              as they currently use 'fullName' and 'setFullName' in your sample snippet */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput 
-              style={styles.input}
-              placeholder="example@email.com"
-              value={fullName} 
-              onChangeText={setFullName}
-            />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Phone</Text>
-            <TextInput 
-              style={styles.input}
-              placeholder="+1 234 567 890"
-              value={fullName}
-              onChangeText={setFullName}
-            />
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Items to be stored</Text>
-            <View style={styles.selectRow}>
-              {['Furniture', 'Boxes', 'Vehicle', 'Other'].map((item) => (
-                <TouchableOpacity key={item} style={[styles.chip, item === 'Boxes' && styles.activeChip]}>
-                  <Text style={[styles.chipText, item === 'Boxes' && styles.activeChipText]}>{item}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Special Instructions (Optional)</Text>
-            <TextInput 
-              style={[styles.input, styles.textArea]}
-              placeholder="e.g. Will need access on weekends..."
-              multiline
-              numberOfLines={4}
-              value={notes}
-              onChangeText={setNotes}
-            />
-          </View>
-
-          <View style={styles.summaryBox}>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryText}>$85.00 x 1 month</Text>
-              <Text style={styles.summaryText}>$85.00</Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryText}>Service Fee</Text>
-              <Text style={styles.summaryText}>$5.00</Text>
-            </View>
-            <View style={[styles.summaryRow, styles.totalRow]}>
-              <Text style={styles.totalText}>Total</Text>
-              <Text style={styles.totalPrice}>$90.00</Text>
-            </View>
-          </View>
-
+          <BookingStorageInfoCard space={data} />
+          <BookingForm />
+          <PriceBreakDown space={data} />
         </ScrollView>
       </KeyboardAvoidingView>
-
+  
       <View style={styles.bottomBar}>
-        <View>
-          <Text style={styles.bottomPrice}>$90.00</Text>
-          <Text style={styles.bottomSub}>Total for 30 days</Text>
-        </View>
-        <TouchableOpacity style={styles.confirmButton} onPress={() => router.push('/booking-confirmation')}>
+        <TotalToPay price={data.amount} period={data.billingInterval} currencySymbol={data.currencySymbol} />
+        <TouchableOpacity
+          style={styles.confirmButton}
+          onPress={() => router.push('/booking/booking-confirmation')}
+        >
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
       </View>
@@ -159,64 +65,6 @@ export default function BookingDetailsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   scrollContent: { padding: 20, paddingBottom: 100 },
-  listingPreview: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#F5F7F9',
-    borderRadius: 12,
-    marginBottom: 25,
-  },
-  previewImage: { width: 60, height: 60, borderRadius: 8 },
-  previewText: { marginLeft: 12, flex: 1 },
-  listingTitle: { fontSize: 16, fontWeight: '700', color: '#151718' },
-  listingLocation: { fontSize: 13, color: '#687076', marginTop: 2 },
-  sectionTitle: { fontSize: 18, fontWeight: '800', color: '#151718', marginBottom: 15, marginTop: 10 },
-  row: { flexDirection: 'row', gap: 12, marginBottom: 20 },
-  datePickerBox: {
-    flex: 1,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: lightBorder,
-    borderRadius: 12,
-  },
-  dateLabel: { fontSize: 11, fontWeight: '700', color: brandOrange, textTransform: 'uppercase', marginBottom: 4 },
-  dateValueRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  dateValue: { fontSize: 14, fontWeight: '600', color: '#151718' },
-  inputGroup: { marginBottom: 20 },
-  label: { fontSize: 14, fontWeight: '600', color: '#151718', marginBottom: 8 },
-  input: {
-    backgroundColor: '#F5F7F9',
-    padding: 14,
-    borderRadius: 12,
-    fontSize: 15,
-    borderWidth: 1,
-    borderColor: lightBorder,
-  },
-  textArea: { height: 100, textAlignVertical: 'top' },
-  selectRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: lightBorder,
-    backgroundColor: '#fff',
-  },
-  activeChip: { backgroundColor: brandBlue, borderColor: brandBlue },
-  chipText: { fontSize: 13, color: '#687076', fontWeight: '500' },
-  activeChipText: { color: '#fff' },
-  summaryBox: {
-    marginTop: 10,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: lightBorder,
-  },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-  summaryText: { color: '#687076', fontSize: 14 },
-  totalRow: { marginTop: 8, paddingTop: 8 },
-  totalText: { fontSize: 16, fontWeight: '700', color: '#151718' },
-  totalPrice: { fontSize: 18, fontWeight: '800', color: brandOrange },
   bottomBar: {
     position: 'absolute',
     bottom: 0,

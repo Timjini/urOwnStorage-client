@@ -1,4 +1,5 @@
 import { StorageSpace } from "@/features/storage-space/types"
+import { formatAddress } from "@/utils/addressHelper"
 import { getFullImageUrl } from "@/utils/imageHelpers"
 import { View, Image, Text, StyleSheet } from "react-native"
 
@@ -6,16 +7,19 @@ interface CardProps {
   space:  StorageSpace
 }
 export const BookingStorageInfoCard = ({space}: CardProps) => {
-  <View style={styles.listingPreview}>
-    <Image 
-      source={{ uri: getFullImageUrl(space.imageUrls?.[0]) }}
-      style={styles.previewImage} 
-    />
-    <View style={styles.previewText}>
-      <Text style={styles.listingTitle}>Climate Controlled Basement</Text>
-      <Text style={styles.listingLocation}>3500 Franklin Pike, Nashville</Text>
+  const formatedAddress = formatAddress(space.address);
+  return (
+    <View style={styles.listingPreview}>
+      <Image 
+        source={{ uri: getFullImageUrl(space.imageUrls?.[0]) }}
+        style={styles.previewImage} 
+      />
+      <View style={styles.previewText}>
+        <Text style={styles.listingTitle}>{space.title}</Text>
+        <Text style={styles.listingLocation}>{formatedAddress}</Text>
+      </View>
     </View>
-  </View>
+  )
 }
 
 const styles = StyleSheet.create({
