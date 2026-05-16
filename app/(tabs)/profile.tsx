@@ -67,8 +67,8 @@ export default function ProfileScreen() {
           <View style={styles.avatar}>
             <Ionicons name="person" size={48} color="#fff" />
           </View>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.email}>{user.email}</Text>
+          <Text style={styles.name}>{user?.name}</Text>
+          <Text style={styles.email}>{user?.email}</Text>
         </View>
 
         <View style={styles.card}>

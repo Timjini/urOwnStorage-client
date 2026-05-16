@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from "react-native"
+import { bookingService } from "../services"
 
 interface Props{
   price   : number
@@ -6,10 +7,11 @@ interface Props{
   currencySymbol: string
 }
 export const TotalToPay = ({price, period, currencySymbol}: Props) => {
+  const totalPrice = bookingService.getPriceWithFee(price);
   return (
     <View>
-      <Text style={styles.bottomPrice}>{currencySymbol}{price}</Text>
-      <Text style={styles.bottomSub}>Total for {period} days</Text>
+      <Text style={styles.bottomPrice}>{currencySymbol}{totalPrice}</Text>
+      <Text style={styles.bottomSub}>Total /{period}</Text>
     </View>
   )
 }

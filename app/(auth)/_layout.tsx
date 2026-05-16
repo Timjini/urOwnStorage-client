@@ -6,7 +6,7 @@ export default function AuthLayout() {
   // const { user, isLoading } = useAuth();
 
   let isLoading = false;
-  let user = null;
+  let user = {"name": "james hook"};
 
 
   if (isLoading) {
@@ -45,7 +45,7 @@ export default function AuthLayout() {
         name="register" 
         options={{ 
           title: 'Create Account',
-          headerBackTitle: 'Login',
+          headerShown: false,
         }} 
       />
     </Stack>

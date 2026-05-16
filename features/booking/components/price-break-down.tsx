@@ -1,5 +1,6 @@
 import { StorageSpace } from "@/features/storage-space/types"
 import { View, Text, StyleSheet } from "react-native"
+import { bookingService } from "../services";
 
 interface CardProps {
   space:  StorageSpace
@@ -10,8 +11,8 @@ const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 export const PriceBreakDown = ({space}: CardProps) => {
 
-  const serviceFee = 5;
-  let total = space.amount + serviceFee;
+  const totalPrice = bookingService.getPriceWithFee(space.amount);
+
   return (
     <View style={styles.summaryBox}>
       <View style={styles.summaryRow}>
@@ -24,7 +25,7 @@ export const PriceBreakDown = ({space}: CardProps) => {
       </View>
       <View style={[styles.summaryRow, styles.totalRow]}>
         <Text style={styles.totalText}>Total</Text>
-        <Text style={styles.totalPrice}>{space.currencySymbol}{total}</Text>
+        <Text style={styles.totalPrice}>{space.currencySymbol}{totalPrice}</Text>
       </View>
     </View>
   )
