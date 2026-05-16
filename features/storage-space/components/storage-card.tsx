@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { StorageSpace } from '../types';
+import { formatAddress } from '@/utils/addressHelper';
 
 type CardProps = {
   space:  StorageSpace
@@ -13,12 +14,21 @@ type CardProps = {
 export const StorageSpaceCard = ({space}: CardProps) => {
   const router = useRouter();
 
+  const formatedAddress = formatAddress(space.address);
+
   const handleViewDetails = () => {
     router.push({
       pathname: "/storage-spaces/[id]",
       params: { id: space.id }
     });
   };
+
+  const handleBooking = () => {
+    router.push({
+      pathname: "/storage-spaces/[id]/booking",
+      params: { id: space.id }
+    });
+  }
 
   return (
     <TouchableOpacity 
@@ -38,7 +48,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
 
       <View style={styles.content}>
         <View style={styles.headerRow}>
-          <Text style={styles.title} numberOfLines={1}>Climate Controlled Basement</Text>
+          <Text style={styles.title} numberOfLines={1}>{space.title}</Text>
           <View style={styles.rating}>
             <Ionicons name="star" size={14} color="#FFD700" />
             <Text style={styles.ratingText}>4.9</Text>
@@ -47,7 +57,7 @@ export const StorageSpaceCard = ({space}: CardProps) => {
 
         <View style={styles.locationRow}>
           <Ionicons name="location-outline" size={14} color={Theme.colors.textMuted} />
-          <Text style={styles.locationText}>3500 Franklin Pike • 2.4 miles away</Text>
+          <Text style={styles.locationText}>{formatedAddress}</Text>
         </View>
 
         <View style={styles.detailsRow}>
@@ -75,7 +85,13 @@ export const StorageSpaceCard = ({space}: CardProps) => {
               <Text style={styles.viewButtonText}>View</Text>
             </TouchableOpacity>
 
-            <PrimaryRoutingButton route="/booking-details" label="Book" />
+            <TouchableOpacity 
+              style={styles.viewButton} 
+              onPress={handleBooking}
+            >
+              <Text style={styles.viewButtonText}>Booking</Text>
+            </TouchableOpacity>
+
           </View>
         </View>
       </View>

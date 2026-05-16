@@ -1,35 +1,51 @@
+import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
+import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
+
+import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   View,
+  Text,
+  TouchableOpacity,
 } from "react-native";
-import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
-import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 
 export default function Index() {
+  const { data: spaces, isPending, isError, refetch } = useStorageSpaces("active");
 
-  const { data: spaces, isPending } = useStorageSpaces('active');
-
-  if (isPending) {
-    <View>Loading...</View>
-  }
-
-  if (!spaces)
-  {
-    <View>Oppps!</View>
-  }
-
-  console.log("spaces", spaces);
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={styles.container}>
-        <ScrollView style={{ backgroundColor: "#F5F7F9" }}>
-          {spaces?.map((space) => 
-            <StorageSpaceCard space={space} />
+        <ScrollView style={{ backgroundColor: "#F5F7F9", padding: 16 }}>
+          {isPending && (
+            <>
+              <StorageSpaceSkeleton />
+              <StorageSpaceSkeleton />
+              <StorageSpaceSkeleton />
+            </>
+          )}
+
+          {isError && (
+            <View style={styles.centerContainer}>
+              <Text style={styles.errorText}>Failed to load storage spaces.</Text>
+              <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+                <Text style={styles.retryButtonText}>Try Again</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {!isPending && !isError && spaces?.map((space) => (
+            <StorageSpaceCard key={space.id} space={space} />
+          ))}
+
+          {!isPending && !isError && spaces?.length === 0 && (
+            <View style={styles.centerContainer}>
+              <Text style={styles.emptyText}>No storage spaces available right now.</Text>
+            </View>
           )}
         </ScrollView>
       </View>
@@ -45,5 +61,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  centerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 50,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#D32F2F',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: '#C83803',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontWeight: '700',
   },
 });

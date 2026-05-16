@@ -1,7 +1,9 @@
 import UniversalDatePicker from '@/components/booking/UniversalDatePicker';
-import { useRouter } from 'expo-router';
+import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
+    ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -18,10 +20,29 @@ const brandBlue = '#0a7ea4';
 const lightBorder = '#ECEDEE';
 
 export default function BookingDetailsScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { data, isLoading } = useStorageSpaceDetails(id);
   const [fullName, setFullName] = useState('');
   const [notes, setNotes] = useState('');
   const router = useRouter();
 
+  console.log("space storage in booking screen ===> ", data);
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={brandBlue} />
+      </View>
+    );
+  }
+
+  if (!data) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <Text>Space not found</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -30,7 +51,7 @@ export default function BookingDetailsScreen() {
         style={{ flex: 1 }}
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          
+
           <View style={styles.listingPreview}>
             <Image 
               source={{ uri: 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?q=80&w=200' }} 
@@ -59,12 +80,14 @@ export default function BookingDetailsScreen() {
             />
           </View>
 
+          {/* Note: Fix your Email and Phone value/onChangeText bindings here too if needed, 
+              as they currently use 'fullName' and 'setFullName' in your sample snippet */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
             <TextInput 
               style={styles.input}
               placeholder="example@email.com"
-              value={fullName}
+              value={fullName} 
               onChangeText={setFullName}
             />
           </View>
@@ -78,7 +101,7 @@ export default function BookingDetailsScreen() {
               onChangeText={setFullName}
             />
           </View>
-          
+
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Items to be stored</Text>
             <View style={styles.selectRow}>
