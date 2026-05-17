@@ -19,6 +19,7 @@ export default function AuthLayout() {
         name="booking-confirmation" 
         options={{ 
           title: 'Booking Confirmation',
+          headerShown: false,
         }} 
       />
     </Stack>

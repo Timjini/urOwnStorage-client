@@ -10,18 +10,37 @@ export const LocationBanner = () => {
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') return;
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setDisplayAddress("Location permission denied");
+          return;
+        }
 
-      let location = await Location.getCurrentPositionAsync({});
-      let reverse = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
+        let isLocationEnabled = await Location.hasServicesEnabledAsync();
+        if (!isLocationEnabled) {
+          setDisplayAddress("Location services disabled");
+          return;
+        }
 
-      if (reverse.length > 0) {
-        const addr = reverse[0];
-        setDisplayAddress(`${addr.streetNumber || ''} ${addr.street || 'Current Location'}, ${addr.city}`);
+        let location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
+
+        let reverse = await Location.reverseGeocodeAsync({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+
+        if (reverse.length > 0) {
+          const addr = reverse[0];
+          setDisplayAddress(`${addr.streetNumber || ''} ${addr.street || 'Current Location'}, ${addr.city}`);
+        } else {
+          setDisplayAddress("Unknown location");
+        }
+      } catch (error) {
+        console.warn("Location error caught successfully:", error);
+        setDisplayAddress("Location unavailable");
       }
     })();
   }, []);

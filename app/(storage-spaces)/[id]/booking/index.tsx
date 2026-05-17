@@ -1,3 +1,9 @@
+import BookingForm from '@/features/booking/components/booking-form';
+import { BookingStorageInfoCard } from '@/features/booking/components/booking-storage-info-card';
+import { PriceBreakDown } from '@/features/booking/components/price-break-down';
+import { TotalToPay } from '@/features/booking/components/total-to-pay';
+import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -9,12 +15,6 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
-import { BookingStorageInfoCard } from '@/features/booking/components/booking-storage-info-card';
-import BookingForm from '@/features/booking/components/booking-form';
-import { PriceBreakDown } from '@/features/booking/components/price-break-down';
-import { TotalToPay } from '@/features/booking/components/total-to-pay';
 
 
 const brandOrange = '#C83803';
@@ -53,7 +53,7 @@ export default function BookingDetailsScreen() {
         <TotalToPay price={data.amount} period={data.billingInterval} currencySymbol={data.currencySymbol} />
         <TouchableOpacity
           style={styles.confirmButton}
-          onPress={() => router.push('/booking/booking-confirmation')}
+          onPress={() => router.push('/(booking)/booking-confirmation')}
         >
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
         </TouchableOpacity>
