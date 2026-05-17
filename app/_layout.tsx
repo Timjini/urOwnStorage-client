@@ -22,7 +22,8 @@ export default function RootLayout() {
         <QueryProvider>
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)"  options={{ title: "Home", headerShown: false }} />
+            <Stack.Screen name="(storage-spaces)"  options={{ title: "Storage Space" }} />
             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
           </Stack>

@@ -1,3 +1,6 @@
+import { StorageCard } from "@/components/storageSpace/StorageCard";
+import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
+import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import {
   SafeAreaView,
   ScrollView,
@@ -5,9 +8,6 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { StorageCard } from "@/components/storageSpace/StorageCard";
-import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
-import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 
 export default function Index() {
 
@@ -30,7 +30,7 @@ export default function Index() {
       <View style={styles.container}>
         <ScrollView style={{ backgroundColor: "#F5F7F9" }}>
           {spaces?.map((space) => 
-            <StorageSpaceCard space={space} />
+            <StorageSpaceCard key={space.id} space={space} />
           )}
           <StorageCard />
           <StorageCard />

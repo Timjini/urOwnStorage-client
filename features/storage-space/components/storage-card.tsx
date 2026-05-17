@@ -1,11 +1,10 @@
-import { PrimaryRoutingButton } from '@/components/ui/primary-button';
 import { Theme } from '@/constants/theme';
+import { formatAddress } from '@/utils/addressHelper';
 import { getFullImageUrl } from '@/utils/imageHelpers';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { StorageSpace } from '../types';
-import { formatAddress } from '@/utils/addressHelper';
 
 type CardProps = {
   space:  StorageSpace
@@ -18,14 +17,14 @@ export const StorageSpaceCard = ({space}: CardProps) => {
 
   const handleViewDetails = () => {
     router.push({
-      pathname: "/storage-spaces/[id]",
+      pathname: "/(storage-spaces)/[id]",
       params: { id: space.id }
     });
   };
 
   const handleBooking = () => {
     router.push({
-      pathname: "/storage-spaces/[id]/booking",
+      pathname: "/(storage-spaces)/[id]/booking",
       params: { id: space.id }
     });
   }
