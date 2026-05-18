@@ -1,24 +1,74 @@
-import React, { useState } from "react";
+import UniversalDatePicker from "@/components/booking/UniversalDatePicker";
+import { StorageSpace } from "@/features/storage-space/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import UniversalDatePicker from "@/components/booking/UniversalDatePicker";
+import { useCreateBooking } from "../hooks/useBooking";
+import { Booking } from "../types";
+import { BookingFormData, bookingSchema } from "../validations";
 
 const brandOrange = "#C83803";
 const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
-export default function BookingForm() {
-  // Internalized state variables
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [selectedItem, setSelectedItem] = useState("Boxes");
-  const [notes, setNotes] = useState("");
+interface StorageSpaceProps {
+  space: StorageSpace
+}
+
+export default function BookingForm({space}: StorageSpaceProps) {
+  const { mutate, isPending, isError, error } = useCreateBooking();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BookingFormData>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      storageSpaceId: space.id,
+      status: "Pending",
+      currency: space.currency,
+      amount: space.amount,
+      serviceFee: 5,
+      fullName: "",
+      email: "",
+      phone: "",
+      itemType: "Boxes",
+      instructions: "",
+      startDate: new Date(),
+      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+  });
+
+  const onSubmit = (data: BookingFormData) => {
+
+    const bookingPayload: Booking = {
+      storageSpaceId: Number(data.storageSpaceId), 
+      status: data.status,
+      currency: data.currency,
+      amount: data.amount,
+      serviceFee: data.serviceFee,
+      itemType: data.itemType,
+      instructions: data.instructions || "",
+      startDate: data.startDate,
+      endDate: data.endDate,
+      
+      userData: {
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+      },
+    };
+    mutate(bookingPayload);
+  };
 
   return (
     <View style={styles.formContainer}>
@@ -30,78 +80,132 @@ export default function BookingForm() {
 
       <Text style={styles.sectionTitle}>Your Details</Text>
 
+      {/* Full Name Field */}
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Full Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="John Doe"
-          value={fullName}
-          onChangeText={setFullName}
+        <Controller
+          control={control}
+          name="fullName"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.fullName && styles.inputError]}
+              placeholder="John Doe"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
+        {errors.fullName && <Text style={styles.errorText}>{errors.fullName.message}</Text>}
       </View>
 
+      {/* Email Field */}
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="example@email.com"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.email && styles.inputError]}
+              placeholder="example@email.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
+        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
       </View>
 
+      {/* Phone Field */}
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Phone</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="+1 234 567 890"
-          keyboardType="phone-pad"
-          value={phone}
-          onChangeText={setPhone}
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, errors.phone && styles.inputError]}
+              placeholder="+1 234 567 890"
+              keyboardType="phone-pad"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
+        {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
       </View>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Items to be stored</Text>
-        <View style={styles.selectRow}>
-          {["Furniture", "Boxes", "Vehicle", "Other"].map((item) => (
-            <TouchableOpacity
-              key={item}
-              style={[styles.chip, item === selectedItem && styles.activeChip]}
-              onPress={() => setSelectedItem(item)}
-            >
-              <Text
-                style={[
-                  styles.chipText,
-                  item === selectedItem && styles.activeChipText,
-                ]}
-              >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <Controller
+          control={control}
+          name="itemType"
+          render={({ field: { onChange, value } }) => (
+            <View style={styles.selectRow}>
+              {(["Furniture", "Boxes", "Vehicle", "Other"] as const).map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  style={[styles.chip, item === value && styles.activeChip]}
+                  onPress={() => onChange(item)}
+                >
+                  <Text style={[styles.chipText, item === value && styles.activeChipText]}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        />
       </View>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Special Instructions (Optional)</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="e.g. Will need access on weekends..."
-          multiline
-          numberOfLines={4}
-          value={notes}
-          onChangeText={setNotes}
+        <Controller
+          control={control}
+          name="instructions"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              placeholder="e.g. Will need access on weekends..."
+              multiline
+              numberOfLines={4}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+            />
+          )}
         />
       </View>
+
+      {isError && (
+        <Text style={[styles.errorText, { marginBottom: 15, textAlign: 'center' }]}>
+          {error instanceof Error ? error.message : "Something went wrong!"}
+        </Text>
+      )}
+
+      {/* Submit Button */}
+      <TouchableOpacity 
+        style={styles.submitButton} 
+        onPress={handleSubmit(onSubmit)}
+        disabled={isPending}
+      >
+        {isPending ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.submitButtonText}>Confirm Booking</Text>
+        )}
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  formContainer: { width: "100%" },
+  formContainer: { width: "100%", paddingHorizontal: 4 },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "800",
@@ -120,6 +224,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: lightBorder,
   },
+  inputError: {
+    borderColor: "#E53E3E",
+    backgroundColor: "#FFF5F5",
+  },
+  errorText: {
+    color: "#E53E3E",
+    fontSize: 12,
+    fontWeight: "600",
+    marginTop: 6,
+  },
   textArea: { height: 100, textAlignVertical: "top" },
   selectRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   chip: {
@@ -133,19 +247,18 @@ const styles = StyleSheet.create({
   activeChip: { backgroundColor: brandBlue, borderColor: brandBlue },
   chipText: { fontSize: 13, color: "#687076", fontWeight: "500" },
   activeChipText: { color: "#fff" },
-  summaryBox: {
+  submitButton: {
+    backgroundColor: brandOrange,
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
     marginTop: 10,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: lightBorder,
+    marginBottom: 30,
   },
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700",
   },
-  summaryText: { color: "#687076", fontSize: 14 },
-  totalRow: { marginTop: 8, paddingTop: 8 },
-  totalText: { fontSize: 16, fontWeight: "700", color: "#151718" },
-  totalPrice: { fontSize: 18, fontWeight: "800", color: brandOrange },
 });

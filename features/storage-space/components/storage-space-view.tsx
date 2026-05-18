@@ -27,7 +27,7 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   const router = useRouter();
   const handleBooking = () => {
     router.push({
-      pathname: "/storage-spaces/[id]/booking",
+      pathname: "/(storage-spaces)/[id]/booking",
       params: { id: space.id }
     });
   }

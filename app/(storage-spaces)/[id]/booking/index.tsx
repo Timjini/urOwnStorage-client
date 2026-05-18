@@ -12,7 +12,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View
 } from 'react-native';
 
@@ -44,19 +43,19 @@ export default function BookingDetailsScreen() {
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <BookingStorageInfoCard space={data} />
-          <BookingForm />
+          <BookingForm space={data} />
           <PriceBreakDown space={data} />
         </ScrollView>
       </KeyboardAvoidingView>
   
       <View style={styles.bottomBar}>
         <TotalToPay price={data.amount} period={data.billingInterval} currencySymbol={data.currencySymbol} />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.confirmButton}
           onPress={() => router.push('/(booking)/booking-confirmation')}
         >
           <Text style={styles.confirmButtonText}>Confirm Booking</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

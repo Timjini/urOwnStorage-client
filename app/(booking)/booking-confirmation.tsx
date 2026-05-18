@@ -1,13 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 const brandOrange = '#C83803';
@@ -16,20 +16,35 @@ const mutedText = '#687076';
 
 export default function ConfirmationScreen() {
   const router = useRouter();
-  const referenceNumber = "BK-99421-NSH";
+  
+  const params = useLocalSearchParams<{
+    id: string;
+    amount: string;
+    currency: string;
+    startDate: string;
+    endDate: string;
+    status: string;
+    storageSpace: string;
+  }>();
+
+  // 2. Parse out the nested configuration hash safely
+  const storageSpaceData = params.storageSpace ? JSON.parse(params.storageSpace) : null;
+
+  // Format booking references safely
+  const referenceNumber = `BK-${params.id || '00000'}-STG`;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
 
-        {/* 1. Success Animation Area */}
+        {/* Success Header */}
         <View style={styles.successHeader}>
           <View style={styles.iconCircle}>
             <Ionicons name="checkmark-sharp" size={50} color="#fff" />
           </View>
           <Text style={styles.mainTitle}>Booking Confirmed!</Text>
           <Text style={styles.subTitle}>
-            Your space is reserved. We&apos;ve sent a confirmation email to your inbox.
+            Your space is reserved. Status: <Text style={{fontWeight: '700'}}>{params.status || 'Pending'}</Text>
           </Text>
         </View>
 
@@ -51,35 +66,37 @@ export default function ConfirmationScreen() {
             <View style={styles.detailRow}>
               <View>
                 <Text style={styles.smallLabel}>STORAGE UNIT</Text>
-                <Text style={styles.detailValue}>Climate Basement</Text>
+                {/* Fallback cleanly if metadata names vary inside storageSpace */}
+                <Text style={styles.detailValue}>{storageSpaceData?.name || "Standard Unit"}</Text>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.smallLabel}>SIZE</Text>
-                <Text style={styles.detailValue}>10x10 ft</Text>
+                <Text style={styles.smallLabel}>TOTAL AMOUNT</Text>
+                <Text style={styles.detailValue}>{params.amount} {params.currency}</Text>
               </View>
             </View>
 
             <View style={styles.detailRow}>
               <View>
                 <Text style={styles.smallLabel}>START DATE</Text>
-                <Text style={styles.detailValue}>May 12, 2026</Text>
+                <Text style={styles.detailValue}>{params.startDate || 'N/A'}</Text>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={styles.smallLabel}>END DATE</Text>
+                <Text style={styles.detailValue}>{params.endDate || 'N/A'}</Text>
               </View>
             </View>
 
             <View style={styles.addressSection}>
               <Text style={styles.smallLabel}>LOCATION</Text>
-              <Text style={styles.detailValue}>3500 Franklin Pike, Nashville, TN</Text>
+              <Text style={styles.detailValue}>{storageSpaceData?.address || "Assigned Facility Location"}</Text>
             </View>
           </View>
 
-          {/* 3. Action Buttons */}
+          {/* Action Buttons */}
           <View style={styles.footer}>
             <TouchableOpacity 
               style={styles.primaryButton}
-              onPress={() => router.replace('./(tabs)')}
+              onPress={() => router.replace('/(tabs)')} // Adjusted to root routing structure rule
             >
               <Text style={styles.primaryButtonText}>Back to Dashboard</Text>
             </TouchableOpacity>
