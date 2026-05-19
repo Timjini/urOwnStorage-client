@@ -1,24 +1,24 @@
 import { JsonApiSingleResponse } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import { bookingService } from '../services';
-import { Booking, BookingAttributes } from '../types';
+import { checkoutService } from '../services';
+import { Checkout, CheckoutAttributes } from '../types';
 
-export const useCreateBooking = () => {
+export const useCreateCheckout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation<JsonApiSingleResponse<BookingAttributes>, Error, Booking>({
-    mutationFn: (bookingData: Booking) => bookingService.create(bookingData),
+  return useMutation<JsonApiSingleResponse<CheckoutAttributes>, Error, Checkout>({
+    mutationFn: (data: Checkout) => checkoutService.create(data),
     onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['checkouts'] });
       const attrs = response?.data?.attributes;
 
       router.push({
         pathname: '/booking-payment',
         params: {
           id: response?.data?.id,
-          amount: attrs?.amount?.toString() ?? '',
+          amount: attrs?.totalAmount?.toString() ?? '',
           serviceFee: attrs?.serviceFee?.toString() ?? '',
           currency: attrs?.currency ?? '',
           startDate: String(attrs?.startDate ?? ''),
@@ -26,11 +26,11 @@ export const useCreateBooking = () => {
           status: attrs?.status ?? '',
           storageSpace: JSON.stringify(attrs?.storageSpace ?? {}),
           paymentIntentClientSecret: attrs?.stripePaymentIntentId ?? '',
-          // referenceNumber: attrs.reference
+          referenceNumber: attrs.reference
         }
       });
     },
-    onError: (error) => console.error('useCreateBooking failed:', error.message),
+    onError: (error) => console.error('useCreateCheckout failed:', error.message),
   });
 };
 

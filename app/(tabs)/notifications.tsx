@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  FlatList, 
-  TouchableOpacity, 
-  SafeAreaView 
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { NOTIFICATIONS } from '@/services/mock-data';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';

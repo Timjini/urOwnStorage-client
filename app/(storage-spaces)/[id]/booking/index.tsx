@@ -1,7 +1,7 @@
-import { BookingForm, BookingFormRef } from '@/features/booking/components/booking-form';
-import { BookingStorageInfoCard } from '@/features/booking/components/booking-storage-info-card';
-import { PriceBreakDown } from '@/features/booking/components/price-break-down';
-import { TotalToPay } from '@/features/booking/components/total-to-pay';
+import { CheckoutForm, CheckoutFormRef } from '@/features/checkout/components/checkout-form';
+import { BookingStorageInfoCard } from '@/features/checkout/components/checkout-storage-info-card';
+import { PriceBreakDown } from '@/features/checkout/components/price-break-down';
+import { TotalToPay } from '@/features/checkout/components/total-to-pay';
 import { useStorageSpaceDetails } from '@/features/storage-space/hooks/useStorageSpace';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -26,8 +26,7 @@ export default function BookingDetailsScreen() {
   const router = useRouter();
   const { data, isLoading } = useStorageSpaceDetails(id);
   
-  // Create a ref linked to our form actions
-  const formRef = useRef<BookingFormRef>(null);
+  const formRef = useRef<CheckoutFormRef>(null);
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isAuthenticated] = useState(false); 
@@ -43,10 +42,8 @@ export default function BookingDetailsScreen() {
   if (!data) return <Text>Space not found</Text>;
 
   const handleBottomBarConfirm = () => {
-    // 1. Guard against Terms check
     if (!agreedToTerms) return;
 
-    // 2. Safely call the inner react-hook-form handleSubmit validation engine
     if (formRef.current) {
       formRef.current.requestSubmit();
     }
@@ -62,7 +59,7 @@ export default function BookingDetailsScreen() {
           <BookingStorageInfoCard space={data} />
           
           {/* Pass the Ref handler to the child form component */}
-          <BookingForm ref={formRef} space={data} />
+          <CheckoutForm ref={formRef} space={data} />
           
           <PriceBreakDown space={data} />
 
@@ -93,7 +90,6 @@ export default function BookingDetailsScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
   
-      {/* Sticky Bottom Actions Bar */}
       <View style={styles.bottomBar}>
         <TotalToPay price={data.amount} period={data.billingInterval} currencySymbol={data.currencySymbol} />
         
@@ -116,7 +112,6 @@ export default function BookingDetailsScreen() {
   );
 }
 
-// Styling details remain consistent with previous configurations
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   scrollContent: { padding: 20, paddingBottom: 130 },

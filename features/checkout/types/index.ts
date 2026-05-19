@@ -1,12 +1,12 @@
 import { JsonApiSingleResponse } from "@/types/api";
 
-export interface Booking {
+export interface Checkout {
     storageSpaceId: number
     startDate:      unknown
     endDate:        unknown
-    status:         "NOT_STARTED" | "EXECUTING" | "SUCCESS" |  "FAILED";
+    status:         CheckoutSessionStatus;
     currency:       string
-    amount:         number
+    totalAmount:         number
     serviceFee:     number
     itemType:       "Furniture" | "Boxes" | "Vehicle" | "Other";
     instructions:   string
@@ -19,15 +19,15 @@ export interface User {
     fullName:   string
 }
 
-export interface BookingAttributes {
-    amount: number;
+export interface CheckoutAttributes {
+    totalAmount: number;
     serviceFee: number;
     currency: string;
     startDate: string;
     endDate: string;
     stripePaymentIntentId: string;
-    // reference: string;
-    status: "Pending" | "Approved" | "Cancelled" | "Completed";
+    reference: string;
+    status: "NOT_STARTED" | "EXECUTING" | "SUCCESS" |  "FAILED";
     storageSpace: {
       id?: number;
       name?: string;
@@ -36,4 +36,6 @@ export interface BookingAttributes {
     };
   }
   
-  export type BookingResponse = JsonApiSingleResponse<BookingAttributes>;
+  export type BookingResponse = JsonApiSingleResponse<CheckoutAttributes>;
+
+  export type CheckoutSessionStatus = "NOT_STARTED" | "EXECUTING" | "SUCCESS" | "FAILED";

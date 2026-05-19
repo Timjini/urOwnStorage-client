@@ -9,4 +9,5 @@ export const LOGIN = `${API}/v1/auth/login`;
 export const SIGNUP = `${API}/v1/auth/login`;
 export const STORAGE_SPACES = `${API}/v1/storage_spaces`;
 export const PAYMENTS = `${API}/v1/payments`;
-export const BOOKINGS = `${API}/v1/bookings`;
+export const CHECKOUT_SESSION = `${API}/v1/checkout_sessions`;
+export const BOOKINGS = `${API}/v1/checkout_sessions`;
