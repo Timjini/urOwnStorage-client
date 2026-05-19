@@ -54,8 +54,8 @@
       [
         "@stripe/stripe-react-native",
         {
-          "merchantIdentifier": "ur.own.storage",
-          "enableGooglePay": true
+          // "merchantIdentifier": "ur.own.storage",
+          // "enableGooglePay": true,
         }
       ],
       "expo-web-browser"

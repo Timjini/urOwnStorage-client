@@ -1,6 +1,5 @@
-import { Redirect, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 // import { useAuth } from '@/context/AuthContext';
-import { ActivityIndicator, View } from 'react-native';
 
 export default function AuthLayout() {
   // const { user, isLoading } = useAuth();
@@ -9,17 +8,17 @@ export default function AuthLayout() {
   let user = {"name": "james hook"};
 
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-        <ActivityIndicator size="large" color="#0a7ea4" />
-      </View>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+  //       <ActivityIndicator size="large" color="#0a7ea4" />
+  //     </View>
+  //   );
+  // }
 
-  if (user) {
-    return <Redirect href="/" />; 
-  }
+  // if (user) {
+  //   return <Redirect href="/" />; 
+  // }
 
   return (
     <Stack

@@ -24,6 +24,8 @@ export interface BookingAttributes {
     currency: string;
     startDate: string;
     endDate: string;
+    paymentIntent: string;
+    reference: string;
     status: "Pending" | "Approved" | "Cancelled" | "Completed";
     storageSpace: {
       id?: number;

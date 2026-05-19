@@ -1,38 +1,53 @@
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { JsonApiSingleResponse } from '@/types/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { bookingService } from '../services';
-import { Booking } from '../types';
+import { Booking, BookingAttributes } from '../types';
 
 export const useCreateBooking = () => {
-    const queryClient = new QueryClient();
-    const router = useRouter();
-  return useMutation<Booking>({
-    mutationFn: (bookingData: Booking) => bookingService.create(bookingData),
-    
-    onSuccess: (data) => {
-      console.log('Booking successfully created:', data);
-      
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
-      const bookingId = data?.data.id;
-      const attrs = data?.data.attributes;
+  return useMutation<JsonApiSingleResponse<BookingAttributes>, Error, Booking>({
+    mutationFn: (bookingData: Booking) => bookingService.create(bookingData),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      const attrs = response?.data?.attributes;
 
       router.push({
-        pathname: '/booking-confirmation',
+        pathname: '/booking-payment',
         params: {
-          id: bookingId,
-          amount: attrs.amount.toString(),
-          currency: attrs.currency,
-          startDate: attrs.startDate,
-          endDate: attrs.endDate,
-          status: attrs.status,
-          storageSpace: JSON.stringify(attrs.storageSpace) 
+          id: response?.data?.id,
+          amount: attrs?.amount?.toString() ?? '',
+          currency: attrs?.currency ?? '',
+          startDate: String(attrs?.startDate ?? ''),
+          endDate: String(attrs?.endDate ?? ''),
+          status: attrs?.status ?? '',
+          storageSpace: JSON.stringify(attrs?.storageSpace ?? {}),
+          paymentIntentClientSecret: attrs?.paymentIntent ?? '',
+          referenceNumber: attrs.reference
         }
       });
     },
-    
-    onError: (error) => {
-      console.error('Error in useCreateBooking hook:', error.message);
-    },
+    onError: (error) => console.error('useCreateBooking failed:', error.message),
   });
 };
+
+// export const useFetchBookings = () => {
+//   return useQuery({
+//     queryKey: ['bookings'],
+//     queryFn: () => bookingService.getAll(), // Assumes this method exists in your service
+//   });
+// };
+
+// export const useCancelBooking = () => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation({
+//     mutationFn: (bookingId: string) => bookingService.cancel(bookingId),
+//     onSuccess: () => {
+//       // Refresh the booking lists instantly on deletion/cancellation
+//       queryClient.invalidateQueries({ queryKey: ['bookings'] });
+//     },
+//   });
+// };

@@ -1,26 +1,33 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
-export default function AuthLayout() {
-
+export default function BookingLayout() {
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
         },
-        headerTintColor: '#151718',
+        headerTintColor: "#151718",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-        animation: 'slide_from_right', 
+        animation: "slide_from_right",
       }}
     >
-      <Stack.Screen 
-        name="booking-confirmation" 
-        options={{ 
-          title: 'Booking Confirmation',
+      <Stack.Screen
+        name="booking-confirmation"
+        options={{
+          title: "Booking Confirmation",
           headerShown: false,
-        }} 
+        }}
+      />
+
+      <Stack.Screen
+        name="booking-payment"
+        options={{
+          title: "Booking Payment",
+          headerShown: false,
+        }}
       />
     </Stack>
   );

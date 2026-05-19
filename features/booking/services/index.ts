@@ -1,5 +1,6 @@
+import { JsonApiSingleResponse } from "@/types/api";
 import { createBooking } from "../api";
-import { Booking } from "../types";
+import { Booking, BookingAttributes } from "../types";
 
 export const bookingService = {
   defaultFee: 5,
@@ -8,10 +9,9 @@ export const bookingService = {
     return this.defaultFee + price;
   },
 
-  async create(bookingData: Booking): Promise<Booking> {
+  async create(bookingData: Booking): Promise<JsonApiSingleResponse<BookingAttributes>> {
     try {
       const response = await createBooking(bookingData);
-      
       return response;
     } catch (error) {
       console.error("BookingService.create failed:", error);

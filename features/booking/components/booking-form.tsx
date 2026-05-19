@@ -1,30 +1,34 @@
 import UniversalDatePicker from "@/components/booking/UniversalDatePicker";
+import { useCreateBooking } from '@/features/booking';
 import { StorageSpace } from "@/features/storage-space/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import { useCreateBooking } from "../hooks/useBooking";
 import { Booking } from "../types";
 import { BookingFormData, bookingSchema } from "../validations";
 
-const brandOrange = "#C83803";
 const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 interface StorageSpaceProps {
-  space: StorageSpace
+  space: StorageSpace;
 }
 
-export default function BookingForm({space}: StorageSpaceProps) {
-  const { mutate, isPending, isError, error } = useCreateBooking();
+export interface BookingFormRef {
+  requestSubmit: () => void;
+  isFormPending: boolean;
+}
+
+export const BookingForm = forwardRef<BookingFormRef, StorageSpaceProps>(
+  function BookingFormProps({ space }, ref) {
+    const { mutate, isPending, isError, error } = useCreateBooking();
 
   const {
     control,
@@ -49,7 +53,6 @@ export default function BookingForm({space}: StorageSpaceProps) {
   });
 
   const onSubmit = (data: BookingFormData) => {
-
     const bookingPayload: Booking = {
       storageSpaceId: Number(data.storageSpaceId), 
       status: data.status,
@@ -60,7 +63,6 @@ export default function BookingForm({space}: StorageSpaceProps) {
       instructions: data.instructions || "",
       startDate: data.startDate,
       endDate: data.endDate,
-      
       userData: {
         fullName: data.fullName,
         email: data.email,
@@ -70,17 +72,47 @@ export default function BookingForm({space}: StorageSpaceProps) {
     mutate(bookingPayload);
   };
 
+  useImperativeHandle(ref, () => ({
+    requestSubmit: () => {
+      handleSubmit(onSubmit)();
+    },
+    isFormPending: isPending
+  }));
+
   return (
     <View style={styles.formContainer}>
       <Text style={styles.sectionTitle}>Select Dates</Text>
       <View style={styles.row}>
-        <UniversalDatePicker />
-        <UniversalDatePicker />
+      <View style={styles.datePickerWrapper}>
+    <Controller
+      control={control}
+      name="startDate"
+      render={({ field: { onChange, value } }) => (
+        <UniversalDatePicker
+          label="START DATE"
+          date={value}
+          onChangeDate={onChange}
+        />
+      )}
+    />
+  </View>
+  <View style={styles.datePickerWrapper}>
+    <Controller
+      control={control}
+      name="endDate"
+      render={({ field: { onChange, value } }) => (
+        <UniversalDatePicker
+          label="END DATE"
+          date={value}
+          onChangeDate={onChange}
+        />
+      )}
+    />
+  </View>
       </View>
 
       <Text style={styles.sectionTitle}>Your Details</Text>
 
-      {/* Full Name Field */}
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Full Name</Text>
         <Controller
@@ -99,7 +131,6 @@ export default function BookingForm({space}: StorageSpaceProps) {
         {errors.fullName && <Text style={styles.errorText}>{errors.fullName.message}</Text>}
       </View>
 
-      {/* Email Field */}
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Email</Text>
         <Controller
@@ -120,7 +151,6 @@ export default function BookingForm({space}: StorageSpaceProps) {
         {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
       </View>
 
-      {/* Phone Field */}
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Phone</Text>
         <Controller
@@ -187,78 +217,25 @@ export default function BookingForm({space}: StorageSpaceProps) {
           {error instanceof Error ? error.message : "Something went wrong!"}
         </Text>
       )}
-
-      {/* Submit Button */}
-      <TouchableOpacity 
-        style={styles.submitButton} 
-        onPress={handleSubmit(onSubmit)}
-        disabled={isPending}
-      >
-        {isPending ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.submitButtonText}>Confirm Booking</Text>
-        )}
-      </TouchableOpacity>
+      
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   formContainer: { width: "100%", paddingHorizontal: 4 },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "800",
-    color: "#151718",
-    marginBottom: 15,
-    marginTop: 10,
-  },
+  sectionTitle: { fontSize: 18, fontWeight: "800", color: "#151718", marginBottom: 15, marginTop: 10 },
   row: { flexDirection: "row", gap: 12, marginBottom: 20 },
   inputGroup: { marginBottom: 20 },
   label: { fontSize: 14, fontWeight: "600", color: "#151718", marginBottom: 8 },
-  input: {
-    backgroundColor: "#F5F7F9",
-    padding: 14,
-    borderRadius: 12,
-    fontSize: 15,
-    borderWidth: 1,
-    borderColor: lightBorder,
-  },
-  inputError: {
-    borderColor: "#E53E3E",
-    backgroundColor: "#FFF5F5",
-  },
-  errorText: {
-    color: "#E53E3E",
-    fontSize: 12,
-    fontWeight: "600",
-    marginTop: 6,
-  },
+  input: { backgroundColor: "#F5F7F9", padding: 14, borderRadius: 12, fontSize: 15, borderWidth: 1, borderColor: lightBorder },
+  inputError: { borderColor: "#E53E3E", backgroundColor: "#FFF5F5" },
+  errorText: { color: "#E53E3E", fontSize: 12, fontWeight: "600", marginTop: 6 },
   textArea: { height: 100, textAlignVertical: "top" },
   selectRow: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: lightBorder,
-    backgroundColor: "#fff",
-  },
+  chip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, borderWidth: 1, borderColor: lightBorder, backgroundColor: "#fff" },
   activeChip: { backgroundColor: brandBlue, borderColor: brandBlue },
   chipText: { fontSize: 13, color: "#687076", fontWeight: "500" },
   activeChipText: { color: "#fff" },
-  submitButton: {
-    backgroundColor: brandOrange,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  submitButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "700",
-  },
+  datePickerWrapper: {flex : 1}
 });
