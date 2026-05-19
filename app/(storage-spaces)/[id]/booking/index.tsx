@@ -58,12 +58,10 @@ export default function BookingDetailsScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <BookingStorageInfoCard space={data} />
           
-          {/* Pass the Ref handler to the child form component */}
           <CheckoutForm ref={formRef} space={data} />
           
           <PriceBreakDown space={data} />
 
-          {/* Terms checkbox container blocks */}
           <View style={styles.authTermsContainer}>
             <TouchableOpacity 
               style={styles.checkboxRow} 
