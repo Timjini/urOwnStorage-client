@@ -21,6 +21,7 @@ export interface User {
 
 export interface BookingAttributes {
     amount: number;
+    serviceFee: number;
     currency: string;
     startDate: string;
     endDate: string;

@@ -21,6 +21,7 @@ export default function BookingPaymentScreen() {
   const params = useLocalSearchParams<{
     id: string;
     amount: string;
+    serviceFee: string;
     currency: string;
     startDate: string;
     endDate: string;
@@ -52,7 +53,7 @@ export default function BookingPaymentScreen() {
           <View style={styles.ticketSection}>
             <Text style={styles.label}>Amount Due</Text>
             <Text style={styles.amountText}>
-              {params.amount} {params.currency?.toUpperCase()}
+              {params.amount + params.serviceFee} {params.currency?.toUpperCase()}
             </Text>
           </View>
 

@@ -19,6 +19,7 @@ export const useCreateBooking = () => {
         params: {
           id: response?.data?.id,
           amount: attrs?.amount?.toString() ?? '',
+          serviceFee: attrs?.serviceFee?.toString() ?? '',
           currency: attrs?.currency ?? '',
           startDate: String(attrs?.startDate ?? ''),
           endDate: String(attrs?.endDate ?? ''),
