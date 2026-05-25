@@ -7,7 +7,7 @@ import { DashboardHeader } from "@/components/DashboardHeader";
 import { HapticTab } from "@/components/haptic-tab";
 import { LocationBanner } from "@/components/LocationBanner";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
+import { Theme } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import Feather from '@expo/vector-icons/Feather';
 
@@ -25,12 +25,12 @@ export default function TabLayout() {
 
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme].tint,
+          tabBarActiveTintColor: Theme.colors.primary,
           headerShown: false,
           tabBarButton: HapticTab,
           tabBarStyle: {
-            backgroundColor: Colors[colorScheme].background,
-            borderTopColor: Colors[colorScheme].border,
+            backgroundColor: Theme.colors.background,
+            borderTopColor: Theme.colors.border,
           },
         }}
       >

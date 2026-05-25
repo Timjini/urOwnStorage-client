@@ -2,7 +2,7 @@ import * as z from "zod";
 
 export const bookingSchema = z.object({
     storageSpaceId: z.coerce.string<string>("Storage Space must exist"),
-    status: z.enum(["Pending", "Cancelled", "Approved"]),
+    status: z.enum(["NOT_STARTED", "EXECUTING", "SUCCESS", "FAILED"]),
     currency: z.string().min(2, "Issue with the Currency"),
     amount: z.coerce.number<number>({ error: "Issue with the price" }),
     serviceFee: z.coerce.number<number>({ error: "Issue with payment" }),

@@ -15,10 +15,10 @@ export const useCreateCheckout = () => {
       const attrs = response?.data?.attributes;
 
       router.push({
-        pathname: '/booking-payment',
+        pathname: '/(checkout)/checkout',
         params: {
           id: response?.data?.id,
-          amount: attrs?.totalAmount?.toString() ?? '',
+          totalAmount: attrs?.totalAmount?.toString() ?? '',
           serviceFee: attrs?.serviceFee?.toString() ?? '',
           currency: attrs?.currency ?? '',
           startDate: String(attrs?.startDate ?? ''),

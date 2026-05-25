@@ -36,6 +36,7 @@ export default function RootLayout() {
                 options={{ title: "Storage Space" }}
               />
               <Stack.Screen name="(booking)" options={{ title: "Booking" }} />
+              <Stack.Screen name="(checkout)" options={{ title: "Checkout" }} />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="modal"

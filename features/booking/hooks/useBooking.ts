@@ -18,7 +18,7 @@ export const useCreateBooking = () => {
         pathname: '/booking-payment',
         params: {
           id: response?.data?.id,
-          amount: attrs?.amount?.toString() ?? '',
+          totalAmount: attrs?.totalAmount?.toString() ?? '',
           serviceFee: attrs?.serviceFee?.toString() ?? '',
           currency: attrs?.currency ?? '',
           startDate: String(attrs?.startDate ?? ''),
@@ -26,7 +26,7 @@ export const useCreateBooking = () => {
           status: attrs?.status ?? '',
           storageSpace: JSON.stringify(attrs?.storageSpace ?? {}),
           paymentIntentClientSecret: attrs?.stripePaymentIntentId ?? '',
-          // referenceNumber: attrs.reference
+          referenceNumber: attrs.reference
         }
       });
     },

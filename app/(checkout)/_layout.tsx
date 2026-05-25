@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function BookingLayout() {
+export default function CheckoutLayout() {
 
   return (
     <Stack
@@ -17,9 +17,23 @@ export default function BookingLayout() {
     >
 
     <Stack.Screen 
-        name="search" 
+        name="checkout" 
         options={{ 
-          title: 'Search',
+          title: 'Checkout',
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="success" 
+        options={{ 
+          title: 'Payment Successful',
+          headerShown: false,
+        }} 
+      />
+      <Stack.Screen 
+        name="failure" 
+        options={{ 
+          title: 'Payment failed',
           headerShown: false,
         }} 
       />

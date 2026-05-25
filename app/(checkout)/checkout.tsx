@@ -1,6 +1,6 @@
 import { useStripePayment } from '@/features/checkout';
 import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -13,27 +13,45 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
-// Consistent Branding Palette
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';
 const mutedText = '#687076';
 
-export default function BookingPaymentScreen() {
+export default function CheckoutScreen() {
+  const router = useRouter();
   const params = useLocalSearchParams<{
     id: string;
-    amount: string;
+    totalAmount: string;
     serviceFee: string;
     currency: string;
     startDate: string;
     endDate: string;
     storageSpace: string;
     paymentIntentClientSecret: string;
-    reference: string;
+    referenceNumber: string;
   }>();
 
   const { isReady, loading, presentCheckout } = useStripePayment({
     paymentIntentClientSecret: params.paymentIntentClientSecret,
   });
+
+  const handlePayment = async () => {
+    try {
+      const isSuccess: boolean = await presentCheckout();
+    
+      if (isSuccess) {
+        router.replace({
+          pathname: '/(checkout)/success',
+          params: { referenceNumber: params.referenceNumber }
+        });
+      } else {
+        router.replace('/(checkout)/failure'); 
+      }
+    } catch (error) {
+      console.error("Payment routing error: ", error);
+      router.replace('/(checkout)/failure');
+    }
+  };
 
   const storageSpaceData = params.storageSpace ? JSON.parse(params.storageSpace) : null;
 
@@ -54,7 +72,7 @@ export default function BookingPaymentScreen() {
           <View style={styles.ticketSection}>
             <Text style={styles.label}>Amount Due</Text>
             <Text style={styles.amountText}>
-              {params.amount + params.serviceFee} {params.currency?.toUpperCase()}
+              {params.totalAmount} {params.currency?.toUpperCase()}
             </Text>
           </View>
 
@@ -73,7 +91,7 @@ export default function BookingPaymentScreen() {
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={styles.smallLabel}>REFERENCE</Text>
-                <Text style={[styles.detailValue, { color: brandOrange }]}>{params.reference}</Text>
+                <Text style={[styles.detailValue, { color: brandOrange }]}>{params.referenceNumber}</Text>
               </View>
             </View>
 
@@ -99,7 +117,7 @@ export default function BookingPaymentScreen() {
             <TouchableOpacity 
               style={[styles.primaryButton, (!isReady || loading) && styles.disabledButton]}
               disabled={!isReady || loading} 
-              onPress={presentCheckout}
+              onPress={handlePayment}
               activeOpacity={0.8}
             >
               {loading ? (
@@ -108,7 +126,7 @@ export default function BookingPaymentScreen() {
                 <>
                   <Ionicons name="lock-closed-sharp" size={18} color="#fff" />
                   <Text style={styles.primaryButtonText}>
-                    Pay Now • {params.amount} {params.currency?.toUpperCase()}
+                    Pay Now • {params.totalAmount} {params.currency?.toUpperCase()}
                   </Text>
                 </>
               )}

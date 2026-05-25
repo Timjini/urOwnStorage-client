@@ -20,14 +20,14 @@ export interface User {
 }
 
 export interface BookingAttributes {
-    amount: number;
+    totalAmount: number;
     serviceFee: number;
     currency: string;
     startDate: string;
     endDate: string;
     stripePaymentIntentId: string;
-    // reference: string;
-    status: "Pending" | "Approved" | "Cancelled" | "Completed";
+    reference: string;
+    status: "NOT_STARTED" | "EXECUTING" | "SUCCESS" |  "FAILED";
     storageSpace: {
       id?: number;
       name?: string;
