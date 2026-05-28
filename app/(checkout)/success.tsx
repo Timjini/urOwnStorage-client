@@ -11,6 +11,9 @@ export default function SuccessScreen() {
   const router = useRouter();
   const { referenceNumber } = useLocalSearchParams<{ referenceNumber?: string }>();
 
+  const navigateToBooking = () =>{
+    router.push('/(booking)/search')
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -41,7 +44,7 @@ export default function SuccessScreen() {
       <View style={styles.footer}>
         <TouchableOpacity 
           style={styles.primaryButton}
-          onPress={() => router.dismissAll()} // Clears the stack back to home/dashboard
+          onPress={navigateToBooking}
           activeOpacity={0.8}
         >
           <Text style={styles.primaryButtonText}>Go to My Bookings</Text>
