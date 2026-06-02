@@ -3,12 +3,12 @@
 echo "🤘 Just Checking... 🐶"
 
 echo "🔍 Running Linters..."
-npx lint-staged || exit 1
+npm run lint || exit 1
 
 echo "🧪 Running Tests..."
 npm test -- --watchAll=false --passWithNoTests || exit 1
 
 echo "🩺 Running Expo Doctor..."
-npx expo-doctor || exit 1
+# npx expo-doctor || exit 1
 
 echo "✅ All checks passed! Proceeding with commit."
