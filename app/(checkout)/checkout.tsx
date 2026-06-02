@@ -1,44 +1,80 @@
+import { useStripePayment } from '@/features/checkout';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const brandOrange = '#C83803';
 const brandBlue = '#0a7ea4';
 const mutedText = '#687076';
 
-export default function ConfirmationScreen() {
+export default function CheckoutScreen() {
   const router = useRouter();
-  const referenceNumber = "BK-99421-NSH";
+  const params = useLocalSearchParams<{
+    id: string;
+    totalAmount: string;
+    serviceFee: string;
+    currency: string;
+    startDate: string;
+    endDate: string;
+    storageSpace: string;
+    paymentIntentClientSecret: string;
+    referenceNumber: string;
+  }>();
+
+  const { isReady, loading, presentCheckout } = useStripePayment({
+    paymentIntentClientSecret: params.paymentIntentClientSecret,
+  });
+
+  const handlePayment = async () => {
+    try {
+      const isSuccess: boolean = await presentCheckout();
+    
+      if (isSuccess) {
+        router.replace({
+          pathname: '/(checkout)/success',
+          params: { referenceNumber: params.referenceNumber }
+        });
+      } else {
+        router.replace('/(checkout)/failure'); 
+      }
+    } catch (error) {
+      console.error("Payment routing error: ", error);
+      router.replace('/(checkout)/failure');
+    }
+  };
+
+  const storageSpaceData = params.storageSpace ? JSON.parse(params.storageSpace) : null;
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-
-        {/* 1. Success Animation Area */}
-        <View style={styles.successHeader}>
-          <View style={styles.iconCircle}>
-            <Ionicons name="checkmark-sharp" size={50} color="#fff" />
-          </View>
-          <Text style={styles.mainTitle}>Booking Confirmed!</Text>
+        
+        {/* Header Section */}
+        <View style={styles.header}>
+          <Text style={styles.mainTitle}>Secure Payment</Text>
           <Text style={styles.subTitle}>
-            Your space is reserved. We&apos;ve sent a confirmation email to your inbox.
+            Review your rental summary and complete your booking safely via Stripe.
           </Text>
         </View>
 
+        {/* Breakdown Ticket */}
         <View style={styles.ticket}>
-
-          <TouchableOpacity style={styles.ticketSection}>
-            <Text style={styles.label}>Booking Reference</Text>
-            <Text style={styles.refNumber}>{referenceNumber}</Text>
-          </TouchableOpacity>
+          <View style={styles.ticketSection}>
+            <Text style={styles.label}>Amount Due</Text>
+            <Text style={styles.amountText}>
+              {params.totalAmount} {params.currency?.toUpperCase()}
+            </Text>
+          </View>
 
           <View style={styles.dividerContainer}>
             <View style={styles.dotLeft} />
@@ -49,51 +85,65 @@ export default function ConfirmationScreen() {
           {/* Details Section */}
           <View style={styles.detailsContainer}>
             <View style={styles.detailRow}>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.smallLabel}>STORAGE UNIT</Text>
-                <Text style={styles.detailValue}>Climate Basement</Text>
+                <Text style={styles.detailValue}>{storageSpaceData?.name || "Standard Unit"}</Text>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.smallLabel}>SIZE</Text>
-                <Text style={styles.detailValue}>10x10 ft</Text>
+                <Text style={styles.smallLabel}>REFERENCE</Text>
+                <Text style={[styles.detailValue, { color: brandOrange }]}>{params.referenceNumber}</Text>
               </View>
             </View>
 
             <View style={styles.detailRow}>
               <View>
                 <Text style={styles.smallLabel}>START DATE</Text>
-                <Text style={styles.detailValue}>May 12, 2026</Text>
+                <Text style={styles.detailValue}>{params.startDate || 'N/A'}</Text>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={styles.smallLabel}>END DATE</Text>
+                <Text style={styles.detailValue}>{params.endDate || 'N/A'}</Text>
               </View>
             </View>
 
             <View style={styles.addressSection}>
               <Text style={styles.smallLabel}>LOCATION</Text>
-              <Text style={styles.detailValue}>3500 Franklin Pike, Nashville, TN</Text>
+              <Text style={styles.detailValue}>{storageSpaceData?.address || "Assigned Facility Location"}</Text>
             </View>
           </View>
 
-          {/* 3. Action Buttons */}
+          {/* Footer Action */}
           <View style={styles.footer}>
             <TouchableOpacity 
-              style={styles.primaryButton}
-              onPress={() => router.replace('./(tabs)')}
+              style={[styles.primaryButton, (!isReady || loading) && styles.disabledButton]}
+              disabled={!isReady || loading} 
+              onPress={handlePayment}
+              activeOpacity={0.8}
             >
-              <Text style={styles.primaryButtonText}>Back to Dashboard</Text>
+              {loading ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <>
+                  <Ionicons name="lock-closed-sharp" size={18} color="#fff" />
+                  <Text style={styles.primaryButtonText}>
+                    Pay Now • {params.totalAmount} {params.currency?.toUpperCase()}
+                  </Text>
+                </>
+              )}
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.secondaryButton}>
-              <Ionicons name="download-outline" size={18} color={brandBlue} />
-              <Text style={styles.secondaryButtonText}>Save PDF Receipt</Text>
-            </TouchableOpacity>
+            <View style={styles.securityNotice}>
+              <Ionicons name="shield-checkmark" size={14} color={mutedText} />
+              <Text style={styles.securityNoticeText}>Encrypted, secure payment processing</Text>
+            </View>
           </View>
         </View>
 
-        <TouchableOpacity style={styles.supportLink}>
-          <Text style={styles.supportText}>Need to change your booking? <Text style={{ color: brandBlue, fontWeight: '700' }}>Contact Support</Text></Text>
-        </TouchableOpacity>
+        <View style={styles.supportLink}>
+          <Text style={styles.supportText}>
+            Secured by <Text style={{ fontWeight: '700', color: '#635BFF' }}>stripe</Text>
+          </Text>
+        </View>
 
       </ScrollView>
     </SafeAreaView>
@@ -109,23 +159,9 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
   },
-  successHeader: {
+  header: {
     alignItems: 'center',
     marginVertical: 30,
-  },
-  iconCircle: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: '#2E7D32', // Success Green
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-    // Glow effect
-    shadowColor: '#2E7D32',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
   },
   mainTitle: {
     fontSize: 26,
@@ -162,10 +198,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
-  refNumber: {
-    fontSize: 28,
+  amountText: {
+    fontSize: 32,
     fontWeight: '900',
-    color: brandOrange,
+    color: '#151718',
     marginTop: 5,
   },
   dividerContainer: {
@@ -221,42 +257,45 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 25,
-    marginTop: 10,
+    marginTop: 15,
   },
   primaryButton: {
     backgroundColor: brandBlue,
     height: 55,
     borderRadius: 12,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 8,
     marginBottom: 12,
+  },
+  disabledButton: {
+    backgroundColor: '#A0D1E1',
   },
   primaryButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '700',
   },
-  secondaryButton: {
+  securityNotice: {
     flexDirection: 'row',
-    height: 55,
-    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ECEDEE',
-    gap: 8,
+    gap: 6,
+    marginTop: 4,
   },
-  secondaryButtonText: {
-    color: brandBlue,
-    fontSize: 15,
-    fontWeight: '600',
+  securityNoticeText: {
+    fontSize: 12,
+    color: mutedText,
   },
   supportLink: {
     marginTop: 30,
     paddingBottom: 40,
   },
   supportText: {
-    fontSize: 14,
+    fontSize: 13,
     color: mutedText,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   }
 });

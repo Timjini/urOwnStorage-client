@@ -2,12 +2,13 @@ import { StorageCard } from "@/components/storageSpace/StorageCard";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   View,
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function Index() {
 

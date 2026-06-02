@@ -4,12 +4,13 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import {
   ImageBackground,
-  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -34,14 +35,14 @@ export default function WelcomeScreen() {
           <View style={styles.bottomSection}>
             <TouchableOpacity 
               style={styles.primaryBtn}
-              onPress={() => router.push('/register')}
+              onPress={() => router.push('/(auth)/register')}
             >
               <Text style={styles.primaryBtnText}>Get Started</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.secondaryBtn}
-              onPress={() => router.push('/login')}
+              onPress={() => router.push('/(auth)/login')}
             >
               <Text style={styles.secondaryBtnText}>Log In</Text>
             </TouchableOpacity>

@@ -1,6 +1,6 @@
-import { StorageSpace } from "@/features/storage-space/types"
-import { View, Text, StyleSheet } from "react-native"
-import { bookingService } from "../services";
+import { StorageSpace } from "@/features/storage-space/types";
+import { StyleSheet, Text, View } from "react-native";
+import { checkoutService } from "../services";
 
 interface CardProps {
   space:  StorageSpace
@@ -11,7 +11,7 @@ const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 export const PriceBreakDown = ({space}: CardProps) => {
 
-  const totalPrice = bookingService.getPriceWithFee(space.amount);
+  const totalPrice = checkoutService.getPriceWithFee(space.amount);
 
   return (
     <View style={styles.summaryBox}>
