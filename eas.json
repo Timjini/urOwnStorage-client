@@ -11,9 +11,18 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": { "distribution": "store", "android": { "buildType": "app-bundle" } }
+    "production": {
+      "distribution": "store"
+    }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "track": "internal"
+      },
+      "ios": {
+        "ascAppId": "6777071268"
+      }
+    }
   }
 }

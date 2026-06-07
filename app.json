@@ -9,7 +9,13 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.urownstorage"
+      "deploymentTarget": "16.4",
+      "bundleIdentifier": "com.urownstorage",
+
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "This app requires camera access to allow you to upload profile pictures or scan/send proof of storage items."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -49,11 +55,7 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
-      "@react-native-community/datetimepicker",
-      [
-        "@stripe/stripe-react-native",
-        {}
-      ],
+      ["@stripe/stripe-react-native", {}],
       "expo-web-browser",
       "expo-image"
     ],

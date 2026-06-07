@@ -1,9 +1,9 @@
 import { Theme } from "@/constants/theme";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 
 const SkeletonItem = ({ style }: { style: any }) => {
-  const opacity = useRef(new Animated.Value(0.3)).current;
+  const opacity = useMemo(() => new Animated.Value(0.3), []);
 
   useEffect(() => {
     Animated.loop(
