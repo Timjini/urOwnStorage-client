@@ -14,6 +14,7 @@ import {
   View,
 } from "react-native";
 import { StorageSpace } from "../types";
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const { width } = Dimensions.get("window");
 const brandOrange = "#C83803";
@@ -33,6 +34,7 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   }
   return (
     <>
+    <SafeAreaView>
       <ScrollView bounces={false} contentContainerStyle={styles.scrollContent}>
         {/* 1. Image Gallery Header */}
         <View style={styles.galleryContainer}>
@@ -49,20 +51,6 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
               />
             ))}
           </ScrollView>
-
-          {/* Floating Back & Share Buttons */}
-          <View style={styles.floatingNav}>
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={styles.circleBtn}
-            >
-              <Ionicons name="chevron-back" size={24} color="#151718" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.circleBtn}>
-              <Ionicons name="share-outline" size={22} color="#151718" />
-            </TouchableOpacity>
-          </View>
-
           <View style={styles.imageCounter}>
             <Text style={styles.counterText}>1 / {space.imageUrls.length}</Text>
           </View>
@@ -151,6 +139,7 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
           <Text style={styles.bookBtnText}>Reserve Space</Text>
         </TouchableOpacity>
       </View>
+    </SafeAreaView>
     </>
   );
 };

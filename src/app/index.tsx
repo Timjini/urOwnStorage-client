@@ -20,12 +20,10 @@ export default function WelcomeScreen() {
       source={{ uri: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000' }} 
       style={styles.background}
     >
-      {/* Dark overlay to make text pop */}
       <View style={styles.overlay}>
         <SafeAreaView style={styles.container}>
 
           <View style={styles.topSection}>
-            {/* Replace with your actual logo file */}
             <View style={styles.logoContainer}>
               <Text style={styles.logoText}>UR <Text style={{color: Theme.colors.primary}}>OWN</Text> <Text style={{color: '#fff'}}>STORAGE</Text></Text>
             </View>

@@ -3,7 +3,6 @@ import { StorageSpaceSkeleton } from "@/features/storage-space/components/storag
 
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {
   const { data: spaces, isPending, isError, refetch } = useStorageSpaces("active");
@@ -20,7 +20,7 @@ export default function Index() {
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={styles.container}>
-        <ScrollView style={{ backgroundColor: "#F5F7F9", padding: 16 }}>
+        <ScrollView style={{ padding: 16 }}>
           {isPending && (
             <>
               <StorageSpaceSkeleton />
@@ -56,7 +56,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#C83803",
+    backgroundColor: "#fff",
   },
   container: {
     flex: 1,

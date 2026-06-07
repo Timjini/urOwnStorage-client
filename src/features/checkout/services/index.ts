@@ -6,7 +6,7 @@ export const checkoutService = {
   defaultFee: 5,
 
   getPriceWithFee(price: number): number {
-    return this.defaultFee + price;
+    return Number(this.defaultFee) + Number(price);
   },
 
   async create(data: Checkout): Promise<JsonApiSingleResponse<CheckoutAttributes>> {

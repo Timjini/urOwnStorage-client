@@ -11,9 +11,7 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {
-      "autoIncrement": true
-    }
+    "production": { "distribution": "store", "android": { "buildType": "app-bundle" } }
   },
   "submit": {
     "production": {}
