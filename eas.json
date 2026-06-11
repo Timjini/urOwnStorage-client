@@ -4,19 +4,30 @@
     "appVersionSource": "remote"
   },
   "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+    "production": {
+      "node": "22.19.0",
+      "autoIncrement": true
     },
     "preview": {
-      "distribution": "internal"
-    },
-    "production": {
+      "extends": "production",
       "distribution": "store"
+    },
+    "development": {
+      "extends": "production",
+      "developmentClient": true,
+      "distribution": "internal"
     }
   },
   "submit": {
     "production": {
+      "android": {
+        "track": "internal"
+      },
+      "ios": {
+        "ascAppId": "6777071268"
+      }
+    },
+    "preview": {
       "android": {
         "track": "internal"
       },
