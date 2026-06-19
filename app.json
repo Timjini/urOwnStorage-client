@@ -54,9 +54,13 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
-      ["@stripe/stripe-react-native", {}],
+      [
+        "@stripe/stripe-react-native",
+        {}
+      ],
       "expo-web-browser",
-      "expo-image"
+      "expo-image",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,

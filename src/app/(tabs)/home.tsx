@@ -10,17 +10,22 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
-  const { data: spaces, isPending, isError, refetch } = useStorageSpaces("active");
+  const {
+    data: spaces,
+    isPending,
+    isError,
+    refetch,
+  } = useStorageSpaces("active");
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={styles.container}>
-        <ScrollView style={{ padding: 16 }}>
+        <ScrollView style={{ padding: 4 }}>
           {isPending && (
             <>
               <StorageSpaceSkeleton />
@@ -31,20 +36,29 @@ export default function Index() {
 
           {isError && (
             <View style={styles.centerContainer}>
-              <Text style={styles.errorText}>Failed to load storage spaces.</Text>
-              <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+              <Text style={styles.errorText}>
+                Failed to load storage spaces.
+              </Text>
+              <TouchableOpacity
+                style={styles.retryButton}
+                onPress={() => refetch()}
+              >
                 <Text style={styles.retryButtonText}>Try Again</Text>
               </TouchableOpacity>
             </View>
           )}
 
-          {!isPending && !isError && spaces?.map((space) => (
-            <StorageSpaceCard key={space.id} space={space} />
-          ))}
+          {!isPending &&
+            !isError &&
+            spaces?.map((space) => (
+              <StorageSpaceCard key={space.id} space={space} />
+            ))}
 
           {!isPending && !isError && spaces?.length === 0 && (
             <View style={styles.centerContainer}>
-              <Text style={styles.emptyText}>No storage spaces available right now.</Text>
+              <Text style={styles.emptyText}>
+                No storage spaces available right now.
+              </Text>
             </View>
           )}
         </ScrollView>
@@ -64,29 +78,29 @@ const styles = StyleSheet.create({
   },
   centerContainer: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 5,
   },
   errorText: {
     fontSize: 16,
-    color: '#D32F2F',
+    color: "#D32F2F",
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   emptyText: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
+    color: "#666",
+    textAlign: "center",
   },
   retryButton: {
-    backgroundColor: '#C83803',
+    backgroundColor: "#C83803",
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#fff',
-    fontWeight: '700',
+    color: "#fff",
+    fontWeight: "700",
   },
 });
