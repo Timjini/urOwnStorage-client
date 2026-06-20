@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { NotificationDrawer } from "./SideDrawer";
 import { useRouter } from "expo-router";
 
@@ -10,25 +10,31 @@ const lightBorder = "#ECEDEE";
 export const DashboardHeader = () => {
   const [notifVisible, setNotifVisible] = useState(false);
   const router = useRouter();
+
   return (
     <>
       <View style={styles.headerContainer}>
-        <View style={styles.searchSection}>
+        {/* Changed from a View to a TouchableOpacity button */}
+        <TouchableOpacity
+          style={styles.filterSection}
+          onPress={() => router.push("/(storage-spaces)/filter")} // Routes to your filter screen
+          activeOpacity={0.7}
+        >
           <Ionicons
-            name="search"
+            name="options-outline" // Swapped search icon for a filter/options icon
             size={18}
             color="#687076"
-            style={styles.searchIcon}
+            style={styles.filterIcon}
           />
-          <TextInput
-            style={styles.input}
-            placeholder="Search for storage spaces or addresses..."
-            placeholderTextColor="#9BA1A6"
-            underlineColorAndroid="transparent"
-          />
-        </View>
+          <Text style={styles.filterPlaceholder}>
+            Filter by address, space type...
+          </Text>
+        </TouchableOpacity>
 
-        <TouchableOpacity style={styles.bellButton} onPress={()=> {router.push('/notifications')}}>
+        <TouchableOpacity
+          style={styles.bellButton}
+          onPress={() => router.push("/notifications")}
+        >
           <Ionicons name="notifications-outline" size={26} color={brandBlue} />
           <View style={styles.badge} />
         </TouchableOpacity>
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: lightBorder,
   },
-  searchSection: {
+  filterSection: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -60,15 +66,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     marginRight: 15,
+    height: 40, // Keeps the uniform layout height of the old input box
   },
-  searchIcon: {
+  filterIcon: {
     padding: 5,
   },
-  input: {
+  filterPlaceholder: {
     flex: 1,
-    height: 40,
-    color: "#151718",
+    color: "#9BA1A6", // Matches the original placeholder text color
     fontSize: 14,
+    paddingLeft: 4,
   },
   bellButton: {
     position: "relative",
