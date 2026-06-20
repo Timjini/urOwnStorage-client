@@ -1,9 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as Location from 'expo-location';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import * as Location from "expo-location";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-const brandOrange = '#C83803';
+const brandOrange = "#C83803";
 
 export const LocationBanner = () => {
   const [displayAddress, setDisplayAddress] = useState("Detecting location...");
@@ -12,12 +12,13 @@ export const LocationBanner = () => {
     (async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
+        if (status !== "granted") {
           setDisplayAddress("Location permission denied");
           return;
         }
 
         let isLocationEnabled = await Location.hasServicesEnabledAsync();
+        console.log("isLocationEnabled", isLocationEnabled);
         if (!isLocationEnabled) {
           setDisplayAddress("Location services disabled");
           return;
@@ -27,6 +28,8 @@ export const LocationBanner = () => {
           accuracy: Location.Accuracy.Balanced,
         });
 
+        console.log("location", location);
+
         let reverse = await Location.reverseGeocodeAsync({
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
@@ -34,7 +37,9 @@ export const LocationBanner = () => {
 
         if (reverse.length > 0) {
           const addr = reverse[0];
-          setDisplayAddress(`${addr.streetNumber || ''} ${addr.street || 'Current Location'}, ${addr.city}`);
+          setDisplayAddress(
+            `${addr.streetNumber || ""} ${addr.street || "Current Location"}, ${addr.city}`,
+          );
         } else {
           setDisplayAddress("Unknown location");
         }
@@ -51,7 +56,12 @@ export const LocationBanner = () => {
       <Text style={styles.text} numberOfLines={1}>
         Current Location: <Text style={styles.bold}>{displayAddress}</Text>
       </Text>
-      <Ionicons name="chevron-down" size={12} color="white" style={{ marginLeft: 4 }} />
+      <Ionicons
+        name="chevron-down"
+        size={12}
+        color="white"
+        style={{ marginLeft: 4 }}
+      />
     </View>
   );
 };
@@ -61,15 +71,15 @@ const styles = StyleSheet.create({
     backgroundColor: brandOrange,
     paddingVertical: 6,
     paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   text: {
-    color: 'white',
+    color: "white",
     fontSize: 12,
     marginLeft: 5,
   },
   bold: {
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });

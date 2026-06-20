@@ -1,40 +1,48 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
 export default function StorageSpaceLayout() {
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
         },
-        headerTintColor: '#151718',
+        headerTintColor: "#151718",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-        animation: 'slide_from_right', 
+        animation: "slide_from_right",
       }}
     >
-      <Stack.Screen 
-        name="index" 
-        options={{ 
-          title: 'Storage Spaces',
+      <Stack.Screen
+        name="index"
+        options={{
+          title: "Storage Spaces",
           headerShown: false,
-        }} 
+        }}
       />
 
-      <Stack.Screen 
-        name="[id]/index" 
-        options={{ 
-          title: 'Storage Space Details',
-          headerShown: false
-        }} 
+      <Stack.Screen
+        name="[id]/index"
+        options={{
+          title: "Storage Space Details",
+          headerShown: false,
+        }}
       />
 
-      <Stack.Screen 
-        name="[id]/booking/index" 
-        options={{ 
-          title: 'Book Space',
-          headerShown: false
+      <Stack.Screen
+        name="[id]/booking/index"
+        options={{
+          title: "Book Space",
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="filter"
+        options={{
+          title: "Filter Storage Spaces",
+          headerShown: false,
         }}
       />
     </Stack>

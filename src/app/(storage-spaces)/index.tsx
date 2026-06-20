@@ -1,30 +1,21 @@
 import { StorageCard } from "@/components/storageSpace/StorageCard";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const { data: spaces } = useStorageSpaces("active");
 
-  const { data: spaces } = useStorageSpaces('active');
-
-
-  console.log("spaces", spaces);
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={styles.container}>
         <ScrollView style={{ backgroundColor: "#F5F7F9" }}>
-          {spaces?.map((space) => 
+          {spaces?.map((space) => (
             <StorageSpaceCard key={space.id} space={space} />
-          )}
+          ))}
           <StorageCard />
           <StorageCard />
           <StorageCard />
