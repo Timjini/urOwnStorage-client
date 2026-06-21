@@ -1,57 +1,106 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as Location from 'expo-location';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useLocationStore } from "@/features/localisation/user-location/store/use-location-store";
+import { Ionicons } from "@expo/vector-icons";
+import * as Location from "expo-location";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-const brandOrange = '#C83803';
+const brandOrange = "#C83803";
 
 export const LocationBanner = () => {
-  const [displayAddress, setDisplayAddress] = useState("Detecting location...");
+  const { savedAddress, setLocation, clearLocation } = useLocationStore();
 
   useEffect(() => {
-    (async () => {
+    let isMounted = true;
+
+    const fetchDeviceLocation = async () => {
       try {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          setDisplayAddress("Location permission denied");
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          if (isMounted)
+            useLocationStore.setState({
+              savedAddress: "Location permission denied",
+            });
           return;
         }
 
-        let isLocationEnabled = await Location.hasServicesEnabledAsync();
+        const isLocationEnabled = await Location.hasServicesEnabledAsync();
         if (!isLocationEnabled) {
-          setDisplayAddress("Location services disabled");
+          if (isMounted)
+            useLocationStore.setState({
+              savedAddress: "Location services disabled",
+            });
           return;
         }
 
-        let location = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.Balanced,
+        let locationResult: Location.LocationObject | null = null;
+
+        try {
+          locationResult = await Location.getLastKnownPositionAsync({});
+
+          if (!locationResult) {
+            locationResult = await Location.getCurrentPositionAsync({
+              accuracy: Location.Accuracy.Balanced,
+              // timeout: 10000,
+            });
+          }
+        } catch (innerError) {
+          console.warn(
+            "Fresh location timed out. Attempting last known lookup...",
+          );
+          locationResult = await Location.getLastKnownPositionAsync({});
+        }
+
+        if (!locationResult) {
+          if (isMounted)
+            useLocationStore.setState({ savedAddress: "Location unavailable" });
+          return;
+        }
+
+        const { latitude, longitude } = locationResult.coords;
+
+        const reverse = await Location.reverseGeocodeAsync({
+          latitude,
+          longitude,
         });
 
-        let reverse = await Location.reverseGeocodeAsync({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        });
-
-        if (reverse.length > 0) {
+        let readableAddress = "Unknown location";
+        if (reverse && reverse.length > 0) {
           const addr = reverse[0];
-          setDisplayAddress(`${addr.streetNumber || ''} ${addr.street || 'Current Location'}, ${addr.city}`);
-        } else {
-          setDisplayAddress("Unknown location");
+          const rawStreet =
+            `${addr.streetNumber || ""} ${addr.street || ""}`.trim();
+          const locationLabel =
+            rawStreet || addr.district || "Current Location";
+          readableAddress = `${locationLabel}, ${addr.city || addr.subregion || ""}`;
+        }
+
+        if (isMounted) {
+          setLocation(latitude, longitude, readableAddress);
         }
       } catch (error) {
-        console.warn("Location error caught successfully:", error);
-        setDisplayAddress("Location unavailable");
+        console.error("Location Engine Failure:", error);
+        if (isMounted) clearLocation();
       }
-    })();
+    };
+
+    fetchDeviceLocation();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
     <View style={styles.banner}>
       <Ionicons name="location-sharp" size={14} color="white" />
       <Text style={styles.text} numberOfLines={1}>
-        Current Location: <Text style={styles.bold}>{displayAddress}</Text>
+        Current Location: <Text style={styles.bold}>{savedAddress}</Text>
       </Text>
-      <Ionicons name="chevron-down" size={12} color="white" style={{ marginLeft: 4 }} />
+      <Ionicons
+        name="chevron-down"
+        size={12}
+        color="white"
+        style={{ marginLeft: 4 }}
+      />
     </View>
   );
 };
@@ -61,15 +110,16 @@ const styles = StyleSheet.create({
     backgroundColor: brandOrange,
     paddingVertical: 6,
     paddingHorizontal: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   text: {
-    color: 'white',
+    color: "white",
     fontSize: 12,
     marginLeft: 5,
+    flex: 1,
   },
   bold: {
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });

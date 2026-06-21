@@ -1,15 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { StorageSpaceService } from "../services";
-
-export interface StorageSpaceFilters {
-  status?: string;
-  selectedInterval?: string;
-  selectedSpaceType?: string;
-  selectedFeatures?: string[];
-  selectedAddress?: string;
-  coordinates?: [number, number] | null;
-}
+import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
 
 export const useStorageSpaces = (
   filters?: StorageSpaceFilters,

@@ -2,7 +2,7 @@ import { apiClient } from "@/lib/apiClient";
 import { StorageSpace } from "../types";
 import { JsonApiResponse, JsonApiSingleResponse } from "@/types/api";
 import { STORAGE_SPACES } from "@/constants/appGlobal";
-import { StorageSpaceFilters } from "../hooks/useStorageSpace";
+import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
 
 export const fetchStorageSpaces = async (
   query?: string | StorageSpaceFilters,
@@ -28,6 +28,7 @@ export const fetchStorageSpaces = async (
       }
 
       const queryString = searchParams.toString();
+      console.log("------------>", url, queryString);
       if (queryString) {
         url += `?${queryString}`;
       }

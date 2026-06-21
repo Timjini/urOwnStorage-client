@@ -1,9 +1,11 @@
+import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
 import * as storageSpaceApi from "../api";
-import { StorageSpaceFilters } from "../hooks/useStorageSpace";
 import { StorageSpace } from "../types";
 
 interface IStorageSpaceService {
-  getAvailableSpaces(searchQuery?: string): Promise<StorageSpace[]>;
+  getAvailableSpaces(
+    searchQuery?: string | StorageSpaceFilters,
+  ): Promise<StorageSpace[]>;
   getSpaceDetails(id: string): Promise<StorageSpace>;
 }
 

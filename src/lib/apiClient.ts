@@ -1,30 +1,39 @@
-interface RequestOptions extends Omit<RequestInit, 'body'> {
-  body?: unknown; 
+interface RequestOptions extends Omit<RequestInit, "body"> {
+  body?: unknown;
 }
 
-async function apiRequest<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
-  const { method = 'GET', body, headers = {}, ...customConfig } = options;
+async function apiRequest<T>(
+  endpoint: string,
+  options: RequestOptions = {},
+): Promise<T> {
+  const { method = "GET", body, headers = {}, ...customConfig } = options;
   const config: RequestInit = {
     method,
     headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
       ...headers,
     },
     ...customConfig,
   };
 
+  console.log("options", config);
+
   if (body) config.body = JSON.stringify(body);
 
   try {
     const response = await fetch(`${endpoint}`, config);
-    
+
     if (response.status === 204) return {} as T;
 
     const data = await response.json();
 
     console.log("------apiClient data-----", data);
     if (!response.ok) {
+      if (response.status === 404) {
+        return { data: [] } as T;
+      }
+
       throw new Error(data.message || `API Error: ${response.status}`);
     }
 
@@ -36,20 +45,20 @@ async function apiRequest<T>(endpoint: string, options: RequestOptions = {}): Pr
       console.log("An unexpected error occurred", String(error));
     }
 
-    throw error; 
+    throw error;
   }
 }
 
 export const apiClient = {
-  get: <T>(endpoint: string, options?: RequestOptions) => 
-    apiRequest<T>(endpoint, { ...options, method: 'GET' }),
+  get: <T>(endpoint: string, options?: RequestOptions) =>
+    apiRequest<T>(endpoint, { ...options, method: "GET" }),
 
-  post: <T, B = unknown>(endpoint: string, body: B, options?: RequestOptions) => 
-    apiRequest<T>(endpoint, { ...options, method: 'POST', body }),
+  post: <T, B = unknown>(endpoint: string, body: B, options?: RequestOptions) =>
+    apiRequest<T>(endpoint, { ...options, method: "POST", body }),
 
-  put: <T, B = unknown>(endpoint: string, body: B, options?: RequestOptions) => 
-    apiRequest<T>(endpoint, { ...options, method: 'PUT', body }),
+  put: <T, B = unknown>(endpoint: string, body: B, options?: RequestOptions) =>
+    apiRequest<T>(endpoint, { ...options, method: "PUT", body }),
 
-  delete: <T>(endpoint: string, options?: RequestOptions) => 
-    apiRequest<T>(endpoint, { ...options, method: 'DELETE' }),
+  delete: <T>(endpoint: string, options?: RequestOptions) =>
+    apiRequest<T>(endpoint, { ...options, method: "DELETE" }),
 };
