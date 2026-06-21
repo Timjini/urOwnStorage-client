@@ -14,14 +14,13 @@ export const DashboardHeader = () => {
   return (
     <>
       <View style={styles.headerContainer}>
-        {/* Changed from a View to a TouchableOpacity button */}
         <TouchableOpacity
           style={styles.filterSection}
-          onPress={() => router.push("/(storage-spaces)/filter")} // Routes to your filter screen
+          onPress={() => router.push("/(storage-spaces)/filter")}
           activeOpacity={0.7}
         >
           <Ionicons
-            name="options-outline" // Swapped search icon for a filter/options icon
+            name="options-outline"
             size={18}
             color="#687076"
             style={styles.filterIcon}

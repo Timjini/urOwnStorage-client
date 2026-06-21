@@ -14,7 +14,8 @@ import {
   View,
 } from "react-native";
 import { StorageSpace } from "../types";
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import StorageSpaceMap from "./storage-space-map";
 
 const { width } = Dimensions.get("window");
 const brandOrange = "#C83803";
@@ -24,19 +25,27 @@ const mutedText = "#687076";
 interface StorageSpaceProps {
   space: StorageSpace;
 }
+
 const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+
   const handleBooking = () => {
     router.push({
       pathname: "/(storage-spaces)/[id]/booking",
-      params: { id: space.id }
+      params: { id: space.id },
     });
-  }
+  };
+
   return (
-    <>
-    <SafeAreaView>
-      <ScrollView bounces={false} contentContainerStyle={styles.scrollContent}>
-        {/* 1. Image Gallery Header */}
+    <View style={styles.container}>
+      <ScrollView
+        bounces={false}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: 100 + insets.bottom },
+        ]}
+      >
         <View style={styles.galleryContainer}>
           <ScrollView
             horizontal
@@ -54,9 +63,17 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
           <View style={styles.imageCounter}>
             <Text style={styles.counterText}>1 / {space.imageUrls.length}</Text>
           </View>
+
+          <View style={[styles.floatingNav, { top: Math.max(insets.top, 16) }]}>
+            <TouchableOpacity
+              style={styles.circleBtn}
+              onPress={() => router.back()}
+            >
+              <Ionicons name="arrow-back" size={22} color="#151718" />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {/* 2. Listing Info Header */}
         <View style={styles.infoSection}>
           <View style={styles.badgeRow}>
             {!!space?.instantBooking && (
@@ -66,7 +83,8 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
                 badgeStyle={styles.instantBadge}
                 textStyle={styles.badgeText}
                 iconColor="#fff"
-              />)}
+              />
+            )}
 
             <View style={styles.ratingRow}>
               <Ionicons name="star" size={14} color="#FFB000" />
@@ -78,39 +96,18 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
           <View style={styles.locationRow}>
             <Ionicons name="location-outline" size={16} color={brandBlue} />
             <Text style={styles.addressText}>
-              3500 Franklin Pike, Nashville, TN 37204
+              {space.address.address1}, {space.address.city}{" "}
+              {space.address.postcode}, {space.address.country}
             </Text>
           </View>
         </View>
 
         <View style={styles.divider} />
 
-        {/* 3. Map / Location Preview */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Location</Text>
-          <TouchableOpacity style={styles.mapContainer}>
-            {/* Fake Map Placeholder - Replace with react-native-maps in production */}
-            <Image
-              source={{
-                uri: `https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-s+C83803(-86.7816,36.1627)/-86.7816,36.1627,14/600x300@2x?access_token=${process.env.MAPBOX_API_KEY}`,
-              }}
-              style={styles.mapPlaceholder}
-            />
-            <View style={styles.mapOverlay}>
-              <View style={styles.mapButton}>
-                <Ionicons name="map-outline" size={18} color={brandBlue} />
-                <Text style={styles.mapButtonText}>Open in Maps</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <Text style={styles.locationNote}>
-            Exact location provided after booking for security.
-          </Text>
-        </View>
+        <StorageSpaceMap lng={space.address.lng} lat={space.address.lat} />
 
         <View style={styles.divider} />
 
-        {/* 4. Features/Amenities */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Space Features</Text>
           <View style={styles.featureGrid}>
@@ -122,8 +119,12 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
         </View>
       </ScrollView>
 
-      {/* 5. Sticky Booking Bar */}
-      <View style={styles.bottomBar}>
+      <View
+        style={[
+          styles.bottomBar,
+          { paddingBottom: Math.max(insets.bottom, 16) },
+        ]}
+      >
         <View>
           <View style={styles.priceRow}>
             <Text style={styles.price}>{space.formattedPrice}</Text>
@@ -132,19 +133,14 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
           <Text style={styles.availability}>Available now</Text>
         </View>
 
-        <TouchableOpacity
-          style={styles.bookBtn}
-          onPress={handleBooking}
-        >
+        <TouchableOpacity style={styles.bookBtn} onPress={handleBooking}>
           <Text style={styles.bookBtnText}>Reserve Space</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
-    </>
+    </View>
   );
 };
 
-// Sub-component for Features
 const Feature = ({ icon, label }: { icon: any; label: string }) => (
   <View style={styles.featureItem}>
     <Ionicons name={icon} size={20} color={brandBlue} />
@@ -153,17 +149,29 @@ const Feature = ({ icon, label }: { icon: any; label: string }) => (
 );
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  scrollContent: { paddingBottom: 120 },
-  galleryContainer: { height: 300, position: "relative" },
-  mainImage: { width: width, height: 300, resizeMode: "cover" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  scrollContent: {
+    paddingBottom: 120,
+  },
+  galleryContainer: {
+    height: 300,
+    position: "relative",
+  },
+  mainImage: {
+    width: width,
+    height: 300,
+    resizeMode: "cover",
+  },
   floatingNav: {
     position: "absolute",
-    top: Platform.OS === "ios" ? 50 : 20,
-    left: 20,
-    right: 20,
+    left: 16,
+    right: 16,
     flexDirection: "row",
     justifyContent: "space-between",
+    zIndex: 10,
   },
   circleBtn: {
     width: 40,
@@ -173,8 +181,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   imageCounter: {
     position: "absolute",
@@ -184,9 +194,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 15,
+    zIndex: 5,
   },
-  counterText: { color: "#fff", fontSize: 12, fontWeight: "600" },
-  infoSection: { padding: 20 },
+  counterText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "600",
+  },
+  infoSection: {
+    padding: 20,
+  },
   badgeRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -201,19 +218,44 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 4,
   },
-  badgeText: { color: "#fff", fontSize: 10, fontWeight: "800", marginLeft: 4 },
-  ratingRow: { flexDirection: "row", alignItems: "center" },
+  badgeText: {
+    color: "#fff",
+    fontSize: 10,
+    fontWeight: "800",
+    marginLeft: 4,
+  },
+  ratingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   ratingText: {
     fontSize: 13,
     fontWeight: "600",
     color: "#151718",
     marginLeft: 4,
   },
-  title: { fontSize: 24, fontWeight: "800", color: "#151718", marginBottom: 8 },
-  locationRow: { flexDirection: "row", alignItems: "center" },
-  addressText: { color: mutedText, fontSize: 14, marginLeft: 6 },
-  divider: { height: 8, backgroundColor: "#F5F7F9" },
-  section: { padding: 20 },
+  title: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: "#151718",
+    marginBottom: 8,
+  },
+  locationRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addressText: {
+    color: mutedText,
+    fontSize: 14,
+    marginLeft: 6,
+  },
+  divider: {
+    height: 8,
+    backgroundColor: "#F5F7F9",
+  },
+  section: {
+    padding: 20,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
@@ -226,13 +268,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     position: "relative",
   },
-  mapPlaceholder: { width: "100%", height: "100%" },
-  mapOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.05)",
-    justifyContent: "center",
-    alignItems: "center",
+  mapPlaceholder: {
+    width: "100%",
+    height: "100%",
   },
+
   mapButton: {
     flexDirection: "row",
     backgroundColor: "#fff",
@@ -243,15 +283,24 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
+    elevation: 3,
   },
-  mapButtonText: { color: brandBlue, fontWeight: "700", marginLeft: 8 },
+  mapButtonText: {
+    color: brandBlue,
+    fontWeight: "700",
+    marginLeft: 8,
+  },
   locationNote: {
     fontSize: 12,
     color: mutedText,
     marginTop: 10,
     fontStyle: "italic",
   },
-  featureGrid: { flexDirection: "row", flexWrap: "wrap", gap: 15 },
+  featureGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 15,
+  },
   featureItem: {
     width: (width - 55) / 2,
     flexDirection: "row",
@@ -276,22 +325,40 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingTop: 15,
     borderTopWidth: 1,
     borderTopColor: "#ECEDEE",
-    paddingBottom: Platform.OS === "ios" ? 35 : 15,
   },
-  priceRow: { flexDirection: "row", alignItems: "baseline" },
-  price: { fontSize: 24, fontWeight: "800", color: brandOrange },
-  perMonth: { fontSize: 14, color: mutedText, marginLeft: 2 },
-  availability: { fontSize: 12, color: "#2E7D32", fontWeight: "600" },
+  priceRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+  },
+  price: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: brandOrange,
+  },
+  perMonth: {
+    fontSize: 14,
+    color: mutedText,
+    marginLeft: 2,
+  },
+  availability: {
+    fontSize: 12,
+    color: "#2E7D32",
+    fontWeight: "600",
+  },
   bookBtn: {
     backgroundColor: brandBlue,
     paddingHorizontal: 28,
     paddingVertical: 14,
     borderRadius: 12,
   },
-  bookBtnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+  bookBtnText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
 });
 
 export default StorageSpaceView;
