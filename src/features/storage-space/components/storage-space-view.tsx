@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bookBtn: {
-    backgroundColor: brandBlue,
+    backgroundColor: brandOrange,
     paddingHorizontal: 28,
     paddingVertical: 14,
     borderRadius: 12,

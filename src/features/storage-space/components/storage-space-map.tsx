@@ -1,11 +1,9 @@
 import { Text, View, StyleSheet } from "react-native";
-import MapView from "react-native-maps";
+// import MapView from "react-native-maps";
 
 const StorageSpaceMap = ({ lng, lat }: { lng: number; lat: number }) => {
   return (
-    <View style={styles.container}>
-      <MapView style={styles.map} />
-    </View>
+    <View style={styles.container}>{/*<MapView style={styles.map} />*/}</View>
   );
 };
 

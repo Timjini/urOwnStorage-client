@@ -29,7 +29,7 @@ export const StorageSpaceCard = ({ space }: CardProps) => {
     });
   };
 
-  console.log("===> ", space.imageUrls);
+  console.log("space", space);
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -42,7 +42,7 @@ export const StorageSpaceCard = ({ space }: CardProps) => {
           style={styles.image}
         />
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>Shared Space</Text>
+          <Text style={styles.badgeText}>{space.spaceType}</Text>
         </View>
       </View>
 
@@ -89,7 +89,7 @@ export const StorageSpaceCard = ({ space }: CardProps) => {
 
         <View style={styles.footer}>
           <View>
-            <Text style={styles.priceLabel}>Monthly</Text>
+            <Text style={styles.priceLabel}>{space.billingInterval}</Text>
             <Text style={styles.priceValue}>
               {space.formattedPrice}
               <Text style={styles.priceUnit}>/{space.billingInterval}</Text>

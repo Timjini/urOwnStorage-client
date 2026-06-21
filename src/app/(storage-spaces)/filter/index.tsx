@@ -10,7 +10,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Slider from "@react-native-community/slider";
+import { ActivityIndicator } from "react-native";
+
+// import { SafeAreaView } from "react-native-safe-area-context";
 
 const ALLOWED_INTERVALS = ["day", "week", "month", "year"];
 const SPACE_TYPES = [
@@ -36,6 +39,7 @@ const FEATURE_OPTIONS = [
 ];
 
 const brandBlue = "#0a7ea4";
+const brandOrange = "#C83803";
 
 export default function FilterScreen() {
   const router = useRouter();
@@ -64,106 +68,147 @@ export default function FilterScreen() {
     }
   };
 
+  const [loading, setLoading] = useState(false);
+  const [distance, setDistance] = useState(1);
   const handleApply = () => {
+    setLoading(true);
     router.push({
-      pathname: "/home",
+      pathname: "/(storage-spaces)",
       params: {
-        selectedInterval,
-        selectedSpaceType,
-        selectedFeatures: JSON.stringify(selectedFeatures),
-        selectedAddress,
+        billing_interval: selectedInterval,
+        space_type: selectedSpaceType,
+        features: JSON.stringify(selectedFeatures),
+        address: selectedAddress,
         coordinates: JSON.stringify(coordinates),
+        lat: coordinates?.[1],
+        lng: coordinates?.[0],
+        distance: distance,
       },
     });
+    setLoading(false);
   };
   return (
-    <SafeAreaView style={styles.safeContainer}>
+    <View style={styles.safeContainer}>
       <View style={styles.container}>
         <Text style={styles.sectionTitle}>Location Address</Text>
 
         <AddressAutocomplete onLocationSelect={handleLocationSelect} />
 
-        <Text style={styles.sectionTitle}>Space Type</Text>
-        <View style={styles.chipContainer}>
-          {SPACE_TYPES.map((type) => {
-            const isSelected = selectedSpaceType === type;
-            return (
-              <TouchableOpacity
-                key={type}
-                style={[styles.chip, isSelected && styles.chipSelected]}
-                onPress={() => setSelectedSpaceType(isSelected ? "" : type)}
-              >
-                <Text
-                  style={[
-                    styles.chipText,
-                    isSelected && styles.chipTextSelected,
-                  ]}
-                >
-                  {type}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+        <View style={styles.sliderContainer}>
+          <Text style={styles.sliderLabel}>
+            Distance: {distance.toFixed(2)} miles
+          </Text>
+          <Slider
+            style={{ width: "100%", height: 40 }}
+            minimumValue={0}
+            maximumValue={999}
+            minimumTrackTintColor="#C83803"
+            maximumTrackTintColor="#ECEDEE"
+            thumbTintColor="#C83803"
+            value={distance}
+            onValueChange={(value) => setDistance(value)}
+          />
         </View>
+        <ScrollView>
+          <Text style={styles.sectionTitle}>Space Type</Text>
+          <View style={styles.chipContainer}>
+            {SPACE_TYPES.map((type) => {
+              const isSelected = selectedSpaceType === type;
+              return (
+                <TouchableOpacity
+                  key={type}
+                  style={[styles.chip, isSelected && styles.chipSelected]}
+                  onPress={() => setSelectedSpaceType(isSelected ? "" : type)}
+                >
+                  <Text
+                    style={[
+                      styles.chipText,
+                      isSelected && styles.chipTextSelected,
+                    ]}
+                  >
+                    {type}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
 
-        <Text style={styles.sectionTitle}>Key Features</Text>
-        <View style={styles.chipContainer}>
-          {FEATURE_OPTIONS.map((feature) => {
-            const isSelected = selectedFeatures.includes(feature);
-            return (
-              <TouchableOpacity
-                key={feature}
-                style={[styles.chip, isSelected && styles.chipSelected]}
-                onPress={() => toggleFeature(feature)}
-              >
-                <Text
-                  style={[
-                    styles.chipText,
-                    isSelected && styles.chipTextSelected,
-                  ]}
+          <Text style={styles.sectionTitle}>Key Features</Text>
+          <View style={styles.chipContainer}>
+            {FEATURE_OPTIONS.map((feature) => {
+              const isSelected = selectedFeatures.includes(feature);
+              return (
+                <TouchableOpacity
+                  key={feature}
+                  style={[styles.chip, isSelected && styles.chipSelected]}
+                  onPress={() => toggleFeature(feature)}
                 >
-                  {feature}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                  <Text
+                    style={[
+                      styles.chipText,
+                      isSelected && styles.chipTextSelected,
+                    ]}
+                  >
+                    {feature}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
 
-        <Text style={styles.sectionTitle}>Rental Frequency / Interval</Text>
-        <View style={styles.chipContainer}>
-          {ALLOWED_INTERVALS.map((interval) => {
-            const isSelected = selectedInterval === interval;
-            return (
-              <TouchableOpacity
-                key={interval}
-                style={[styles.chip, isSelected && styles.chipSelected]}
-                onPress={() => setSelectedInterval(isSelected ? "" : interval)}
-              >
-                <Text
-                  style={[
-                    styles.chipText,
-                    isSelected && styles.chipTextSelected,
-                    { textTransform: "capitalize" },
-                  ]}
+          <Text style={styles.sectionTitle}>Rental Frequency / Interval</Text>
+          <View style={styles.chipContainer}>
+            {ALLOWED_INTERVALS.map((interval) => {
+              const isSelected = selectedInterval === interval;
+              return (
+                <TouchableOpacity
+                  key={interval}
+                  style={[styles.chip, isSelected && styles.chipSelected]}
+                  onPress={() =>
+                    setSelectedInterval(isSelected ? "" : interval)
+                  }
                 >
-                  per {interval}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                  <Text
+                    style={[
+                      styles.chipText,
+                      isSelected && styles.chipTextSelected,
+                      { textTransform: "capitalize" },
+                    ]}
+                  >
+                    per {interval}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
 
         <View style={styles.footerContainer}>
-          <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-            <Text style={styles.applyButtonText}>Apply Filters</Text>
-          </TouchableOpacity>
+          {loading ? (
+            <View style={styles.applyButton}>
+              <ActivityIndicator size="small" color={"white"} />
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
+              <Text style={styles.applyButtonText}>Apply Filters</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  sliderContainer: {
+    width: "100%",
+    marginBottom: 5,
+    marginVertical: 20,
+  },
+  sliderLabel: {
+    fontSize: 14,
+    color: "#525252",
+  },
   container: {
     flex: 1,
     marginTop: 0,
@@ -289,9 +334,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopWidth: 1,
     borderTopColor: "#ECEDEE",
+    marginVertical: 16,
   },
   applyButton: {
-    backgroundColor: brandBlue,
+    backgroundColor: brandOrange,
     borderRadius: 10,
     height: 48,
     justifyContent: "center",

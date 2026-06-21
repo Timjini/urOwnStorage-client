@@ -1,3 +1,6 @@
+import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
+import { ErrorScreen } from "@/features/storage-space/components/error-screen";
+import { NotFoundScreen } from "@/features/storage-space/components/not-found-screen";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
 
@@ -24,7 +27,7 @@ export default function Index() {
     ? JSON.parse(params.selectedFeatures as string)
     : [];
 
-  const filters = {
+  const filters: StorageSpaceFilters = {
     // status: "active",
     billing_interval: (params.selectedInterval as string) || "month",
     space_type: (params.selectedSpaceType as string) || "Garage",
@@ -43,7 +46,7 @@ export default function Index() {
   } = useStorageSpaces(filters);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={styles.container}>
@@ -56,19 +59,7 @@ export default function Index() {
             </>
           )}
 
-          {isError && (
-            <View style={styles.centerContainer}>
-              <Text style={styles.errorText}>
-                Failed to load storage spaces.
-              </Text>
-              <TouchableOpacity
-                style={styles.retryButton}
-                onPress={() => refetch()}
-              >
-                <Text style={styles.retryButtonText}>Try Again</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+          {isError && <ErrorScreen refetch={refetch} />}
 
           {!isPending &&
             !isError &&
@@ -76,16 +67,10 @@ export default function Index() {
               <StorageSpaceCard key={space.id} space={space} />
             ))}
 
-          {!isPending && !isError && spaces?.length === 0 && (
-            <View style={styles.centerContainer}>
-              <Text style={styles.emptyText}>
-                No storage spaces available right now.
-              </Text>
-            </View>
-          )}
+          {!isPending && !isError && spaces?.length === 0 && <NotFoundScreen />}
         </ScrollView>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
