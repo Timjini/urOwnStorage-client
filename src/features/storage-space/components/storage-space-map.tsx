@@ -1,9 +1,13 @@
 import { Text, View, StyleSheet } from "react-native";
-// import MapView from "react-native-maps";
+import { MapView, PROVIDER_GOOGLE } from "react-native-maps";
+// import MapView, { Marker } from "react-native-maps";
 
 const StorageSpaceMap = ({ lng, lat }: { lng: number; lat: number }) => {
+  console.log("lng", lng, "lat", lat);
   return (
-    <View style={styles.container}>{/*<MapView style={styles.map} />*/}</View>
+    <View style={styles.container}>
+      <MapView style={styles.map} provider={PROVIDER_GOOGLE} />
+    </View>
   );
 };
 

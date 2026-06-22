@@ -103,8 +103,9 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
         </View>
 
         <View style={styles.divider} />
-
-        <StorageSpaceMap lng={space.address.lng} lat={space.address.lat} />
+        <>
+          <StorageSpaceMap lng={space.address.lng} lat={space.address.lat} />
+        </>
 
         <View style={styles.divider} />
 
