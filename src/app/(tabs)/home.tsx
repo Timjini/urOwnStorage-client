@@ -3,18 +3,10 @@ import { ErrorScreen } from "@/features/storage-space/components/error-screen";
 import { NotFoundScreen } from "@/features/storage-space/components/not-found-screen";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
-
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import { useLocalSearchParams } from "expo-router";
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
+import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
 
 export default function Index() {
   const params = useLocalSearchParams();
@@ -28,10 +20,8 @@ export default function Index() {
     : [];
 
   const filters: StorageSpaceFilters = {
-    // status: "active",
     billing_interval: (params.selectedInterval as string) || "month",
     space_type: (params.selectedSpaceType as string) || "Garage",
-    // address: params.selectedAddress as string,
     features: selectedFeatures,
     lat: coordinates?.[1],
     lng: coordinates?.[0],
@@ -45,12 +35,24 @@ export default function Index() {
     refetch,
   } = useStorageSpaces(filters);
 
+  const spacesMarkers = spaces
+    ? spaces.map((space) => ({
+        latitude: space.address.lat,
+        longitude: space.address.lng,
+        title: space.title,
+      }))
+    : [];
+
   return (
     <View style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={styles.container}>
-        <ScrollView style={{ padding: 16 }}>
+        <View style={styles.topMapContainer}>
+          <StorageSpaceMap markers={spacesMarkers} />
+        </View>
+
+        <ScrollView style={styles.listScroll}>
           {isPending && (
             <>
               <StorageSpaceSkeleton />
@@ -83,31 +85,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  centerContainer: {
+  topMapContainer: {
+    height: 250,
+    width: "100%",
+    backgroundColor: "#F5F7F9",
+  },
+  listScroll: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 50,
-  },
-  errorText: {
-    fontSize: 16,
-    color: "#D32F2F",
-    marginBottom: 16,
-    textAlign: "center",
-  },
-  emptyText: {
-    fontSize: 16,
-    color: "#666",
-    textAlign: "center",
-  },
-  retryButton: {
-    backgroundColor: "#C83803",
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: "#fff",
-    fontWeight: "700",
+    padding: 16,
   },
 });

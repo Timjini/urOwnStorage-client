@@ -1,21 +1,20 @@
-import { useStripePayment } from '@/features/checkout';
-import { Ionicons } from '@expo/vector-icons';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
+import { useStripePayment } from "@/features/checkout";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React from "react";
 import {
   ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-
-const brandOrange = '#C83803';
-const brandBlue = '#0a7ea4';
-const mutedText = '#687076';
+const brandOrange = "#C83803";
+const brandBlue = "#0a7ea4";
+const mutedText = "#687076";
 
 export default function CheckoutScreen() {
   const router = useRouter();
@@ -38,32 +37,35 @@ export default function CheckoutScreen() {
   const handlePayment = async () => {
     try {
       const isSuccess: boolean = await presentCheckout();
-    
+
       if (isSuccess) {
         router.replace({
-          pathname: '/(checkout)/success',
-          params: { referenceNumber: params.referenceNumber }
+          pathname: "/(checkout)/success",
+          params: { referenceNumber: params.referenceNumber },
         });
       } else {
-        router.replace('/(checkout)/failure'); 
+        router.replace("/(checkout)/failure");
       }
     } catch (error) {
       console.error("Payment routing error: ", error);
-      router.replace('/(checkout)/failure');
+      router.replace("/(checkout)/failure");
     }
   };
 
-  const storageSpaceData = params.storageSpace ? JSON.parse(params.storageSpace) : null;
+  const storageSpaceData = params.storageSpace
+    ? JSON.parse(params.storageSpace)
+    : null;
 
+  console.log("-=========> ", storageSpaceData);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        
         {/* Header Section */}
         <View style={styles.header}>
           <Text style={styles.mainTitle}>Secure Payment</Text>
           <Text style={styles.subTitle}>
-            Review your rental summary and complete your booking safely via Stripe.
+            Review your rental summary and complete your booking safely via
+            Stripe.
           </Text>
         </View>
 
@@ -87,36 +89,49 @@ export default function CheckoutScreen() {
             <View style={styles.detailRow}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.smallLabel}>STORAGE UNIT</Text>
-                <Text style={styles.detailValue}>{storageSpaceData?.name || "Standard Unit"}</Text>
+                <Text style={styles.detailValue}>
+                  {storageSpaceData?.name || "Standard Unit"}
+                </Text>
               </View>
-              <View style={{ alignItems: 'flex-end' }}>
+              <View style={{ alignItems: "flex-end" }}>
                 <Text style={styles.smallLabel}>REFERENCE</Text>
-                <Text style={[styles.detailValue, { color: brandOrange }]}>{params.referenceNumber}</Text>
+                <Text style={[styles.detailValue, { color: brandOrange }]}>
+                  {params.referenceNumber}
+                </Text>
               </View>
             </View>
 
             <View style={styles.detailRow}>
               <View>
                 <Text style={styles.smallLabel}>START DATE</Text>
-                <Text style={styles.detailValue}>{params.startDate || 'N/A'}</Text>
+                <Text style={styles.detailValue}>
+                  {params.startDate || "N/A"}
+                </Text>
               </View>
-              <View style={{ alignItems: 'flex-end' }}>
+              <View style={{ alignItems: "flex-end" }}>
                 <Text style={styles.smallLabel}>END DATE</Text>
-                <Text style={styles.detailValue}>{params.endDate || 'N/A'}</Text>
+                <Text style={styles.detailValue}>
+                  {params.endDate || "N/A"}
+                </Text>
               </View>
             </View>
 
             <View style={styles.addressSection}>
               <Text style={styles.smallLabel}>LOCATION</Text>
-              <Text style={styles.detailValue}>{storageSpaceData?.address || "Assigned Facility Location"}</Text>
+              <Text style={styles.detailValue}>
+                {storageSpaceData?.address || "Assigned Facility Location"}
+              </Text>
             </View>
           </View>
 
           {/* Footer Action */}
           <View style={styles.footer}>
-            <TouchableOpacity 
-              style={[styles.primaryButton, (!isReady || loading) && styles.disabledButton]}
-              disabled={!isReady || loading} 
+            <TouchableOpacity
+              style={[
+                styles.primaryButton,
+                (!isReady || loading) && styles.disabledButton,
+              ]}
+              disabled={!isReady || loading}
               onPress={handlePayment}
               activeOpacity={0.8}
             >
@@ -126,7 +141,8 @@ export default function CheckoutScreen() {
                 <>
                   <Ionicons name="lock-closed-sharp" size={18} color="#fff" />
                   <Text style={styles.primaryButtonText}>
-                    Pay Now • {params.totalAmount} {params.currency?.toUpperCase()}
+                    Pay Now • {params.totalAmount}{" "}
+                    {params.currency?.toUpperCase()}
                   </Text>
                 </>
               )}
@@ -134,17 +150,19 @@ export default function CheckoutScreen() {
 
             <View style={styles.securityNotice}>
               <Ionicons name="shield-checkmark" size={14} color={mutedText} />
-              <Text style={styles.securityNoticeText}>Encrypted, secure payment processing</Text>
+              <Text style={styles.securityNoticeText}>
+                Encrypted, secure payment processing
+              </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.supportLink}>
           <Text style={styles.supportText}>
-            Secured by <Text style={{ fontWeight: '700', color: '#635BFF' }}>stripe</Text>
+            Secured by{" "}
+            <Text style={{ fontWeight: "700", color: "#635BFF" }}>stripe</Text>
           </Text>
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );
@@ -153,83 +171,83 @@ export default function CheckoutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F7F9',
+    backgroundColor: "#F5F7F9",
   },
   content: {
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 30,
   },
   mainTitle: {
     fontSize: 26,
-    fontWeight: '800',
-    color: '#151718',
+    fontWeight: "800",
+    color: "#151718",
     marginBottom: 10,
   },
   subTitle: {
     fontSize: 15,
     color: mutedText,
-    textAlign: 'center',
+    textAlign: "center",
     paddingHorizontal: 20,
     lineHeight: 22,
   },
   ticket: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
-    width: '100%',
+    width: "100%",
     paddingVertical: 25,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.05,
     shadowRadius: 15,
     elevation: 3,
   },
   ticketSection: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingBottom: 20,
   },
   label: {
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     color: mutedText,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 1,
   },
   amountText: {
     fontSize: 32,
-    fontWeight: '900',
-    color: '#151718',
+    fontWeight: "900",
+    color: "#151718",
     marginTop: 5,
   },
   dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   dashedLine: {
     flex: 1,
     height: 1,
     borderWidth: 1,
-    borderColor: '#ECEDEE',
-    borderStyle: 'dashed',
+    borderColor: "#ECEDEE",
+    borderStyle: "dashed",
     borderRadius: 1,
   },
   dotLeft: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#F5F7F9',
+    backgroundColor: "#F5F7F9",
     marginLeft: -10,
   },
   dotRight: {
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: '#F5F7F9',
+    backgroundColor: "#F5F7F9",
     marginRight: -10,
   },
   detailsContainer: {
@@ -237,20 +255,20 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   smallLabel: {
     fontSize: 10,
-    fontWeight: '700',
+    fontWeight: "700",
     color: mutedText,
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#151718',
+    fontWeight: "600",
+    color: "#151718",
   },
   addressSection: {
     marginTop: 5,
@@ -263,24 +281,24 @@ const styles = StyleSheet.create({
     backgroundColor: brandBlue,
     height: 55,
     borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     marginBottom: 12,
   },
   disabledButton: {
-    backgroundColor: '#A0D1E1',
+    backgroundColor: "#A0D1E1",
   },
   primaryButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   securityNotice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 6,
     marginTop: 4,
   },
@@ -296,6 +314,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: mutedText,
     letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  }
+    textTransform: "uppercase",
+  },
 });

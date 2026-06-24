@@ -7,4 +7,6 @@ export interface StorageSpaceFilters {
   lng?: number;
   distance?: number;
   coordinates?: [number, number];
+  page?: number | unknown;
+  per_page?: number;
 }

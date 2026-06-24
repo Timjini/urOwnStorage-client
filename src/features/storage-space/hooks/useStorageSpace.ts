@@ -9,7 +9,12 @@ export const useStorageSpaces = (
 ) => {
   return useQuery({
     queryKey: ["storageSpaces", "list", filters],
-    queryFn: () => StorageSpaceService.getAvailableSpaces(filters),
+    queryFn: ({ pageParam = 1 }) =>
+      StorageSpaceService.getAvailableSpaces({
+        ...filters,
+        page: pageParam,
+        per_page: 5,
+      }),
     staleTime: 1000 * 60 * 5,
     ...options,
   });

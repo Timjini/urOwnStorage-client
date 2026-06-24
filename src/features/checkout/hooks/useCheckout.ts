@@ -1,36 +1,41 @@
-import { JsonApiSingleResponse } from '@/types/api';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import { checkoutService } from '../services';
-import { Checkout, CheckoutAttributes } from '../types';
+import { JsonApiSingleResponse } from "@/types/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
+import { checkoutService } from "../services";
+import { Checkout, CheckoutAttributes } from "../types";
 
 export const useCreateCheckout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  return useMutation<JsonApiSingleResponse<CheckoutAttributes>, Error, Checkout>({
+  return useMutation<
+    JsonApiSingleResponse<CheckoutAttributes>,
+    Error,
+    Checkout
+  >({
     mutationFn: (data: Checkout) => checkoutService.create(data),
     onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ['checkouts'] });
+      queryClient.invalidateQueries({ queryKey: ["checkouts"] });
       const attrs = response?.data?.attributes;
 
       router.push({
-        pathname: '/(checkout)/checkout',
+        pathname: "/(checkout)/checkout",
         params: {
           id: response?.data?.id,
-          totalAmount: attrs?.totalAmount?.toString() ?? '',
-          serviceFee: attrs?.serviceFee?.toString() ?? '',
-          currency: attrs?.currency ?? '',
-          startDate: String(attrs?.startDate ?? ''),
-          endDate: String(attrs?.endDate ?? ''),
-          status: attrs?.status ?? '',
+          totalAmount: attrs?.totalAmount?.toString() ?? "",
+          serviceFee: attrs?.serviceFee?.toString() ?? "",
+          currency: attrs?.currency ?? "",
+          startDate: String(attrs?.startDate ?? ""),
+          endDate: String(attrs?.endDate ?? ""),
+          status: attrs?.status ?? "",
           storageSpace: JSON.stringify(attrs?.storageSpace ?? {}),
-          paymentIntentClientSecret: attrs?.stripePaymentIntentId ?? '',
-          referenceNumber: attrs.reference
-        }
+          paymentIntentClientSecret: attrs?.stripeClientSecret ?? "",
+          referenceNumber: attrs.reference,
+        },
       });
     },
-    onError: (error) => console.error('useCreateCheckout failed:', error.message),
+    onError: (error) =>
+      console.error("useCreateCheckout failed:", error.message),
   });
 };
 

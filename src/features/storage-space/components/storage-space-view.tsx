@@ -103,9 +103,18 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
         </View>
 
         <View style={styles.divider} />
-        <>
-          <StorageSpaceMap lng={space.address.lng} lat={space.address.lat} />
-        </>
+
+        <View style={[styles.mapContainer, { margin: 20 }]}>
+          <StorageSpaceMap
+            markers={[
+              {
+                latitude: space.address.lat,
+                longitude: space.address.lng,
+                title: space.title,
+              },
+            ]}
+          />
+        </View>
 
         <View style={styles.divider} />
 
