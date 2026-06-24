@@ -6,7 +6,7 @@ import React from "react";
 import {
   Dimensions,
   Image,
-  Platform,
+  // Platform,
   ScrollView,
   StyleSheet,
   Text,
