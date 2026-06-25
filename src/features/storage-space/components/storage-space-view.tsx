@@ -4,9 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  Dimensions,
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,10 +12,8 @@ import {
   View,
 } from "react-native";
 import { StorageSpace } from "../types";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import StorageSpaceMap from "./storage-space-map";
 
-const { width } = Dimensions.get("window");
 const brandOrange = "#C83803";
 const brandBlue = "#0a7ea4";
 const mutedText = "#687076";
@@ -28,7 +24,6 @@ interface StorageSpaceProps {
 
 const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
 
   const handleBooking = () => {
     router.push({
@@ -37,44 +32,17 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
     });
   };
 
+  const images = space.imageUrls || [];
+
   return (
-    <View style={styles.container}>
+    <View style={styles.webContainer}>
+      {/* 🏛️ LEFT COLUMN: Header, Map, and Features (50%) */}
       <ScrollView
-        bounces={false}
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: 100 + insets.bottom },
-        ]}
+        style={styles.webLeftScroll}
+        contentContainerStyle={styles.webLeftContent}
+        showsVerticalScrollIndicator={false}
       >
-        <View style={styles.galleryContainer}>
-          <ScrollView
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-          >
-            {space.imageUrls?.map((img, index) => (
-              <Image
-                key={index}
-                source={{ uri: getFullImageUrl(img) }}
-                style={styles.mainImage}
-              />
-            ))}
-          </ScrollView>
-          <View style={styles.imageCounter}>
-            <Text style={styles.counterText}>1 / {space.imageUrls.length}</Text>
-          </View>
-
-          <View style={[styles.floatingNav, { top: Math.max(insets.top, 16) }]}>
-            <TouchableOpacity
-              style={styles.circleBtn}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="arrow-back" size={22} color="#151718" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.infoSection}>
+        <View style={styles.headerBlock}>
           <View style={styles.badgeRow}>
             {!!space?.instantBooking && (
               <CustomBadge
@@ -85,29 +53,26 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
                 iconColor="#fff"
               />
             )}
-
             <View style={styles.ratingRow}>
               <Ionicons name="star" size={14} color="#FFB000" />
               <Text style={styles.ratingText}>4.9 (24 reviews)</Text>
             </View>
           </View>
-
           <Text style={styles.title}>{space.title}</Text>
           <View style={styles.locationRow}>
             <Ionicons name="location-outline" size={16} color={brandBlue} />
             <Text style={styles.addressText}>
-              {space.address.address1}, {space.address.city}{" "}
+              {space.address.address1}, {space.address.city},{" "}
               {space.address.postcode}, {space.address.country}
             </Text>
           </View>
         </View>
 
-        <View style={styles.divider} />
-
-        <View style={[styles.mapContainer, { margin: 20 }]}>
+        <View style={styles.webMapWrapper}>
           <StorageSpaceMap
             markers={[
               {
+                id: space.id,
                 latitude: space.address.lat,
                 longitude: space.address.lng,
                 title: space.title,
@@ -116,139 +81,88 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
           />
         </View>
 
-        <View style={styles.divider} />
+        <View style={styles.webDivider} />
 
-        <View style={styles.section}>
+        <View style={styles.sectionNoPadding}>
           <Text style={styles.sectionTitle}>Space Features</Text>
-          <View style={styles.featureGrid}>
-            <Feature icon="thermometer-outline" label="Climate Control" />
-            <Feature icon="shield-checkmark-outline" label="24/7 Security" />
-            <Feature icon="car-outline" label="Easy Loading" />
-            <Feature icon="key-outline" label="Private Access" />
+          <View style={styles.webFeatureGrid}>
+            <WebFeature icon="thermometer-outline" label="Climate Control" />
+            <WebFeature icon="shield-checkmark-outline" label="24/7 Security" />
+            <WebFeature icon="car-outline" label="Easy Loading" />
+            <WebFeature icon="key-outline" label="Private Access" />
           </View>
         </View>
       </ScrollView>
 
-      <View
-        style={[
-          styles.bottomBar,
-          { paddingBottom: Math.max(insets.bottom, 16) },
-        ]}
-      >
-        <View>
-          <View style={styles.priceRow}>
-            <Text style={styles.price}>{space.formattedPrice}</Text>
-            <Text style={styles.perMonth}>/ {space.billingInterval}</Text>
+      {/* 🖼️ RIGHT COLUMN: Large Interactive Photo & Booking Panel (50%) */}
+      <View style={styles.webRightPanel}>
+        <View style={styles.sidebarContainer}>
+          {/* Main Display Image Frame */}
+          <View style={styles.imageContainerFrame}>
+            {images.length > 0 ? (
+              <Image
+                source={{ uri: getFullImageUrl(images[0]) }}
+                style={styles.webShowcaseImage}
+              />
+            ) : (
+              <View style={styles.fallbackPlaceholder}>
+                <Ionicons name="image-outline" size={48} color="#9CA3AF" />
+                <Text style={{ color: "#9CA3AF", marginTop: 8 }}>
+                  No Images Available
+                </Text>
+              </View>
+            )}
           </View>
-          <Text style={styles.availability}>Available now</Text>
-        </View>
 
-        <TouchableOpacity style={styles.bookBtn} onPress={handleBooking}>
-          <Text style={styles.bookBtnText}>Reserve Space</Text>
-        </TouchableOpacity>
+          {/* Checkout Booking Card Box */}
+          <View style={styles.webCheckoutCard}>
+            <View>
+              <View style={styles.priceRow}>
+                <Text style={styles.price}>{space.formattedPrice}</Text>
+                <Text style={styles.perMonth}>/ {space.billingInterval}</Text>
+              </View>
+              <Text style={styles.availability}>Available now</Text>
+            </View>
+
+            <TouchableOpacity style={styles.bookBtn} onPress={handleBooking}>
+              <Text style={styles.bookBtnText}>Reserve Space</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );
 };
 
-const Feature = ({ icon, label }: { icon: any; label: string }) => (
-  <View style={styles.featureItem}>
-    <Ionicons name={icon} size={20} color={brandBlue} />
+const WebFeature = ({ icon, label }: { icon: any; label: string }) => (
+  <View style={styles.webFeatureItem}>
+    <Ionicons name={icon} size={22} color={brandBlue} />
     <Text style={styles.featureLabel}>{label}</Text>
   </View>
 );
 
 const styles = StyleSheet.create({
-  container: {
+  webContainer: {
     flex: 1,
+    flexDirection: "row",
     backgroundColor: "#fff",
   },
-  scrollContent: {
-    paddingBottom: 120,
+  webLeftScroll: {
+    flex: 1, // Balanced 50/50 Split
+    borderRightWidth: 1,
+    borderColor: "#E5E7EB",
   },
-  galleryContainer: {
-    height: 300,
-    position: "relative",
+  webLeftContent: {
+    padding: 40,
   },
-  mainImage: {
-    width: width,
-    height: 300,
-    resizeMode: "cover",
-  },
-  floatingNav: {
-    position: "absolute",
-    left: 16,
-    right: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    zIndex: 10,
-  },
-  circleBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.9)",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  imageCounter: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 15,
-    zIndex: 5,
-  },
-  counterText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  infoSection: {
-    padding: 20,
-  },
-  badgeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  instantBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: brandOrange,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  badgeText: {
-    color: "#fff",
-    fontSize: 10,
-    fontWeight: "800",
-    marginLeft: 4,
-  },
-  ratingRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  ratingText: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#151718",
-    marginLeft: 4,
+  headerBlock: {
+    marginBottom: 24,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "800",
     color: "#151718",
-    marginBottom: 8,
+    marginVertical: 12,
   },
   locationRow: {
     flexDirection: "row",
@@ -259,109 +173,141 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 6,
   },
-  divider: {
-    height: 8,
-    backgroundColor: "#F5F7F9",
-  },
-  section: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#151718",
-    marginBottom: 15,
-  },
-  mapContainer: {
-    height: 180,
-    borderRadius: 15,
+  webMapWrapper: {
+    height: 380, // Generous clean height for map frame match
+    borderRadius: 16,
     overflow: "hidden",
-    position: "relative",
-  },
-  mapPlaceholder: {
-    width: "100%",
-    height: "100%",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
   },
 
-  mapButton: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 25,
+  // Right Column Layout Design
+  webRightPanel: {
+    flex: 1, // Balanced 50/50 Split
+    backgroundColor: "#F9FAFB",
+    padding: 40,
+  },
+  sidebarContainer: {
+    flex: 1,
+    justifyContent: "space-between", // Pushes content away cleanly
+  },
+  imageContainerFrame: {
+    flex: 1,
+    width: "100%",
+    minHeight: 350, // Ensures standard baseline sizing height parameters are locked
+    borderRadius: 16,
+    overflow: "hidden",
+    backgroundColor: "#E5E7EB",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    marginBottom: 24,
+  },
+  webShowcaseImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover", // Forces the image to fill out nicely without weird layout squeezes
+  },
+  fallbackPlaceholder: {
+    flex: 1,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 3,
+    justifyContent: "center",
+    backgroundColor: "#F3F4F6",
   },
-  mapButtonText: {
-    color: brandBlue,
-    fontWeight: "700",
-    marginLeft: 8,
-  },
-  locationNote: {
-    fontSize: 12,
-    color: mutedText,
-    marginTop: 10,
-    fontStyle: "italic",
-  },
-  featureGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 15,
-  },
-  featureItem: {
-    width: (width - 55) / 2,
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 12,
-    backgroundColor: "#F5F7F9",
-    borderRadius: 12,
-  },
-  featureLabel: {
-    marginLeft: 10,
-    fontSize: 13,
-    fontWeight: "500",
-    color: "#151718",
-  },
-  bottomBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+  webCheckoutCard: {
     backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: "#ECEDEE",
+  },
+  sectionNoPadding: {
+    paddingVertical: 8,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#151718",
+    marginBottom: 16,
+  },
+  webFeatureGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
+  },
+  webFeatureItem: {
+    width: "48%",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "#F3F4F6",
+    borderRadius: 12,
+  },
+  featureLabel: {
+    marginLeft: 12,
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#151718",
+  },
+  webDivider: {
+    height: 1,
+    backgroundColor: "#E5E7EB",
+    marginVertical: 32,
+  },
+  badgeRow: {
+    flexDirection: "row",
+    gap: 16,
+    alignItems: "center",
+  },
+  instantBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: brandOrange,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  badgeText: {
+    color: "#fff",
+    fontSize: 11,
+    fontWeight: "800",
+  },
+  ratingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  ratingText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#151718",
+    marginLeft: 4,
   },
   priceRow: {
     flexDirection: "row",
     alignItems: "baseline",
   },
   price: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "800",
     color: brandOrange,
   },
   perMonth: {
-    fontSize: 14,
+    fontSize: 15,
     color: mutedText,
-    marginLeft: 2,
+    marginLeft: 4,
   },
   availability: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#2E7D32",
     fontWeight: "600",
+    marginTop: 4,
   },
   bookBtn: {
     backgroundColor: brandOrange,
-    paddingHorizontal: 28,
-    paddingVertical: 14,
+    paddingHorizontal: 32,
+    paddingVertical: 16,
     borderRadius: 12,
   },
   bookBtnText: {

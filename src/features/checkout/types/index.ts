@@ -27,6 +27,7 @@ export interface CheckoutAttributes {
   endDate: string;
   stripePaymentIntentId: string;
   stripeClientSecret: string;
+  stripeCheckoutUrl: string;
   reference: string;
   status: "NOT_STARTED" | "EXECUTING" | "SUCCESS" | "FAILED";
   storageSpace: {

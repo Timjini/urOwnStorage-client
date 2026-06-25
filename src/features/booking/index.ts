@@ -1,4 +1,4 @@
-export * from './hooks/useBooking';
-export { useStripePayment } from './hooks/useStripePayment';
+export * from "./hooks/useBooking";
+// export { useStripePayment } from './hooks/useStripePayment';
 
-export * from './types';
+export * from "./types";

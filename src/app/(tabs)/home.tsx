@@ -5,16 +5,25 @@ import { StorageSpaceCard } from "@/features/storage-space/components/storage-ca
 import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  View,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
 
 export default function Index() {
   const params = useLocalSearchParams();
+  const { width } = useWindowDimensions();
+
+  const isWebDesktop = Platform.OS === "web" && width > 768;
 
   const coordinates = params.coordinates
     ? JSON.parse(params.coordinates as string)
     : null;
-
   const selectedFeatures = params.selectedFeatures
     ? JSON.parse(params.selectedFeatures as string)
     : [];
@@ -37,9 +46,12 @@ export default function Index() {
 
   const spacesMarkers = spaces
     ? spaces.map((space) => ({
+        id: space.id,
         latitude: space.address.lat,
         longitude: space.address.lng,
         title: space.title,
+        price: space.formattedPrice,
+        info: space.spaceType || "Storage Unit",
       }))
     : [];
 
@@ -47,29 +59,56 @@ export default function Index() {
     <View style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
-      <View style={styles.container}>
-        <View style={styles.topMapContainer}>
+      <View style={[styles.container, isWebDesktop && styles.containerWeb]}>
+        {/* Left Side: Map (50%) */}
+        <View
+          style={[styles.mapContainer, isWebDesktop && styles.mapContainerWeb]}
+        >
           <StorageSpaceMap markers={spacesMarkers} />
         </View>
 
-        <ScrollView style={styles.listScroll}>
-          {isPending && (
-            <>
-              <StorageSpaceSkeleton />
-              <StorageSpaceSkeleton />
-              <StorageSpaceSkeleton />
-            </>
-          )}
+        {/* Right Side: Scrollable Sidebar (50%) */}
+        <ScrollView
+          style={[styles.listScroll, isWebDesktop && styles.listScrollWeb]}
+          // 🛠️ Apply grid behavior to the inner wrapper container on web
+          contentContainerStyle={
+            isWebDesktop ? styles.scrollContentWeb : undefined
+          }
+        >
+          {/* Wrap cards in a tracking view to control the grid layout layout */}
+          <View style={isWebDesktop ? styles.gridContainerWeb : undefined}>
+            {isPending && (
+              <>
+                <View style={isWebDesktop && styles.cardWrapperWeb}>
+                  <StorageSpaceSkeleton />
+                </View>
+                <View style={isWebDesktop && styles.cardWrapperWeb}>
+                  <StorageSpaceSkeleton />
+                </View>
+                <View style={isWebDesktop && styles.cardWrapperWeb}>
+                  <StorageSpaceSkeleton />
+                </View>
+              </>
+            )}
 
-          {isError && <ErrorScreen refetch={refetch} />}
+            {isError && <ErrorScreen refetch={refetch} />}
 
-          {!isPending &&
-            !isError &&
-            spaces?.map((space) => (
-              <StorageSpaceCard key={space.id} space={space} />
-            ))}
+            {!isPending &&
+              !isError &&
+              spaces?.map((space) => (
+                // 🛠️ Each card gets wrapped to ensure it drops into the 2-column calculation perfectly
+                <View
+                  key={space.id}
+                  style={isWebDesktop ? styles.cardWrapperWeb : undefined}
+                >
+                  <StorageSpaceCard space={space} />
+                </View>
+              ))}
 
-          {!isPending && !isError && spaces?.length === 0 && <NotFoundScreen />}
+            {!isPending && !isError && spaces?.length === 0 && (
+              <NotFoundScreen />
+            )}
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -84,14 +123,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    flexDirection: "column",
   },
-  topMapContainer: {
+  containerWeb: {
+    flexDirection: "row", // 50/50 Side-by-side split
+  },
+  mapContainer: {
     height: 250,
     width: "100%",
     backgroundColor: "#F5F7F9",
   },
+  mapContainerWeb: {
+    flex: 1, // Left half
+    height: "100%",
+  },
   listScroll: {
     flex: 1,
     padding: 16,
+  },
+  listScrollWeb: {
+    flex: 1, // Right half
+    backgroundColor: "#FAFAFA",
+    borderLeftWidth: 1,
+    borderLeftColor: "#E5E7EB",
+  },
+  scrollContentWeb: {
+    paddingBottom: 32,
+  },
+  // 🛠️ New Web Grid Styles
+  gridContainerWeb: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between", // Spaces elements beautifully out to the margins
+    marginHorizontal: -8, // Compensate for card padding
+  },
+  cardWrapperWeb: {
+    width: "50%", // 🛠️ Forces exactly two items per row
+    paddingHorizontal: 8, // Gives breathing room between the columns
+    marginBottom: 16, // Spacing below each row
   },
 });
