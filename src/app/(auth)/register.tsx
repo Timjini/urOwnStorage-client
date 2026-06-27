@@ -1,21 +1,33 @@
+import { AuthForm, AuthFormRef } from '@/features/auth/register-as-storage-user/ui/form';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
+const brandBlue = "#0a7ea4";
+const lightBorder = "#ECEDEE";
+const mutedText = "#687076";
+
 export default function RegisterScreen() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
 
+  const formRef = useRef<AuthFormRef>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleBottomBarConfirm = () => {
+    if (formRef.current) {
+      setIsSubmitting(true);
+      formRef.current.requestSubmit();
+    }
+  };
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
-        <View style={{ flex: 1, padding: 24 }}>
+        <ScrollView style={{ flex: 1, padding: 24 }}>
 
           <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: 30 }}>
             <Ionicons name="arrow-back" size={24} color="#151718" />
@@ -26,68 +38,54 @@ export default function RegisterScreen() {
             <Text style={{ fontSize: 16, color: '#687076' }}>Join the community to find storage space</Text>
           </View>
 
-          <View style={{ flex: 1 }}>
-            <View style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 12, fontWeight: '700', marginBottom: 8, textTransform: 'uppercase' }}>Full Name</Text>
-              <TextInput 
-                style={{ height: 55, backgroundColor: '#F5F7F9', borderRadius: 12, paddingHorizontal: 16, borderWidth: 1, borderColor: '#ECEDEE' }}
-                placeholder="John Doe"
-                value={name}
-                onChangeText={setName}
-              />
-            </View>
 
-            <View style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 12, fontWeight: '700', marginBottom: 8, textTransform: 'uppercase' }}>Email</Text>
-              <TextInput 
-                style={{ height: 55, backgroundColor: '#F5F7F9', borderRadius: 12, paddingHorizontal: 16, borderWidth: 1, borderColor: '#ECEDEE' }}
-                placeholder="email@example.com"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
-
-            <View style={{ marginBottom: 20 }}>
-              <Text style={{ fontSize: 12, fontWeight: '700', marginBottom: 8, textTransform: 'uppercase' }}>Phone Number</Text>
-              <TextInput 
-                style={{ height: 55, backgroundColor: '#F5F7F9', borderRadius: 12, paddingHorizontal: 16, borderWidth: 1, borderColor: '#ECEDEE' }}
-                placeholder="+1 258...."
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="name-phone-pad"
-                autoCapitalize="none"
-              />
-            </View>
-
-            <View style={{ marginBottom: 30 }}>
-              <Text style={{ fontSize: 12, fontWeight: '700', marginBottom: 8, textTransform: 'uppercase' }}>Password</Text>
-              <TextInput 
-                style={{ height: 55, backgroundColor: '#F5F7F9', borderRadius: 12, paddingHorizontal: 16, borderWidth: 1, borderColor: '#ECEDEE' }}
-                placeholder="Minimum 8 characters"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </View>
-
-            <TouchableOpacity 
-                style={{ backgroundColor: '#0a7ea4', height: 56, borderRadius: 12, alignItems: 'center', justifyContent: 'center' }}
-                onPress={() => router.replace('/(tabs)')}
-            >
-              <Text style={{ color: '#fff', fontSize: 18, fontWeight: '700' }}>Get Started</Text>
-            </TouchableOpacity>
-          </View>
+           <AuthForm />
 
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
             <Text style={{ color: '#687076' }}>Already have an account? </Text>
-            <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
+            {/* <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
               <Text style={{ color: '#C83803', fontWeight: '700' }}>Log In</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  loginOptionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 14,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: lightBorder,
+  },
+  loginPrompt: { fontSize: 14, color: mutedText },
+  bottomBar: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderTopWidth: 1,
+    borderTopColor: lightBorder,
+    paddingBottom: Platform.OS === "ios" ? 30 : 15,
+  },
+  confirmButton: {
+    backgroundColor: brandBlue,
+    paddingHorizontal: 25,
+    paddingVertical: 14,
+    borderRadius: 12,
+    minWidth: 150,
+    alignItems: "center",
+  },
+  disabledButton: { backgroundColor: "#A0D1E1" },
+  confirmButtonText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+});

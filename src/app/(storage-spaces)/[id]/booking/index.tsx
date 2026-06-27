@@ -33,7 +33,6 @@ export default function BookingDetailsScreen() {
 
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isAuthenticated] = useState(false);
-  // 1. Created independent state to track the actual API form submission process
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (isLoading) {

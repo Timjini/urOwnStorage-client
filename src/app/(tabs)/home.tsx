@@ -12,14 +12,17 @@ import {
   View,
   Platform,
   useWindowDimensions,
+  FlatList,
 } from "react-native";
 import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
+import { useState } from "react";
 
 export default function Index() {
   const params = useLocalSearchParams();
   const { width } = useWindowDimensions();
 
   const isWebDesktop = Platform.OS === "web" && width > 768;
+  const [spacePerPage, setSpacePerPage] = useState(10);
 
   const coordinates = params.coordinates
     ? JSON.parse(params.coordinates as string)
@@ -35,6 +38,7 @@ export default function Index() {
     lat: coordinates?.[1],
     lng: coordinates?.[0],
     distance: 10,
+    per_page: spacePerPage,
   };
 
   const {
@@ -64,13 +68,12 @@ export default function Index() {
         <View
           style={[styles.mapContainer, isWebDesktop && styles.mapContainerWeb]}
         >
-          <StorageSpaceMap markers={spacesMarkers} />
+          {/* <StorageSpaceMap markers={spacesMarkers} /> */}
         </View>
 
         {/* Right Side: Scrollable Sidebar (50%) */}
         <ScrollView
           style={[styles.listScroll, isWebDesktop && styles.listScrollWeb]}
-          // 🛠️ Apply grid behavior to the inner wrapper container on web
           contentContainerStyle={
             isWebDesktop ? styles.scrollContentWeb : undefined
           }
@@ -91,20 +94,24 @@ export default function Index() {
               </>
             )}
 
-            {isError && <ErrorScreen refetch={refetch} />}
-
-            {!isPending &&
-              !isError &&
-              spaces?.map((space) => (
-                // 🛠️ Each card gets wrapped to ensure it drops into the 2-column calculation perfectly
-                <View
-                  key={space.id}
-                  style={isWebDesktop ? styles.cardWrapperWeb : undefined}
-                >
-                  <StorageSpaceCard space={space} />
-                </View>
-              ))}
-
+            {
+              !isPending && !isError && (
+                <FlatList
+                  data={spaces}
+                  renderItem={({ item }) => <StorageSpaceCard space={item} />}
+                  keyExtractor={(item) => item.id}
+                  onEndReached={() => setSpacePerPage(spacePerPage + 10)}
+                />
+              )
+              // spaces?.map((space) => (
+              //   <View
+              //     key={space.id}
+              //     style={isWebDesktop ? styles.cardWrapperWeb : undefined}
+              //   >
+              //     <StorageSpaceCard space={space} />
+              //   </View>
+              // ))}
+            }
             {!isPending && !isError && spaces?.length === 0 && (
               <NotFoundScreen />
             )}

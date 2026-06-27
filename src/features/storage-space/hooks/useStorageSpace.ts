@@ -12,8 +12,7 @@ export const useStorageSpaces = (
     queryFn: ({ pageParam = 1 }) =>
       StorageSpaceService.getAvailableSpaces({
         ...filters,
-        page: pageParam,
-        per_page: 10,
+        page: pageParam
       }),
     staleTime: 1000 * 60 * 5,
     ...options,
