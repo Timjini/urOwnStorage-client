@@ -13,13 +13,14 @@ import {
 import { useRouter } from "expo-router";
 import { AuthFormData, authSchema } from "@/entities/auth/validations";
 import { IAuth } from "@/entities/auth/models/auth";
+import { useAuth } from "../../shared/hook";
 
 const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 export function AuthSessionForm() {
-  const { mutate, isPending, isError, error } = useAuthSessison();
-  const router = useRouter();
+  const { createAccount } = useAuth();
+  const { mutate, isPending, isError, error } = createAccount;
 
   const {
     control,

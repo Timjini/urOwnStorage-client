@@ -1,11 +1,13 @@
 import { JsonApiSingleResponse } from "@/types/api";
 import { AuthAttributes, IAuth } from "@/entities/auth/models/auth";
-import { createAccount, createSession } from "../api";
+import { AuthApi } from "./api";
 
 export const AuthService = {
-  async createAccount(data: IAuth): Promise<JsonApiSingleResponse<AuthAttributes>> {
+  async createAccount(
+    data: IAuth,
+  ): Promise<JsonApiSingleResponse<AuthAttributes>> {
     try {
-      const response = await createAccount(data);
+      const response = await AuthApi.signup(data);
       return response;
     } catch (error) {
       console.error("AuthService.create failed:", error);
@@ -13,12 +15,15 @@ export const AuthService = {
     }
   },
 
-  async createSession(data: IAuth): Promise<JsonApiSingleResponse<AuthAttributes>> {
-    try{
-      const response = await createSession(data);
+  async createSession(
+    data: IAuth,
+  ): Promise<JsonApiSingleResponse<AuthAttributes>> {
+    try {
+      const response = await AuthApi.login(data);
       return response;
-    } catch (error: any) {
+    } catch (error) {
       console.error("AuthService.create failed:", error);
+      throw error;
     }
-  }
+  },
 };

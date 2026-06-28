@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
 import { AuthFormData, authSchema } from "@/entities/auth/validations";
 import { IAuth } from "@/entities/auth/models/auth";
 import { useAuth } from "../../shared/hook";
@@ -19,8 +18,8 @@ const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 export function AuthForm() {
-  const { mutate, isPending, isError, error } = useAuth();
-  const router = useRouter();
+  const { createSession } = useAuth();
+  const { mutate, isPending, isError, error } = createSession;
 
   const {
     control,
@@ -50,7 +49,7 @@ export function AuthForm() {
 
   const onInvalid = (formErrors: any) => {
     console.log("Validation Failed! Missing or invalid fields:", formErrors);
-    Alert.alert('Validation Failed! Missing or invalid fields')
+    Alert.alert("Validation Failed! Missing or invalid fields");
   };
 
   return (

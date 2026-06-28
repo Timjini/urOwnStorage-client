@@ -17,6 +17,6 @@
     pkgs.nodejs-20_x
     pkgs.yarn
     pkgs.openssh
-     pkgs.glib
+    pkgs.glib
   ];
 }
