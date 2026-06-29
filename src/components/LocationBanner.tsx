@@ -43,6 +43,7 @@ export const LocationBanner = () => {
               // timeout: 10000,
             });
           }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (innerError) {
           console.warn(
             "Fresh location timed out. Attempting last known lookup...",

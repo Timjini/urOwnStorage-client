@@ -1,24 +1,20 @@
 import { AuthSessionForm } from "@/features/auth/login-as-storage-user/ui/form";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+// import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const brandBlue = "#0a7ea4";
-const lightBorder = "#ECEDEE";
-const mutedText = "#687076";
-
 export default function LoginScreen() {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>

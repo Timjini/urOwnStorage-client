@@ -1,7 +1,3 @@
-const brandOrange = "#C83803";
-const brandBlue = "#0a7ea4";
-// const mutedText = '#687076';
-
 export const NOTIFICATIONS = [
   {
     id: "1",

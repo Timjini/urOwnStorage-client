@@ -1,17 +1,8 @@
-import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
-import {
-  Modal,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-
-const brandOrange = "#C83803";
-const brandBlue = "#0a7ea4";
+// import React, { useState } from "react";
+// import { Platform, StyleSheet } from "react-native";
+// import { Theme } from "@/constants/theme";
+// const brandOrange = "#C83803";
+// const brandBlue = "#0a7ea4";
 
 interface UniversalPickerProps {
   label: string;
@@ -24,17 +15,6 @@ export default function UniversalPicker({
   date,
   onChangeDate,
 }: UniversalPickerProps) {
-  const [show, setShow] = useState(false);
-  const [tempDate, setTempDate] = useState(date || new Date());
-
-  const displayDate = (d: Date) => {
-    return d.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
     <></>
     // <View style={{ flex: 1 }}>
@@ -117,48 +97,48 @@ export default function UniversalPicker({
 }
 
 // Styles remain identical to your clean file configurations below...
-const styles = StyleSheet.create({
-  datePickerBox: {
-    padding: 12,
-    borderWidth: 1,
-    borderColor: "#ECEDEE",
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    position: "relative",
-    flex: 1,
-  },
-  dateLabel: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: brandOrange,
-    textTransform: "uppercase",
-    marginBottom: 4,
-  },
-  dateValueRow: { flexDirection: "row", alignItems: "center", gap: 6 },
-  dateValue: { fontSize: 14, fontWeight: "600", color: "#151718" },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "flex-end",
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-  },
-  modalContent: {
-    backgroundColor: "#ffffff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: Platform.OS === "ios" ? 40 : 20,
-  },
-  modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderColor: "#ECEDEE",
-    backgroundColor: "#F8FAFC",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  cancelText: { color: "#687076", fontSize: 16, fontWeight: "500" },
-  doneText: { color: brandBlue, fontSize: 16, fontWeight: "700" },
-});
+// const styles = StyleSheet.create({
+//   datePickerBox: {
+//     padding: 12,
+//     borderWidth: 1,
+//     borderColor: "#ECEDEE",
+//     borderRadius: 12,
+//     backgroundColor: "#fff",
+//     position: "relative",
+//     flex: 1,
+//   },
+//   dateLabel: {
+//     fontSize: 11,
+//     fontWeight: "700",
+//     color: brandOrange,
+//     textTransform: "uppercase",
+//     marginBottom: 4,
+//   },
+//   dateValueRow: { flexDirection: "row", alignItems: "center", gap: 6 },
+//   dateValue: { fontSize: 14, fontWeight: "600", color: "#151718" },
+//   modalOverlay: {
+//     flex: 1,
+//     justifyContent: "flex-end",
+//     backgroundColor: "rgba(0, 0, 0, 0.4)",
+//   },
+//   modalContent: {
+//     backgroundColor: "#ffffff",
+//     borderTopLeftRadius: 20,
+//     borderTopRightRadius: 20,
+//     paddingBottom: Platform.OS === "ios" ? 40 : 20,
+//   },
+//   modalHeader: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     alignItems: "center",
+//     paddingHorizontal: 20,
+//     paddingVertical: 16,
+//     borderBottomWidth: 1,
+//     borderColor: "#ECEDEE",
+//     backgroundColor: "#F8FAFC",
+//     borderTopLeftRadius: 20,
+//     borderTopRightRadius: 20,
+//   },
+//   cancelText: { color: "#687076", fontSize: 16, fontWeight: "500" },
+//   doneText: { color: brandBlue, fontSize: 16, fontWeight: "700" },
+// });

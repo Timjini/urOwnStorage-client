@@ -1,12 +1,14 @@
-import { Stack } from 'expo-router';
+import { useAppStore } from "@/entities/auth/store/authStore";
+import { Stack } from "expo-router";
 // import { useAuth } from '@/context/AuthContext';
 
 export default function AuthLayout() {
-  // const { user, isLoading } = useAuth();
+  const { auth } = useAppStore();
+
+  console.log(auth);
 
   // let isLoading = false;
   // let user = {"name": "james hook"};
-
 
   // if (isLoading) {
   //   return (
@@ -17,35 +19,35 @@ export default function AuthLayout() {
   // }
 
   // if (user) {
-  //   return <Redirect href="/" />; 
+  //   return <Redirect href="/" />;
   // }
 
   return (
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
         },
-        headerTintColor: '#151718',
+        headerTintColor: "#151718",
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-        animation: 'slide_from_right', 
+        animation: "slide_from_right",
       }}
     >
-      <Stack.Screen 
-        name="login" 
-        options={{ 
-          title: 'Welcome Back',
+      <Stack.Screen
+        name="login"
+        options={{
+          title: "Welcome Back",
           headerShown: false,
-        }} 
+        }}
       />
-      <Stack.Screen 
-        name="register" 
-        options={{ 
-          title: 'Create Account',
+      <Stack.Screen
+        name="register"
+        options={{
+          title: "Create Account",
           headerShown: false,
-        }} 
+        }}
       />
     </Stack>
   );

@@ -1,6 +1,6 @@
 import AddressAutocomplete from "@/features/localisation/search-location/ui/address-autocomplete";
-import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
-import { Ionicons } from "@expo/vector-icons";
+// import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
+// import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -9,9 +9,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from "react-native";
+ ActivityIndicator } from "react-native";
 import Slider from "@react-native-community/slider";
-import { ActivityIndicator } from "react-native";
 
 // import { SafeAreaView } from "react-native-safe-area-context";
 
