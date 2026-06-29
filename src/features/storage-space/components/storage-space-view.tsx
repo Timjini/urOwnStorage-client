@@ -2,7 +2,6 @@ import CustomBadge from "@/components/ui/badge";
 import { getFullImageUrl } from "@/utils/imageHelpers";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
 import {
   Image,
   ScrollView,
@@ -36,7 +35,6 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
 
   return (
     <View style={styles.webContainer}>
-      {/* 🏛️ LEFT COLUMN: Header, Map, and Features (50%) */}
       <ScrollView
         style={styles.webLeftScroll}
         contentContainerStyle={styles.webLeftContent}
@@ -94,10 +92,8 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
         </View>
       </ScrollView>
 
-      {/* 🖼️ RIGHT COLUMN: Large Interactive Photo & Booking Panel (50%) */}
       <View style={styles.webRightPanel}>
         <View style={styles.sidebarContainer}>
-          {/* Main Display Image Frame */}
           <View style={styles.imageContainerFrame}>
             {images.length > 0 ? (
               <Image
@@ -114,7 +110,6 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
             )}
           </View>
 
-          {/* Checkout Booking Card Box */}
           <View style={styles.webCheckoutCard}>
             <View>
               <View style={styles.priceRow}>
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   webLeftScroll: {
-    flex: 1, // Balanced 50/50 Split
+    flex: 1,
     borderRightWidth: 1,
     borderColor: "#E5E7EB",
   },
@@ -174,27 +169,26 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   webMapWrapper: {
-    height: 380, // Generous clean height for map frame match
+    height: 380,
     borderRadius: 16,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "#E5E7EB",
   },
 
-  // Right Column Layout Design
   webRightPanel: {
-    flex: 1, // Balanced 50/50 Split
+    flex: 1,
     backgroundColor: "#F9FAFB",
     padding: 40,
   },
   sidebarContainer: {
     flex: 1,
-    justifyContent: "space-between", // Pushes content away cleanly
+    justifyContent: "space-between",
   },
   imageContainerFrame: {
     flex: 1,
     width: "100%",
-    minHeight: 350, // Ensures standard baseline sizing height parameters are locked
+    minHeight: 350,
     borderRadius: 16,
     overflow: "hidden",
     backgroundColor: "#E5E7EB",
@@ -205,7 +199,7 @@ const styles = StyleSheet.create({
   webShowcaseImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover", // Forces the image to fill out nicely without weird layout squeezes
+    resizeMode: "cover",
   },
   fallbackPlaceholder: {
     flex: 1,

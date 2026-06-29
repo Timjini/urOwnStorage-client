@@ -1,21 +1,20 @@
 import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
-import { ErrorScreen } from "@/features/storage-space/components/error-screen";
 import { NotFoundScreen } from "@/features/storage-space/components/not-found-screen";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
+import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
 import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import { useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import {
+  FlatList,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
-  View,
-  Platform,
   useWindowDimensions,
-  FlatList,
+  View,
 } from "react-native";
-import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
-import { useState } from "react";
 
 export default function Index() {
   const params = useLocalSearchParams();
@@ -45,7 +44,7 @@ export default function Index() {
     data: spaces,
     isPending,
     isError,
-    refetch,
+    // refetch,
   } = useStorageSpaces(filters);
 
   const spacesMarkers = spaces
@@ -55,6 +54,7 @@ export default function Index() {
         longitude: space.address.lng,
         title: space.title,
         price: space.formattedPrice,
+        billingInterval: space.billingInterval,
         info: space.spaceType || "Storage Unit",
       }))
     : [];
@@ -64,21 +64,18 @@ export default function Index() {
       <StatusBar barStyle="light-content" backgroundColor="#C83803" />
 
       <View style={[styles.container, isWebDesktop && styles.containerWeb]}>
-        {/* Left Side: Map (50%) */}
         <View
           style={[styles.mapContainer, isWebDesktop && styles.mapContainerWeb]}
         >
-          {/* <StorageSpaceMap markers={spacesMarkers} /> */}
+          <StorageSpaceMap markers={spacesMarkers} />
         </View>
 
-        {/* Right Side: Scrollable Sidebar (50%) */}
         <ScrollView
           style={[styles.listScroll, isWebDesktop && styles.listScrollWeb]}
           contentContainerStyle={
             isWebDesktop ? styles.scrollContentWeb : undefined
           }
         >
-          {/* Wrap cards in a tracking view to control the grid layout layout */}
           <View style={isWebDesktop ? styles.gridContainerWeb : undefined}>
             {isPending && (
               <>
@@ -100,7 +97,7 @@ export default function Index() {
                   data={spaces}
                   renderItem={({ item }) => <StorageSpaceCard space={item} />}
                   keyExtractor={(item) => item.id}
-                  onEndReached={() => setSpacePerPage(spacePerPage + 10)}
+                  // onEndReached={() => setSpacePerPage(spacePerPage + 10)}
                 />
               )
               // spaces?.map((space) => (
@@ -133,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   containerWeb: {
-    flexDirection: "row", // 50/50 Side-by-side split
+    flexDirection: "row",
   },
   mapContainer: {
     height: 250,
@@ -141,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F7F9",
   },
   mapContainerWeb: {
-    flex: 1, // Left half
+    flex: 1,
     height: "100%",
   },
   listScroll: {
@@ -149,7 +146,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   listScrollWeb: {
-    flex: 1, // Right half
+    flex: 1,
     backgroundColor: "#FAFAFA",
     borderLeftWidth: 1,
     borderLeftColor: "#E5E7EB",
@@ -157,16 +154,15 @@ const styles = StyleSheet.create({
   scrollContentWeb: {
     paddingBottom: 32,
   },
-  // 🛠️ New Web Grid Styles
   gridContainerWeb: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between", // Spaces elements beautifully out to the margins
-    marginHorizontal: -8, // Compensate for card padding
+    justifyContent: "space-between",
+    marginHorizontal: -8,
   },
   cardWrapperWeb: {
-    width: "50%", // 🛠️ Forces exactly two items per row
-    paddingHorizontal: 8, // Gives breathing room between the columns
-    marginBottom: 16, // Spacing below each row
+    width: "50%",
+    paddingHorizontal: 8,
+    marginBottom: 16,
   },
 });

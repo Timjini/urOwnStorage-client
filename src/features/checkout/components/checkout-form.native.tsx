@@ -1,20 +1,20 @@
 import UniversalDatePicker from "@/components/booking/UniversalDatePicker";
-import { Theme } from "@/constants/theme";
+import { useCreateCheckout } from "@/features/checkout";
 import { StorageSpace } from "@/features/storage-space/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { forwardRef, useImperativeHandle } from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useCreateCheckout } from "../hooks/useCheckout";
 import { Checkout } from "../types";
 import { CheckoutFormData, checkoutSchema } from "../validations";
 
+const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 interface StorageSpaceProps {
@@ -277,10 +277,7 @@ const styles = StyleSheet.create({
     borderColor: lightBorder,
     backgroundColor: "#fff",
   },
-  activeChip: {
-    backgroundColor: Theme.colors.primary,
-    borderColor: Theme.colors.secondary,
-  },
+  activeChip: { backgroundColor: brandBlue, borderColor: brandBlue },
   chipText: { fontSize: 13, color: "#687076", fontWeight: "500" },
   activeChipText: { color: "#fff" },
   datePickerWrapper: { flex: 1 },

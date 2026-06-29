@@ -1,6 +1,7 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { IAuth } from "@/entities/auth/models/auth";
+import { AuthFormData, authSchema } from "@/entities/auth/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Alert,
@@ -10,17 +11,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { AuthFormData, authSchema } from "@/entities/auth/validations";
-import { IAuth } from "@/entities/auth/models/auth";
 import { useAuth } from "../../shared/hook";
+import { Theme } from "@/constants/theme"
 
 const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 export function AuthSessionForm() {
-  const { createAccount } = useAuth();
-  const { mutate, isPending, isError, error } = createAccount;
+  const { createSession } = useAuth();
+  const { mutate, isPending, isError, error } = createSession;
 
   const {
     control,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   confirmButton: {
-    backgroundColor: brandBlue,
+    backgroundColor: Theme.colors.primary,
     paddingHorizontal: 25,
     paddingVertical: 14,
     borderRadius: 12,

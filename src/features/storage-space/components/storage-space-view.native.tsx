@@ -2,19 +2,17 @@ import CustomBadge from "@/components/ui/badge";
 import { getFullImageUrl } from "@/utils/imageHelpers";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
 import {
   Dimensions,
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { StorageSpace } from "../types";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StorageSpace } from "../types";
 import StorageSpaceMap from "./storage-space-map";
 
 const { width } = Dimensions.get("window");
@@ -110,6 +108,8 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
                 latitude: space.address.lat,
                 longitude: space.address.lng,
                 title: space.title,
+                billingInterval: space.billingInterval,
+                id: space.id,
               },
             ]}
           />

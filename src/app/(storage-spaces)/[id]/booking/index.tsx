@@ -1,23 +1,23 @@
 import {
-  CheckoutForm,
-  CheckoutFormRef,
-} from "@/features/checkout/components/checkout-form";
+    CheckoutForm,
+    CheckoutFormRef,
+} from "@/features/checkout/components/checkout-form.native";
 import { BookingStorageInfoCard } from "@/features/checkout/components/checkout-storage-info-card";
 import { PriceBreakDown } from "@/features/checkout/components/price-break-down";
 import { TotalToPay } from "@/features/checkout/components/total-to-pay";
 import { useStorageSpaceDetails } from "@/features/storage-space/hooks/useStorageSpace";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 const brandBlue = "#0a7ea4";

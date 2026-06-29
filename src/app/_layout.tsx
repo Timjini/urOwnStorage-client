@@ -10,7 +10,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
-// import StripeProvider from "./app-stripe-provider";
 import QueryProvider from "./queryProvider";
 
 export const unstable_settings = {
@@ -21,9 +20,6 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    // <StripeProvider>
-    // </StripeProvider>
-    //
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <SafeAreaProvider>
         <QueryProvider>

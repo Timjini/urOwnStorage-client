@@ -1,6 +1,8 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Theme } from "@/constants/theme";
+import { IAuth } from "@/entities/auth/models/auth";
+import { AuthFormData, authSchema } from "@/entities/auth/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Alert,
@@ -10,16 +12,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { AuthFormData, authSchema } from "@/entities/auth/validations";
-import { IAuth } from "@/entities/auth/models/auth";
 import { useAuth } from "../../shared/hook";
 
-const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
 export function AuthForm() {
-  const { createSession } = useAuth();
-  const { mutate, isPending, isError, error } = createSession;
+  const { createAccount } = useAuth();
+  const { mutate, isPending, isError, error } = createAccount;
 
   const {
     control,
@@ -134,7 +133,7 @@ export function AuthForm() {
           {isPending ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
-            <Text style={styles.confirmButtonText}>Confirm Booking</Text>
+            <Text style={styles.confirmButtonText}>Sign up</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   confirmButton: {
-    backgroundColor: brandBlue,
+    backgroundColor: Theme.colors.primary,
     paddingHorizontal: 25,
     paddingVertical: 14,
     borderRadius: 12,

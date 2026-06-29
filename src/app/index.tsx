@@ -1,7 +1,6 @@
 import { Theme } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -156,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   primaryBtn: {
-    backgroundColor: Theme.colors.secondary,
+    backgroundColor: Theme.colors.primary,
     height: 56,
     borderRadius: Theme.radius.md,
     alignItems: "center",

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useRouter } from "expo-router";
 import {
-  APIProvider,
-  Map,
   AdvancedMarker,
-  Pin,
+  APIProvider,
   InfoWindow,
+  Map,
+  Pin,
 } from "@vis.gl/react-google-maps";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 
 interface Poi {
   id: string;
@@ -24,6 +24,7 @@ interface MapMarkerData {
   title?: string;
   price?: number | string;
   info?: string;
+  billingInterval?: string;
 }
 
 interface StorageSpaceMapProps {
@@ -50,8 +51,10 @@ export default function StorageSpaceMap({
     title: m.title || "Storage Location",
     price: m.price,
     info: m.info,
+    billingInterval: m.billingInterval,
   }));
 
+  console.log("locations =======>", locations);
   const centerLat = markers.length > 0 ? markers[0].latitude : defaultLatitude;
   const centerLng =
     markers.length > 0 ? markers[0].longitude : defaultLongitude;
@@ -94,7 +97,7 @@ export default function StorageSpaceMap({
                   <p style={infoWindowStyles.info}>{poi.info}</p>
                   {poi.price && (
                     <p style={infoWindowStyles.price}>
-                      ${poi.price}{" "}
+                      {poi.price}{" "}
                       <span
                         style={{
                           fontSize: "10px",
@@ -102,7 +105,7 @@ export default function StorageSpaceMap({
                           color: "#666",
                         }}
                       >
-                        /mo
+                        /{poi.billingInterval}
                       </span>
                     </p>
                   )}
