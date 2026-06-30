@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { AuthAttributes, IAuth } from "@/entities/auth/models/auth";
 import { AuthService } from "./service";
-import { useAppStore } from "@/entities/auth/store/authStore";
+// import { useAppStore } from "@/entities/auth/store/authStore";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();

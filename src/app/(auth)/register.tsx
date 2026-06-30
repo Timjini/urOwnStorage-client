@@ -1,27 +1,21 @@
-import {
-  AuthForm
-} from "@/features/auth/register-as-storage-user/ui/form";
+import { AuthForm } from "@/features/auth/register-as-storage-user/ui/form";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+// import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StyleSheet,
+  // StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const brandBlue = "#0a7ea4";
-const lightBorder = "#ECEDEE";
-const mutedText = "#687076";
-
 export default function RegisterScreen() {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -73,39 +67,39 @@ export default function RegisterScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  loginOptionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 14,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: lightBorder,
-  },
-  loginPrompt: { fontSize: 14, color: mutedText },
-  bottomBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderTopWidth: 1,
-    borderTopColor: lightBorder,
-    paddingBottom: Platform.OS === "ios" ? 30 : 15,
-  },
-  confirmButton: {
-    backgroundColor: brandBlue,
-    paddingHorizontal: 25,
-    paddingVertical: 14,
-    borderRadius: 12,
-    minWidth: 150,
-    alignItems: "center",
-  },
-  disabledButton: { backgroundColor: "#A0D1E1" },
-  confirmButtonText: { color: "#fff", fontWeight: "700", fontSize: 16 },
-});
+// const styles = StyleSheet.create({
+//   loginOptionContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginTop: 14,
+//     paddingTop: 12,
+//     borderTopWidth: 1,
+//     borderTopColor: lightBorder,
+//   },
+//   loginPrompt: { fontSize: 14, color: mutedText },
+//   bottomBar: {
+//     position: "absolute",
+//     bottom: 0,
+//     left: 0,
+//     right: 0,
+//     backgroundColor: "#fff",
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     alignItems: "center",
+//     paddingHorizontal: 20,
+//     paddingVertical: 15,
+//     borderTopWidth: 1,
+//     borderTopColor: lightBorder,
+//     paddingBottom: Platform.OS === "ios" ? 30 : 15,
+//   },
+//   confirmButton: {
+//     backgroundColor: brandBlue,
+//     paddingHorizontal: 25,
+//     paddingVertical: 14,
+//     borderRadius: 12,
+//     minWidth: 150,
+//     alignItems: "center",
+//   },
+//   disabledButton: { backgroundColor: "#A0D1E1" },
+//   confirmButtonText: { color: "#fff", fontWeight: "700", fontSize: 16 },
+// });

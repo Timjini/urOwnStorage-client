@@ -88,7 +88,7 @@ export const LocationBanner = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [setLocation, clearLocation]);
 
   return (
     <View style={styles.banner}>

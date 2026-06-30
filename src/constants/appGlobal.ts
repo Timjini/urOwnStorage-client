@@ -12,3 +12,4 @@ export const STORAGE_SPACES = `${API}/v1/storage_spaces`;
 export const PAYMENTS = `${API}/v1/payments`;
 export const CHECKOUT_SESSION = `${API}/v1/checkout_sessions`;
 export const BOOKINGS = `${API}/v1/checkout_sessions`;
+export const LEASE = `${API}/v1/leases`;

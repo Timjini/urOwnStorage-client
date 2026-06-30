@@ -97,7 +97,7 @@ export default function Index() {
                   data={spaces}
                   renderItem={({ item }) => <StorageSpaceCard space={item} />}
                   keyExtractor={(item) => item.id}
-                  // onEndReached={() => setSpacePerPage(spacePerPage + 10)}
+                  onEndReached={() => setSpacePerPage(spacePerPage + 10)}
                 />
               )
               // spaces?.map((space) => (

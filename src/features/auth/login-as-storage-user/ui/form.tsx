@@ -12,10 +12,7 @@ import {
   View,
 } from "react-native";
 import { useAuth } from "../../shared/hook";
-import { Theme } from "@/constants/theme"
-
-const brandBlue = "#0a7ea4";
-const lightBorder = "#ECEDEE";
+import { Theme } from "@/constants/theme";
 
 export function AuthSessionForm() {
   const { createSession } = useAuth();
@@ -138,7 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
     fontSize: 15,
   },
   inputError: { borderColor: "#E53E3E", backgroundColor: "#FFF5F5" },
