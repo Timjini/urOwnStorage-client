@@ -1,162 +1,75 @@
-import { Theme } from "@/constants/theme";
 import { Lease } from "@/entities/lease/model";
 import { JsonApiSingleResponse } from "@/types/api";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { useLease } from "../../shared/hooks";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function SearchBox() {
-  const [refNumber, setRefNumber] = useState("");
-  const { searchLeaseByReference } = useLease();
-  const [lease, setLease] = useState<JsonApiSingleResponse<Lease>>();
+const brandOrange = "#C83803";
+const lightBorder = "#ECEDEE";
 
-  const handleSearch = () => {
-    console.log("Searching for reference number:", refNumber);
-    searchLeaseByReference(refNumber).then((result) => {
-      console.log("Search result:", result);
-      if (result) {
-        setLease(result);
-      } else {
-        alert("No lease found.");
-      }
-    });
-  };
+interface RecentBookingProps {
+  lease?: JsonApiSingleResponse<Lease>;
+}
+
+export default function RecentBooking({ lease }: RecentBookingProps) {
+  if (!lease || !lease.data) {
+    return null;
+  }
+
+  const { id, attributes } = lease.data;
 
   return (
-    <>
-      <View style={styles.searchCard}>
-        <Text style={styles.inputLabel}>Reference Number</Text>
-        <View style={styles.inputContainer}>
-          <Ionicons
-            name="receipt-outline"
-            size={20}
-            color={Theme.colors.secondary}
-            style={styles.icon}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="e.g. BK-99421"
-            placeholderTextColor="#9BA1A6"
-            value={refNumber}
-            onChangeText={setRefNumber}
-            autoCapitalize="characters"
-          />
+    <View style={styles.recentSection}>
+      <Text style={styles.sectionTitle}>Recent Bookings</Text>
+
+      <TouchableOpacity style={styles.miniCard}>
+        <View style={styles.miniCardIcon}>
+          <Ionicons name="cube" size={24} color={brandOrange} />
         </View>
-
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>Find My Booking</Text>
-          <Ionicons name="search" size={18} color="#fff" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.infoRow}>
-        <Ionicons name="information-circle-outline" size={18} color="#687076" />
-        <Text style={styles.infoText}>
-          Reference numbers can be found in your confirmation email.
-        </Text>
-      </View>
-
-      {/* <RecentBooking lease={lease} /> */}
-    </>
+        <View style={styles.miniCardContent}>
+          {/* Mapped to your model properties */}
+          <Text style={styles.miniCardTitle} numberOfLines={1}>
+            {attributes?.fullAddress ||
+              `Storage Space #${attributes?.storageSpaceId}`}
+          </Text>
+          <Text style={styles.miniCardSubtitle}>
+            Ref: {attributes?.reference || id} • Duration:{" "}
+            {attributes?.bookingDuration} months
+          </Text>
+        </View>
+        <View style={styles.statusBadge}>
+          <Text style={styles.statusText}>
+            {attributes?.status || "Unknown"}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  searchCard: {
-    backgroundColor: Theme.colors.background,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: Theme.colors.border,
-    shadowColor: Theme.colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
-  },
-  inputLabel: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: Theme.colors.primary,
-    marginBottom: 10,
-    textTransform: "uppercase",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Theme.colors.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: Theme.colors.border,
-    paddingHorizontal: 12,
-    marginBottom: 20,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    fontSize: 16,
-    fontWeight: "600",
-    color: Theme.colors.text,
-  },
-  searchButton: {
-    backgroundColor: Theme.colors.primary,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 55,
-    borderRadius: 12,
-    gap: 10,
-  },
-  searchButtonText: {
-    color: Theme.colors.background,
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  infoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 15,
-    paddingHorizontal: 5,
-    gap: 8,
-  },
-  infoText: {
-    fontSize: 12,
-    color: Theme.colors.textMuted,
-    flex: 1,
-  },
   recentSection: {
     marginTop: 40,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: Theme.colors.text,
+    color: "#151718",
     marginBottom: 15,
   },
   miniCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Theme.colors.background,
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: Theme.colors.border,
+    borderColor: lightBorder,
   },
   miniCardIcon: {
     width: 45,
     height: 45,
     borderRadius: 10,
-    backgroundColor: Theme.colors.secondaryBackground,
+    backgroundColor: "#FFF1ED",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 15,
@@ -167,21 +80,21 @@ const styles = StyleSheet.create({
   miniCardTitle: {
     fontSize: 15,
     fontWeight: "700",
-    color: Theme.colors.text,
+    color: "#151718",
   },
   miniCardSubtitle: {
     fontSize: 12,
-    color: Theme.colors.textMuted,
+    color: "#687076",
     marginTop: 2,
   },
   statusBadge: {
-    backgroundColor: Theme.colors.lightGreen,
+    backgroundColor: "#E8F5E9",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
   },
   statusText: {
-    color: Theme.colors.success,
+    color: "#2E7D32",
     fontSize: 10,
     fontWeight: "700",
     textTransform: "uppercase",

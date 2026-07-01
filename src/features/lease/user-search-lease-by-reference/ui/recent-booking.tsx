@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const brandOrange = "#C83803";
 const lightBorder = "#ECEDEE";
-export default function RecentBooking(lease: Lease) {
+export default function RecentBooking(lease: <JsonApiSingleResponse<Lease>>() => any) {
   console.log("lease", lease);
   return (
     <>

@@ -8,8 +8,7 @@ import { HapticTab } from "@/components/haptic-tab";
 import { LocationBanner } from "@/components/LocationBanner";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Theme } from "@/constants/theme";
-import Feather from '@expo/vector-icons/Feather';
-
+import Feather from "@expo/vector-icons/Feather";
 
 export default function TabLayout() {
   // const colorScheme = useColorScheme() ?? "light";
@@ -51,7 +50,7 @@ export default function TabLayout() {
             ),
           }}
         />
-        <Tabs.Screen
+        {/*<Tabs.Screen
           name="messages"
           options={{
             title: "Messages",
@@ -59,7 +58,7 @@ export default function TabLayout() {
               <IconSymbol size={28} name="message.fill" color={color} />
             ),
           }}
-        />
+        />*/}
 
         <Tabs.Screen
           name="profile"
@@ -73,17 +72,16 @@ export default function TabLayout() {
         <Tabs.Screen
           name="notifications"
           options={{
-            href: null, 
+            href: null,
           }}
         />
 
         <Tabs.Screen
           name="storage-space"
           options={{
-            href: null, 
+            href: null,
           }}
         />
-
       </Tabs>
     </View>
   );
