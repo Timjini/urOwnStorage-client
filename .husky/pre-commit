@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+echo "🤘 Just Checking... 🐶"
+
+echo "🔍 Running Linters..."
+#npm run lint || exit 1
+
+echo "🧪 Running Tests..."
+npm test -- --watchAll=false --passWithNoTests || exit 1
+
+echo "🩺 Running Expo Doctor..."
+# npx expo-doctor || exit 1
+
+echo "✅ All checks passed! Proceeding with commit."

@@ -1,15 +1,20 @@
 {
   "expo": {
     "name": "urOwnStorage",
-    "slug": "urOwnStorage",
+    "slug": "ur-own-storage",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "urownstorage",
+    "scheme": "ur-own-storage",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "deploymentTarget": "16.4",
+      "bundleIdentifier": "com.urownstorage",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "This app requires camera access to allow you to upload profile pictures or scan/send proof of storage items."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -18,15 +23,30 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.timjini.urOwnStorage"
+      "package": "com.urownstorage",
+      "config": {
+        "googleMaps": {
+          "apiKey": "$EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+        }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": true,
+          "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -46,11 +66,21 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
-      "@react-native-community/datetimepicker"
+      ["@stripe/stripe-react-native", {}],
+      "expo-web-browser",
+      "expo-image",
+      "expo-maps"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f671b28a-3da6-4a6a-b67c-b32da4f6e241"
+      }
+    },
+    "owner": "timjini"
   }
 }
