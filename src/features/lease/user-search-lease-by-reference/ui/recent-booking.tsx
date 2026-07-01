@@ -1,9 +1,11 @@
+import { Lease } from "@/entities/lease/model";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const brandOrange = "#C83803";
 const lightBorder = "#ECEDEE";
-export default function RecentBooking() {
+export default function RecentBooking(lease: Lease) {
+  console.log("lease", lease);
   return (
     <>
       <View style={styles.recentSection}>

@@ -1,5 +1,8 @@
+import { Theme } from "@/constants/theme";
+import { Lease } from "@/entities/lease/model";
+import { JsonApiSingleResponse } from "@/types/api";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,19 +10,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Theme } from "@/constants/theme";
 import { useLease } from "../../shared/hooks";
 
 export default function SearchBox() {
   const [refNumber, setRefNumber] = useState("");
   const { searchLeaseByReference } = useLease();
+  const [lease, setLease] = useState<JsonApiSingleResponse<Lease>>();
 
   const handleSearch = () => {
     console.log("Searching for reference number:", refNumber);
     searchLeaseByReference(refNumber).then((result) => {
       console.log("Search result:", result);
       if (result) {
-        alert("Lease found!");
+        setLease(result);
       } else {
         alert("No lease found.");
       }
@@ -59,6 +62,8 @@ export default function SearchBox() {
           Reference numbers can be found in your confirmation email.
         </Text>
       </View>
+
+      {/* <RecentBooking lease={lease} /> */}
     </>
   );
 }

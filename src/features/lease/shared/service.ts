@@ -4,9 +4,9 @@ import { LeaseApi } from "./api";
 
 export const LeaseService = {
   async searchLeaseByReference(
-    refence: string,
+    reference: string,
   ): Promise<JsonApiSingleResponse<Lease>> {
-    const response = await LeaseApi.searchLeaseByReference(refence);
+    const response = await LeaseApi.searchLeaseByReference(reference);
 
     const validation = LeaseSchema.safeParse(response.data);
 

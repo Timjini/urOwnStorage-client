@@ -22,6 +22,7 @@ export interface Lease {
   unitRate: number;
   updatedAt: Date;
   userId: number;
+  fullAddress: string;
 }
 
 export const LeaseSchema = z.object({

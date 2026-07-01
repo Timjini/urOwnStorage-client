@@ -1,4 +1,5 @@
-import React from "react";
+import { Theme } from "@/constants/theme";
+import SearchBox from "@/features/lease/user-search-lease-by-reference/ui/search-box";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -7,9 +8,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { Theme } from "@/constants/theme";
-import SearchBox from "@/features/lease/user-search-lease-by-reference/ui/search-box";
-import RecentBooking from "@/features/lease/user-search-lease-by-reference/ui/recent-booking";
 
 export default function LeaseSearchScreen() {
   return (
@@ -27,7 +25,6 @@ export default function LeaseSearchScreen() {
         </View>
 
         <SearchBox />
-        <RecentBooking />
       </ScrollView>
     </KeyboardAvoidingView>
   );
