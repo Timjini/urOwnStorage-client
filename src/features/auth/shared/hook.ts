@@ -1,9 +1,9 @@
 import { JsonApiSingleResponse } from "@/types/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { AuthAttributes, IAuth } from "@/entities/auth/models/auth";
+import { AuthAttributes, IAuth } from "@/entities/auth/model";
 import { AuthService } from "./service";
-// import { useAppStore } from "@/entities/auth/store/authStore";
+// import { useAppStore } from "@/entities/auth/store";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();

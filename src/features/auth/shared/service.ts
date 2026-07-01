@@ -1,6 +1,6 @@
 import { JsonApiSingleResponse } from "@/types/api";
-import { AuthAttributes, IAuth } from "@/entities/auth/models/auth";
 import { AuthApi } from "./api";
+import { AuthAttributes, IAuth } from "@/entities/auth/model";
 
 export const AuthService = {
   async createAccount(

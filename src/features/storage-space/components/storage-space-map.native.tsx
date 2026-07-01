@@ -15,8 +15,8 @@ interface StorageSpaceMapProps {
 
 export default function StorageSpaceMap({
   markers,
-  defaultLatitude = 42.348,
-  defaultLongitude = -72.613,
+  defaultLatitude,
+  defaultLongitude,
 }: StorageSpaceMapProps) {
   const formattedMarkers = markers.map((m) => ({
     coordinates: {
@@ -45,8 +45,6 @@ export default function StorageSpaceMap({
         }}
       />
     );
-  } else if (Platform.OS === "web") {
-    return <Text>Web maps are not supported</Text>;
   } else {
     return <Text>Maps are only available on Android and iOS</Text>;
   }

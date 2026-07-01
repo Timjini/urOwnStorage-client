@@ -35,8 +35,8 @@ interface StorageSpaceMapProps {
 
 export default function StorageSpaceMap({
   markers,
-  defaultLatitude = 42.348,
-  defaultLongitude = -72.613,
+  defaultLatitude,
+  defaultLongitude,
 }: StorageSpaceMapProps) {
   const router = useRouter();
   const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null);

@@ -1,7 +1,7 @@
 import { storage } from "@/entities/storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { AuthSlice, createAuthSlice } from "./authSlice";
+import { AuthSlice, createAuthSlice } from "./slice";
 
 type StoreState = AuthSlice;
 

@@ -12,9 +12,11 @@ export const Theme = {
     secondary: "#0a7ea4",
     accent: "#FFB000",
     black: "#000",
+    lightGreen: "#E8F5E9",
 
     // Neutral Scale
     background: "#FFFFFF",
+    secondaryBackground: "#FFF1ED",
     surface: "#F5F7F9",
     border: "#ECEDEE",
 

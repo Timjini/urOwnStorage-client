@@ -1,5 +1,5 @@
 import { StateCreator } from "zustand";
-import { IAuth } from "../models/auth";
+import { IAuth } from "../model";
 
 export interface AuthSlice {
   auth: IAuth | null;

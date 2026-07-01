@@ -1,5 +1,4 @@
-import { IAuth } from "@/entities/auth/models/auth";
-import { AuthFormData, authSchema } from "@/entities/auth/validations";
+import { AuthFormData, authSchema, IAuth } from "@/entities/auth/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import {

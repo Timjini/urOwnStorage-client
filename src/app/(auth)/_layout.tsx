@@ -1,4 +1,4 @@
-import { useAppStore } from "@/entities/auth/store/authStore";
+import { useAppStore } from "@/entities/auth/store/store";
 import { Stack } from "expo-router";
 // import { useAuth } from '@/context/AuthContext';
 

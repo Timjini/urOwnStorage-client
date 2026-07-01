@@ -1,5 +1,5 @@
 import { JsonApiSingleResponse } from "@/types/api";
-import { Lease } from "@/entities/lease/models";
+import { Lease } from "@/entities/lease/model";
 import { apiClient } from "@/lib/apiClient";
 import { LEASE } from "@/constants/appGlobal";
 

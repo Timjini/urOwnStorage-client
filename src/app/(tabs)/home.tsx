@@ -1,9 +1,11 @@
+import { useLocationStore } from "@/entities/localisation/model/store";
 import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
 import { NotFoundScreen } from "@/features/storage-space/components/not-found-screen";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
 import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
 import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
+import { getDefaultLocation } from "@/utils/location-helper";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
@@ -19,6 +21,8 @@ import {
 export default function Index() {
   const params = useLocalSearchParams();
   const { width } = useWindowDimensions();
+  const latitude = useLocationStore((state) => state.latitude);
+  const longitude = useLocationStore((state) => state.longitude);
 
   const isWebDesktop = Platform.OS === "web" && width > 768;
   const [spacePerPage, setSpacePerPage] = useState(10);
@@ -67,7 +71,11 @@ export default function Index() {
         <View
           style={[styles.mapContainer, isWebDesktop && styles.mapContainerWeb]}
         >
-          <StorageSpaceMap markers={spacesMarkers} />
+          <StorageSpaceMap
+            markers={spacesMarkers}
+            defaultLatitude={latitude ?? getDefaultLocation()[0]}
+            defaultLongitude={longitude ?? getDefaultLocation()[1]}
+          />
         </View>
 
         <ScrollView

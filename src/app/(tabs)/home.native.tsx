@@ -7,9 +7,13 @@ import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
 import StorageSpaceMap from "@/features/storage-space/components/storage-space-map";
+import { useLocationStore } from "@/entities/localisation/model/store";
+import { getDefaultLocation } from "@/utils/location-helper";
 
 export default function Index() {
   const params = useLocalSearchParams();
+  const latitude = useLocationStore((state) => state.latitude);
+  const longitude = useLocationStore((state) => state.longitude);
 
   const coordinates = params.coordinates
     ? JSON.parse(params.coordinates as string)
@@ -37,6 +41,7 @@ export default function Index() {
 
   const spacesMarkers = spaces
     ? spaces.map((space) => ({
+        id: space.id,
         latitude: space.address.lat,
         longitude: space.address.lng,
         title: space.title,
@@ -49,7 +54,11 @@ export default function Index() {
 
       <View style={styles.container}>
         <View style={styles.topMapContainer}>
-          <StorageSpaceMap markers={spacesMarkers} />
+          <StorageSpaceMap
+            markers={spacesMarkers}
+            defaultLatitude={latitude ?? getDefaultLocation()[0]}
+            defaultLongitude={longitude ?? getDefaultLocation()[1]}
+          />
         </View>
 
         <ScrollView style={styles.listScroll}>

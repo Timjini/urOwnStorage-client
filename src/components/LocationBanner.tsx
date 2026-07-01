@@ -1,34 +1,40 @@
-import { useLocationStore } from "@/features/localisation/user-location/store/use-location-store";
 import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-
-const brandOrange = "#C83803";
+import { Theme } from "@/constants/theme";
+import { useLocationStore } from "@/entities/localisation/model/store";
 
 export const LocationBanner = () => {
-  const { savedAddress, setLocation, clearLocation } = useLocationStore();
+  const savedAddress = useLocationStore((state) => state.savedAddress);
+  const hasHydrated = useLocationStore((state) => state.hasHydrated);
+  const setLocation = useLocationStore((state) => state.setLocation);
+  const clearLocation = useLocationStore((state) => state.clearLocation);
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     let isMounted = true;
 
     const fetchDeviceLocation = async () => {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
-          if (isMounted)
+          if (isMounted) {
             useLocationStore.setState({
               savedAddress: "Location permission denied",
             });
+          }
           return;
         }
 
         const isLocationEnabled = await Location.hasServicesEnabledAsync();
         if (!isLocationEnabled) {
-          if (isMounted)
+          if (isMounted) {
             useLocationStore.setState({
               savedAddress: "Location services disabled",
             });
+          }
           return;
         }
 
@@ -40,7 +46,6 @@ export const LocationBanner = () => {
           if (!locationResult) {
             locationResult = await Location.getCurrentPositionAsync({
               accuracy: Location.Accuracy.Balanced,
-              // timeout: 10000,
             });
           }
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,8 +57,9 @@ export const LocationBanner = () => {
         }
 
         if (!locationResult) {
-          if (isMounted)
+          if (isMounted) {
             useLocationStore.setState({ savedAddress: "Location unavailable" });
+          }
           return;
         }
 
@@ -88,7 +94,11 @@ export const LocationBanner = () => {
     return () => {
       isMounted = false;
     };
-  }, [setLocation, clearLocation]);
+  }, [setLocation, clearLocation, hasHydrated]);
+
+  if (!hasHydrated) {
+    return null;
+  }
 
   return (
     <View style={styles.banner}>
@@ -108,7 +118,7 @@ export const LocationBanner = () => {
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: brandOrange,
+    backgroundColor: Theme.colors.primary,
     paddingVertical: 6,
     paddingHorizontal: 15,
     flexDirection: "row",
