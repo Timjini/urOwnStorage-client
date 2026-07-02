@@ -45,3 +45,4 @@ app-example
 .env
 deployment.keystore
 development.cer
+coverage/*

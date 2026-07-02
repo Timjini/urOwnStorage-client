@@ -2,7 +2,7 @@
   "expo": {
     "name": "UrOwnStorage",
     "slug": "ur-own-storage",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "ur-own-storage",
@@ -37,7 +37,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.ico"
     },
     "plugins": [
       [
@@ -81,6 +81,6 @@
         "projectId": "f671b28a-3da6-4a6a-b67c-b32da4f6e241"
       }
     },
-    "owner": "timjini"
+    "owner": "UrOwnStorage"
   }
 }
