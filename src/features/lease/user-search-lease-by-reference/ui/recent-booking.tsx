@@ -1,11 +1,9 @@
+import { Theme } from "@/constants/theme";
 import { Lease } from "@/entities/lease/model";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const brandOrange = "#C83803";
-const lightBorder = "#ECEDEE";
-export default function RecentBooking(lease: <JsonApiSingleResponse<Lease>>() => any) {
-  console.log("lease", lease);
+export default function RecentBooking(lease: Lease) {
   return (
     <>
       <View style={styles.recentSection}>
@@ -13,14 +11,14 @@ export default function RecentBooking(lease: <JsonApiSingleResponse<Lease>>() =>
 
         <TouchableOpacity style={styles.miniCard}>
           <View style={styles.miniCardIcon}>
-            <Ionicons name="cube" size={24} color={brandOrange} />
+            <Ionicons name="cube" size={24} color={Theme.colors.primary} />
           </View>
           <View style={styles.miniCardContent}>
-            <Text style={styles.miniCardTitle}>Franklin Pike Storage</Text>
-            <Text style={styles.miniCardSubtitle}>Ref: BK-8821 • Unit 4B</Text>
+            <Text style={styles.miniCardTitle}>Loading...</Text>
+            <Text style={styles.miniCardSubtitle}>Loading...</Text>
           </View>
           <View style={styles.statusBadge}>
-            <Text style={styles.statusText}>Active</Text>
+            <Text style={styles.statusText}>Pending</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -45,7 +43,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
   },
   miniCardIcon: {
     width: 45,

@@ -1,9 +1,11 @@
-import { storage } from "@/entities/storage";
+// import { storage } from "@/entities/storage";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 import { AuthSlice, createAuthSlice } from "./slice";
 
 type StoreState = AuthSlice;
+
+// const storage = createMMKV();
 
 export const useAppStore = create<StoreState>()(
   persist(
@@ -12,7 +14,7 @@ export const useAppStore = create<StoreState>()(
     }),
     {
       name: "auth-storage",
-      storage: createJSONStorage(() => storage),
+      // storage: createJSONStorage(() => storage),
     },
   ),
 );
