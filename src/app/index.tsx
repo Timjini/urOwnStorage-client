@@ -7,15 +7,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  const { width } = useWindowDimensions();
-
-  const isLargeScreen = width >= 768;
 
   return (
     <ImageBackground
@@ -26,57 +22,43 @@ export default function WelcomeScreen() {
     >
       <View style={styles.overlay}>
         <SafeAreaView style={styles.container}>
-          <View
-            style={[styles.contentWrapper, isLargeScreen && styles.rowLayout]}
-          >
-            <View
-              style={[styles.topSection, isLargeScreen && styles.leftColumn]}
-            >
-              <View style={styles.logoContainer}>
-                <Text style={styles.logoText}>
-                  Us<Text style={{ color: Theme.colors.primary }}>Own</Text>
-                  <Text style={{ color: "#fff" }}>Storage</Text>
-                </Text>
-              </View>
-              <Text
-                style={[styles.tagline, isLargeScreen && styles.taglineLeft]}
-              >
-                Safe, local storage right in your neighborhood.
+          <View style={styles.topSection}>
+            <View style={styles.logoContainer}>
+              <Text style={styles.logoText}>
+                Us<Text style={{ color: Theme.colors.primary }}>Own</Text>
+                <Text style={{ color: "#fff" }}>Storage</Text>
               </Text>
             </View>
+            <Text style={styles.tagline}>
+              Safe, local storage right in your neighborhood.
+            </Text>
+          </View>
 
-            <View
-              style={[
-                styles.bottomSection,
-                isLargeScreen && styles.rightColumn,
-              ]}
+          <View style={styles.bottomSection}>
+            <TouchableOpacity
+              style={styles.primaryBtn}
+              onPress={() => router.push("/(auth)/register")}
             >
-              <TouchableOpacity
-                style={styles.primaryBtn}
-                onPress={() => router.push("/(auth)/register")}
-              >
-                <Text style={styles.primaryBtnText}>Get Started</Text>
-              </TouchableOpacity>
+              <Text style={styles.primaryBtnText}>Get Started</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.secondaryBtn}
-                onPress={() => router.push("/(auth)/login")}
-              >
-                <Text style={styles.secondaryBtnText}>Log In</Text>
-              </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.secondaryBtn}
+              onPress={() => router.push("/(auth)/login")}
+            >
+              <Text style={styles.secondaryBtnText}>Log In</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.guestBtn}
+              onPress={() => router.replace("/home")}
+            >
+              <Text style={styles.guestBtnText}>Continue as Guest</Text>
+              <Ionicons name="arrow-forward" size={16} color="#fff" />
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.guestBtn}
-                onPress={() => router.replace("/home")}
-              >
-                <Text style={styles.guestBtnText}>Continue as Guest</Text>
-                <Ionicons name="arrow-forward" size={16} color="#fff" />
-              </TouchableOpacity>
-
-              <Text style={styles.footerText}>
-                By continuing, you agree to our Terms of Service.
-              </Text>
-            </View>
+            <Text style={styles.footerText}>
+              By continuing, you agree to our Terms of Service.
+            </Text>
           </View>
         </SafeAreaView>
       </View>
@@ -96,27 +78,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "center",
-  },
-  contentWrapper: {
-    flex: 1,
     justifyContent: "space-between",
-  },
-  rowLayout: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 40,
   },
   topSection: {
     marginTop: 60,
     alignItems: "center",
-  },
-  leftColumn: {
-    flex: 1,
-    marginTop: 0,
-    alignItems: "flex-start",
-    paddingRight: 40,
   },
   logoContainer: {
     flexDirection: "row",
@@ -138,24 +104,12 @@ const styles = StyleSheet.create({
     opacity: 0.9,
     paddingHorizontal: 20,
   },
-  taglineLeft: {
-    textAlign: "left",
-    paddingHorizontal: 0,
-    fontSize: 24,
-  },
   bottomSection: {
     marginBottom: 20,
     gap: 12,
   },
-  rightColumn: {
-    flex: 1,
-    maxWidth: 400,
-    width: "100%",
-    marginBottom: 0,
-    justifyContent: "center",
-  },
   primaryBtn: {
-    backgroundColor: Theme.colors.primary,
+    backgroundColor: Theme.colors.secondary,
     height: 56,
     borderRadius: Theme.radius.md,
     alignItems: "center",

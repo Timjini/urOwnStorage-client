@@ -1,4 +1,4 @@
-import StorageSpaceView from "@/features/storage-space/components/storage-space-view.native";
+import StorageSpaceView from "@/features/storage-space/components/storage-space-view";
 import { useStorageSpaceDetails } from "@/features/storage-space/hooks/useStorageSpace";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";

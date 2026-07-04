@@ -1,9 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const brandOrange = '#C83803';
+const brandOrange = "#C83803";
 // const brandBlue = '#0a7ea4';
-const lightBorder = '#ECEDEE';
+const lightBorder = "#ECEDEE";
 export default function RecentBooking() {
   return (
     <>

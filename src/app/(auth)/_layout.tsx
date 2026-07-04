@@ -1,11 +1,11 @@
-import { useAppStore } from "@/entities/auth/store/store";
+// import { useAppStore } from "@/entities/auth/store/store";
 import { Stack } from "expo-router";
 // import { useAuth } from '@/context/AuthContext';
 
 export default function AuthLayout() {
-  const { auth } = useAppStore();
+  // const { auth } = useAppStore();
 
-  console.log(auth);
+  // console.log(auth);
 
   // let isLoading = false;
   // let user = {"name": "james hook"};

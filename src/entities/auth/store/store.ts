@@ -1,20 +1,20 @@
-// import { storage } from "@/entities/storage";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { AuthSlice, createAuthSlice } from "./slice";
+// // import { storage } from "@/entities/storage";
+// import { create } from "zustand";
+// import { persist } from "zustand/middleware";
+// import { AuthSlice, createAuthSlice } from "./slice";
 
-type StoreState = AuthSlice;
+// type StoreState = AuthSlice;
 
-// const storage = createMMKV();
+// // const storage = createMMKV();
 
-export const useAppStore = create<StoreState>()(
-  persist(
-    (...a) => ({
-      ...createAuthSlice(...a),
-    }),
-    {
-      name: "auth-storage",
-      // storage: createJSONStorage(() => storage),
-    },
-  ),
-);
+// export const useAppStore = create<StoreState>()(
+//   persist(
+//     (...a) => ({
+//       ...createAuthSlice(...a),
+//     }),
+//     {
+//       name: "auth-storage",
+//       // storage: createJSONStorage(() => storage),
+//     },
+//   ),
+// );
