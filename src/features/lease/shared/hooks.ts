@@ -6,8 +6,14 @@ export const useLease = () => {
 
   const searchLeaseByReference = async (reference: string) => {
     const response = await LeaseService.searchLeaseByReference(reference);
-    queryClient.setQueryData(["lease", reference], response);
-    return response;
+    
+    const singleLease = response?.data && Array.isArray(response.data) 
+      ? response.data[0] 
+      : response;
+
+    queryClient.setQueryData(["lease", reference], singleLease);
+    
+    return singleLease;
   };
 
   return { searchLeaseByReference };

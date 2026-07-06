@@ -15,6 +15,9 @@ export default function Index() {
   const latitude = useLocationStore((state) => state.latitude);
   const longitude = useLocationStore((state) => state.longitude);
 
+  console.log("latitude =====>", latitude);
+  console.log("longitude =====>", longitude);
+
   const coordinates = params.coordinates
     ? JSON.parse(params.coordinates as string)
     : null;

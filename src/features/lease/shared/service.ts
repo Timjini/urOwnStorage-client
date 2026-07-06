@@ -8,7 +8,12 @@ export const LeaseService = {
   ): Promise<JsonApiSingleResponse<Lease>> {
     const response = await LeaseApi.searchLeaseByReference(reference);
 
-    const validation = LeaseSchema.safeParse(response.data);
+    const singleLease =
+      response?.data && Array.isArray(response.data)
+        ? response.data[0]
+        : response;
+
+    const validation = LeaseSchema.safeParse(singleLease);
 
     if (!validation.success) {
       console.error("Lease validation failed:", validation.error.message);

@@ -1,12 +1,63 @@
+import { useLease } from "@/features/lease/shared/hooks";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const brandOrange = '#C83803';
-const brandBlue = '#0a7ea4';
-const lightBorder = '#ECEDEE';
+const brandOrange = "#C83803";
+const brandBlue = "#0a7ea4";
+const lightBorder = "#ECEDEE";
+
+interface LeaseBooking {
+  id: string;
+  type: string;
+  attributes: {
+    storageSpaceTitle: string;
+    fullAddress: string;
+    imageUrls: string[];
+    status?: string;
+  };
+}
+
 export default function SearchBox() {
-    const [refNumber, setRefNumber] = useState('');
+  const [refNumber, setRefNumber] = useState("");
+  const [booking, setBooking] = useState<LeaseBooking | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { searchLeaseByReference } = useLease();
+
+  const handleSearch = async () => {
+    if (!refNumber.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+    setBooking(null);
+
+    try {
+      const data = await searchLeaseByReference(refNumber);
+
+      const bookingData = Array.isArray(data) ? data[0] : data?.data || data;
+
+      console.log("bookingData", bookingData.data[0].attributes);
+      if (bookingData && bookingData.attributes) {
+        setBooking(bookingData.data[0].attributes);
+      } else {
+        setError("No booking found with this reference number.");
+      }
+    } catch (err) {
+      setError("Failed to fetch booking. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -29,9 +80,19 @@ export default function SearchBox() {
           />
         </View>
 
-        <TouchableOpacity style={styles.searchButton}>
-          <Text style={styles.searchButtonText}>Find My Booking</Text>
-          <Ionicons name="search" size={18} color="#fff" />
+        <TouchableOpacity
+          style={styles.searchButton}
+          onPress={handleSearch}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <Text style={styles.searchButtonText}>Find My Booking</Text>
+              <Ionicons name="search" size={18} color="#fff" />
+            </>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -41,6 +102,51 @@ export default function SearchBox() {
           Reference numbers can be found in your confirmation email.
         </Text>
       </View>
+
+      {/* Error Message Section */}
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      )}
+
+      {/* Actual Booking Result Display Section */}
+      {booking && (
+        <View style={styles.bookingResultSection}>
+          <Text style={styles.sectionTitle}>Your Booking</Text>
+          <View style={styles.miniCard}>
+            {/* Image Preview from API */}
+            {booking.attributes.imageUrls?.length > 0 ? (
+              <Image
+                source={{ uri: booking.attributes.imageUrls[0] }}
+                style={styles.miniCardImage}
+              />
+            ) : (
+              <View style={styles.miniCardIcon}>
+                <Ionicons name="cube-outline" size={22} color={brandOrange} />
+              </View>
+            )}
+
+            <View style={styles.miniCardContent}>
+              <Text style={styles.miniCardTitle} numberOfLines={1}>
+                {booking.attributes.storageSpaceTitle}
+              </Text>
+              <Text style={styles.miniCardSubtitle} numberOfLines={2}>
+                {booking.attributes.fullAddress}
+              </Text>
+              <Text style={styles.refBadge}>ID: {booking.id}</Text>
+            </View>
+
+            {booking.attributes.status && (
+              <View style={styles.statusBadge}>
+                <Text style={styles.statusText}>
+                  {booking.attributes.status}
+                </Text>
+              </View>
+            )}
+          </View>
+        </View>
+      )}
     </>
   );
 }
@@ -111,8 +217,8 @@ const styles = StyleSheet.create({
     color: "#687076",
     flex: 1,
   },
-  recentSection: {
-    marginTop: 40,
+  bookingResultSection: {
+    marginTop: 30,
   },
   sectionTitle: {
     fontSize: 18,
@@ -129,9 +235,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: lightBorder,
   },
+  miniCardImage: {
+    width: 55,
+    height: 55,
+    borderRadius: 10,
+    marginRight: 15,
+    backgroundColor: "#F5F7F9",
+  },
   miniCardIcon: {
-    width: 45,
-    height: 45,
+    width: 55,
+    height: 55,
     borderRadius: 10,
     backgroundColor: "#FFF1ED",
     alignItems: "center",
@@ -150,17 +263,37 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#687076",
     marginTop: 2,
+    lineHeight: 16,
+  },
+  refBadge: {
+    fontSize: 11,
+    color: brandBlue,
+    fontWeight: "600",
+    marginTop: 4,
   },
   statusBadge: {
     backgroundColor: "#E8F5E9",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
+    marginLeft: 10,
   },
   statusText: {
     color: "#2E7D32",
     fontSize: 10,
     fontWeight: "700",
     textTransform: "uppercase",
+  },
+  errorContainer: {
+    marginTop: 20,
+    padding: 12,
+    backgroundColor: "#FFEBEE",
+    borderRadius: 8,
+  },
+  errorText: {
+    color: "#C62828",
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });

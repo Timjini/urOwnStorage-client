@@ -1,41 +1,25 @@
+import { Theme } from "@/constants/theme";
 import AddressAutocomplete from "@/features/localisation/search-location/ui/address-autocomplete";
 // import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 // import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
- ActivityIndicator } from "react-native";
 import Slider from "@react-native-community/slider";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import {
+    ActivityIndicator,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
 // import { SafeAreaView } from "react-native-safe-area-context";
 
 const ALLOWED_INTERVALS = ["day", "week", "month", "year"];
-const SPACE_TYPES = [
-  "Garage",
-  "Room",
-  "Driveway",
-  "Workshop",
-  "Warehouse",
-  "Office",
-  "Building",
-  "Basement",
-  "Empty Lot",
-  "Backyard",
-  "Other Space",
-];
-const FEATURE_OPTIONS = [
-  "Climate Control",
-  "24/7 Access",
-  "CCTV",
-  "Alarm System",
-  "Private Entrance",
-  "Smoke Alarm",
-];
+const SPACE_TYPES = ["Garage", "Room", "Driveway", "Workshop"];
+const FEATURE_OPTIONS = ["Climate Control", "24/7 Access", "CCTV"];
 
 const brandBlue = "#0a7ea4";
 const brandOrange = "#C83803";
@@ -108,7 +92,7 @@ export default function FilterScreen() {
             onValueChange={(value) => setDistance(value)}
           />
         </View>
-        <ScrollView>
+        <ScrollView style={{ height: 1200 }}>
           <Text style={styles.sectionTitle}>Space Type</Text>
           <View style={styles.chipContainer}>
             {SPACE_TYPES.map((type) => {
@@ -324,17 +308,6 @@ const styles = StyleSheet.create({
     color: brandBlue,
     fontWeight: "600",
   },
-  footerContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#fff",
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: "#ECEDEE",
-    marginVertical: 16,
-  },
   applyButton: {
     backgroundColor: brandOrange,
     borderRadius: 10,
@@ -346,6 +319,19 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  footerContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginBottom: 45,
+    borderTopColor: Theme.colors.border,
+    borderTopWidth: 1,
+    paddingBottom: Platform.OS === "ios" ? 30 : 15,
   },
 });
 

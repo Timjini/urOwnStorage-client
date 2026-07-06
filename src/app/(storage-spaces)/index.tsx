@@ -1,20 +1,19 @@
+import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
+import { ErrorScreen } from "@/features/storage-space/components/error-screen";
+import { NotFoundScreen } from "@/features/storage-space/components/not-found-screen";
 import { StorageSpaceCard } from "@/features/storage-space/components/storage-card";
+import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  View,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { StorageSpaceSkeleton } from "@/features/storage-space/components/storage-space-skeleton";
-import { ErrorScreen } from "@/features/storage-space/components/error-screen";
-import { NotFoundScreen } from "@/features/storage-space/components/not-found-screen";
-import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function Index() {
   const params = useLocalSearchParams();
@@ -45,58 +44,58 @@ export default function Index() {
   } = useStorageSpaces(filters);
 
   console.log("spaces", spaces);
+
+  if (spaces?.length === 0) {
+    return <NotFoundScreen />;
+  }
   return (
-    <SafeAreaView>
-      <View style={styles.safeArea}>
-        <StatusBar barStyle="light-content" backgroundColor="#C83803" />
-        <View style={styles.locationHeader}>
-          <View style={styles.locationInfo}>
-            <Ionicons
-              name="location-sharp"
-              size={18}
-              color="#C83803"
-              style={styles.locationIcon}
-            />
-            <View style={styles.textColumn}>
-              <Text style={styles.headerLabel}>Browsing spaces near</Text>
-              <Text style={styles.headerAddress} numberOfLines={1}>
-                {displayAddress}
-              </Text>
-            </View>
+    <View style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor="#C83803" />
+      <View style={styles.locationHeader}>
+        <View style={styles.locationInfo}>
+          <Ionicons
+            name="location-sharp"
+            size={18}
+            color="#C83803"
+            style={styles.locationIcon}
+          />
+          <View style={styles.textColumn}>
+            <Text style={styles.headerLabel}>Browsing spaces near</Text>
+            <Text style={styles.headerAddress} numberOfLines={1}>
+              {displayAddress}
+            </Text>
           </View>
-          <TouchableOpacity
-            style={styles.headerFilterButton}
-            onPress={() => router.push("/filter")}
-          >
-            <Ionicons name="options-outline" size={20} color="#484E54" />
-          </TouchableOpacity>
         </View>
-
-        <View style={styles.container}>
-          <ScrollView style={{ padding: 16 }}>
-            {isPending && (
-              <>
-                <StorageSpaceSkeleton />
-                <StorageSpaceSkeleton />
-                <StorageSpaceSkeleton />
-              </>
-            )}
-
-            {isError && <ErrorScreen refetch={refetch} />}
-
-            {!isPending &&
-              !isError &&
-              spaces?.map((space) => (
-                <StorageSpaceCard key={space.id} space={space} />
-              ))}
-
-            {!isPending && !isError && spaces?.length === 0 && (
-              <NotFoundScreen />
-            )}
-          </ScrollView>
-        </View>
+        <TouchableOpacity
+          style={styles.headerFilterButton}
+          onPress={() => router.push("/filter")}
+        >
+          <Ionicons name="options-outline" size={20} color="#484E54" />
+        </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      <View style={styles.container}>
+        <ScrollView style={{ padding: 16 }}>
+          {isPending && (
+            <>
+              <StorageSpaceSkeleton />
+              <StorageSpaceSkeleton />
+              <StorageSpaceSkeleton />
+            </>
+          )}
+
+          {isError && <ErrorScreen refetch={refetch} />}
+
+          {!isPending &&
+            !isError &&
+            spaces?.map((space) => (
+              <StorageSpaceCard key={space.id} space={space} />
+            ))}
+
+          {!isPending && !isError && spaces?.length === 0 && <NotFoundScreen />}
+        </ScrollView>
+      </View>
+    </View>
   );
 }
 

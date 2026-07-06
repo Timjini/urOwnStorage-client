@@ -5,17 +5,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useCreateCheckout } from "../hooks/useCheckout";
 import { Checkout } from "../types";
 import { CheckoutFormData, checkoutSchema } from "../validations";
-
-const lightBorder = "#ECEDEE";
 
 interface StorageSpaceProps {
   space: StorageSpace;
@@ -258,7 +256,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     fontSize: 15,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
   },
   inputError: { borderColor: "#E53E3E", backgroundColor: "#FFF5F5" },
   errorText: {
@@ -274,7 +272,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
     backgroundColor: "#fff",
   },
   activeChip: {

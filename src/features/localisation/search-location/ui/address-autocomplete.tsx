@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  TextInput,
-  View,
   FlatList,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
   ViewStyle,
 } from "react-native";
 
