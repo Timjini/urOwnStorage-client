@@ -1,3 +1,4 @@
+import { Lease } from "@/entities/lease/model";
 import { useLease } from "@/features/lease/shared/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -15,20 +16,9 @@ const brandOrange = "#C83803";
 const brandBlue = "#0a7ea4";
 const lightBorder = "#ECEDEE";
 
-interface LeaseBooking {
-  id: string;
-  type: string;
-  attributes: {
-    storageSpaceTitle: string;
-    fullAddress: string;
-    imageUrls: string[];
-    status?: string;
-  };
-}
-
 export default function SearchBox() {
   const [refNumber, setRefNumber] = useState("");
-  const [booking, setBooking] = useState<LeaseBooking | null>(null);
+  const [booking, setBooking] = useState<Lease | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,11 +34,10 @@ export default function SearchBox() {
     try {
       const data = await searchLeaseByReference(refNumber);
 
-      const bookingData = Array.isArray(data) ? data[0] : data?.data || data;
+      let bookingData = data.attributes;
 
-      console.log("bookingData", bookingData.data[0].attributes);
-      if (bookingData && bookingData.attributes) {
-        setBooking(bookingData.data[0].attributes);
+      if (bookingData) {
+        setBooking(bookingData);
       } else {
         setError("No booking found with this reference number.");
       }
@@ -115,10 +104,9 @@ export default function SearchBox() {
         <View style={styles.bookingResultSection}>
           <Text style={styles.sectionTitle}>Your Booking</Text>
           <View style={styles.miniCard}>
-            {/* Image Preview from API */}
-            {booking.attributes.imageUrls?.length > 0 ? (
+            {booking.imageUrls?.length > 0 ? (
               <Image
-                source={{ uri: booking.attributes.imageUrls[0] }}
+                source={{ uri: booking.imageUrls[0] }}
                 style={styles.miniCardImage}
               />
             ) : (
@@ -129,19 +117,17 @@ export default function SearchBox() {
 
             <View style={styles.miniCardContent}>
               <Text style={styles.miniCardTitle} numberOfLines={1}>
-                {booking.attributes.storageSpaceTitle}
+                {booking.storageSpaceTitle}
               </Text>
               <Text style={styles.miniCardSubtitle} numberOfLines={2}>
-                {booking.attributes.fullAddress}
+                {booking.fullAddress}
               </Text>
-              <Text style={styles.refBadge}>ID: {booking.id}</Text>
+              <Text style={styles.refBadge}>ID:</Text>
             </View>
 
-            {booking.attributes.status && (
+            {booking.status && (
               <View style={styles.statusBadge}>
-                <Text style={styles.statusText}>
-                  {booking.attributes.status}
-                </Text>
+                <Text style={styles.statusText}>{booking.status}</Text>
               </View>
             )}
           </View>

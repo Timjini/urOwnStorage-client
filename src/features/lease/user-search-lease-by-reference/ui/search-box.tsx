@@ -1,7 +1,6 @@
 import { Lease } from "@/entities/lease/model";
 import { JsonApiSingleResponse } from "@/types/api";
-import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 const brandOrange = "#C83803";
 const lightBorder = "#ECEDEE";
@@ -16,32 +15,10 @@ export default function RecentBooking({ lease }: RecentBookingProps) {
   }
 
   const { id, attributes } = lease.data;
-
+  console.log("attributes ===========>", attributes);
   return (
     <View style={styles.recentSection}>
       <Text style={styles.sectionTitle}>Recent Bookings</Text>
-
-      <TouchableOpacity style={styles.miniCard}>
-        <View style={styles.miniCardIcon}>
-          <Ionicons name="cube" size={24} color={brandOrange} />
-        </View>
-        <View style={styles.miniCardContent}>
-          {/* Mapped to your model properties */}
-          <Text style={styles.miniCardTitle} numberOfLines={1}>
-            {attributes?.fullAddress ||
-              `Storage Space #${attributes?.storageSpaceId}`}
-          </Text>
-          <Text style={styles.miniCardSubtitle}>
-            Ref: {attributes?.reference || id} • Duration:{" "}
-            {attributes?.bookingDuration} months
-          </Text>
-        </View>
-        <View style={styles.statusBadge}>
-          <Text style={styles.statusText}>
-            {attributes?.status || "Unknown"}
-          </Text>
-        </View>
-      </TouchableOpacity>
     </View>
   );
 }
