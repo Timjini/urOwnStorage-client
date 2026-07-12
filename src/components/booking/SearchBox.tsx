@@ -41,7 +41,7 @@ export default function SearchBox() {
       } else {
         setError("No booking found with this reference number.");
       }
-    } catch (err) {
+    } catch (err: any) {
       setError("Failed to fetch booking. Please try again.");
     } finally {
       setIsLoading(false);

@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 32,
     fontWeight: "900",
-    color: Theme.colors.secondary,
+    color: "#fff",
     letterSpacing: -1,
   },
   tagline: {
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   primaryBtn: {
-    backgroundColor: Theme.colors.secondary,
+    backgroundColor: Theme.colors.primary,
     height: 56,
     borderRadius: Theme.radius.md,
     alignItems: "center",

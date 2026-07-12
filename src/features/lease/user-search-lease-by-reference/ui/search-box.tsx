@@ -1,9 +1,7 @@
+import { Theme } from "@/constants/theme";
 import { Lease } from "@/entities/lease/model";
 import { JsonApiSingleResponse } from "@/types/api";
 import { StyleSheet, Text, View } from "react-native";
-
-const brandOrange = "#C83803";
-const lightBorder = "#ECEDEE";
 
 interface RecentBookingProps {
   lease?: JsonApiSingleResponse<Lease>;
@@ -14,7 +12,7 @@ export default function RecentBooking({ lease }: RecentBookingProps) {
     return null;
   }
 
-  const { id, attributes } = lease.data;
+  const { attributes } = lease.data;
   console.log("attributes ===========>", attributes);
   return (
     <View style={styles.recentSection}>
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
   },
   miniCardIcon: {
     width: 45,
