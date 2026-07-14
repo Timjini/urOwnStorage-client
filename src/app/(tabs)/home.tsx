@@ -1,3 +1,4 @@
+import { useAppStore } from "@/entities/auth/store/store";
 import { useLocationStore } from "@/entities/localisation/model/store";
 import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
 import { ErrorScreen } from "@/features/storage-space/components/error-screen";
@@ -14,6 +15,10 @@ export default function Index() {
   const params = useLocalSearchParams();
   const latitude = useLocationStore((state) => state.latitude);
   const longitude = useLocationStore((state) => state.longitude);
+
+  const { auth } = useAppStore();
+
+  console.log("user =====>", auth);
 
   console.log("latitude =====>", latitude);
   console.log("longitude =====>", longitude);

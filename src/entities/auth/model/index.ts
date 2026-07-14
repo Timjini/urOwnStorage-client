@@ -30,7 +30,7 @@ export const authSchema = z.object({
   email: z.email("Please enter a valid email address"),
   // phone: z.string().min(6, "Please enter a valid phone number"),
   password: passwordSchema,
-  passwordConfirmation: passwordSchema,
+  // passwordConfirmation: passwordSchema,
 });
 
 export type AuthFormData = z.infer<typeof authSchema>;

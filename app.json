@@ -28,7 +28,7 @@
       "versionCode": 20,
       "config": {
         "googleMaps": {
-          "apiKey": "$EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+          "apiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
         }
       },
       "permissions": [
@@ -41,6 +41,12 @@
       "favicon": "./assets/images/favicon.ico"
     },
     "plugins": [
+      [
+        "react-native-maps",
+        {
+          "androidGoogleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+        }
+      ],
       [
         "expo-maps",
         {
