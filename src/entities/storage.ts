@@ -6,7 +6,7 @@ export const storage: StateStorage = {
     console.log(name, "has been retrieved");
     const data = (await AsyncStorage.getItem(name)) || null;
 
-    console.log("data from storage: ", data);
+    console.log("data: ", data);
     return data;
   },
   setItem: async (name: string, value: string): Promise<void> => {

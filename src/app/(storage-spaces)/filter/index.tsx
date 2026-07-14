@@ -56,8 +56,8 @@ export default function FilterScreen() {
     setSelectedAddress(data.address);
     setCoordinates(data.coordinates);
 
-    console.log("Selected Full Address:", data.address);
-    console.log("Selected Coordinates (Lon, Lat):", data.coordinates);
+    // console.log("Selected Full Address:", data.address);
+    // console.log("Selected Coordinates (Lon, Lat):", data.coordinates);
   };
 
   const toggleFeature = (feature: string) => {

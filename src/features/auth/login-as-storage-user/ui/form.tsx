@@ -1,3 +1,4 @@
+import { Theme } from "@/constants/theme";
 import { AuthFormData, authSchema, IAuth } from "@/entities/auth/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -11,7 +12,6 @@ import {
   View,
 } from "react-native";
 import { useAuth } from "../../shared/hook";
-import { Theme } from "@/constants/theme";
 
 export function AuthSessionForm() {
   const { createSession } = useAuth();
@@ -34,10 +34,8 @@ export function AuthSessionForm() {
     console.log("Form successfully validated! Data:", data);
 
     const payload: IAuth = {
-      user: {
-        email: data.email,
-        password: data.password,
-      },
+      email: data.email,
+      password: data.password,
     };
     mutate(payload);
   };
@@ -102,7 +100,7 @@ export function AuthSessionForm() {
           {isPending ? (
             <ActivityIndicator color="#fff" size="small" />
           ) : (
-            <Text style={styles.confirmButtonText}>Confirm Booking</Text>
+            <Text style={styles.confirmButtonText}>Sign In</Text>
           )}
         </TouchableOpacity>
       </View>

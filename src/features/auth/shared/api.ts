@@ -12,10 +12,9 @@ export const AuthApi = {
   },
 
   async login(data: IAuth): Promise<JsonApiSingleResponse<AuthAttributes>> {
-    const reponse = await apiClient.post<JsonApiSingleResponse<AuthAttributes>>(
-      `${LOGIN}`,
-      data,
-    );
-    return reponse;
+    const response = await apiClient.post<
+      JsonApiSingleResponse<AuthAttributes>
+    >(`${LOGIN}`, data);
+    return response;
   },
 };

@@ -1,9 +1,4 @@
-import { Stack } from "expo-router";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "expo-router/react-navigation";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import "../global.css";
@@ -23,7 +18,6 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-
   const isAndroid15 = Platform.OS === "android" && Platform.Version >= 35;
 
   return (

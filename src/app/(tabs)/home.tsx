@@ -16,12 +16,12 @@ export default function Index() {
   const latitude = useLocationStore((state) => state.latitude);
   const longitude = useLocationStore((state) => state.longitude);
 
-  const { auth } = useAppStore();
+  const auth = useAppStore((state) => state.auth);
+  console.log("authToken =====>", auth);
+  const logout = useAppStore((state) => state.logout);
 
-  console.log("user =====>", auth);
-
-  console.log("latitude =====>", latitude);
-  console.log("longitude =====>", longitude);
+  // console.log("latitude =====>", latitude);
+  // console.log("longitude =====>", longitude);
 
   const coordinates = params.coordinates
     ? JSON.parse(params.coordinates as string)

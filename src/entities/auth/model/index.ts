@@ -1,15 +1,23 @@
 import * as z from "zod";
 
 export interface IAuth {
-  user: {
-    email: string;
-    password: string;
-  };
+  email: string;
+  password: string;
+}
+
+export interface IUserCreate {
+  email: string;
+  password: string;
 }
 
 export interface AuthAttributes {
   email: string;
-  authToken: string;
+  authToken: any;
+}
+
+export interface IAuthResponse {
+  email: string;
+  authToken: any;
 }
 
 const passwordSchema = z
@@ -33,4 +41,12 @@ export const authSchema = z.object({
   // passwordConfirmation: passwordSchema,
 });
 
+export const createAccountSchema = z.object({
+  email: z.email("Please enter a valid email address"),
+  phone: z.string().min(6, "Please enter a valid phone number"),
+  password: passwordSchema,
+  passwordConfirmation: passwordSchema,
+});
+
+export type AccountCreationFormData = z.infer<typeof createAccountSchema>;
 export type AuthFormData = z.infer<typeof authSchema>;

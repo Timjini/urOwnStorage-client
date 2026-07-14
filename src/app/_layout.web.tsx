@@ -1,15 +1,15 @@
 import { Stack } from "expo-router";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
+    DarkTheme,
+    DefaultTheme,
+    ThemeProvider,
 } from "expo-router/react-navigation";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../global.css";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/use-color-scheme.web";
 import QueryProvider from "./queryProvider";
 
 export const unstable_settings = {

@@ -25,10 +25,10 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.urownstorage",
-      "versionCode": 20,
+      "versionCode": 22,
       "config": {
         "googleMaps": {
-          "apiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+          "apiKey": ""
         }
       },
       "permissions": [
@@ -44,7 +44,7 @@
       [
         "react-native-maps",
         {
-          "androidGoogleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY"
+          "androidGoogleMapsApiKey": ""
         }
       ],
       [

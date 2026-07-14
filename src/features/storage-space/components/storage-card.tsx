@@ -29,7 +29,7 @@ export const StorageSpaceCard = ({ space }: CardProps) => {
     });
   };
 
-  console.log("space", space);
+  // console.log("space", space);
   return (
     <TouchableOpacity
       activeOpacity={0.9}

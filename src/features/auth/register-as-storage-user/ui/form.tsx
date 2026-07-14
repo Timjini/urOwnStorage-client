@@ -1,5 +1,10 @@
 import { Theme } from "@/constants/theme";
-import { AuthFormData, authSchema, IAuth } from "@/entities/auth/model";
+import {
+  AccountCreationFormData,
+  AuthFormData,
+  createAccountSchema,
+  IAuth
+} from "@/entities/auth/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -23,11 +28,11 @@ export function AuthForm() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormData>({
-    resolver: zodResolver(authSchema),
+  } = useForm<AccountCreationFormData>({
+    resolver: zodResolver(createAccountSchema),
     defaultValues: {
       email: "",
-      // phone: "",
+      phone: "",
       password: "",
       passwordConfirmation: "",
     },

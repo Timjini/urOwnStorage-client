@@ -1,7 +1,8 @@
+import { AuthAttributes, IAuth } from "@/entities/auth/model";
+import { useAppStore } from "@/entities/auth/store/store";
 import { JsonApiSingleResponse } from "@/types/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import { AuthAttributes, IAuth } from "@/entities/auth/model";
 import { AuthService } from "./service";
 // import { useAppStore } from "@/entities/auth/store";
 
@@ -17,9 +18,10 @@ export const useAuth = () => {
     mutationFn: (data: IAuth) => AuthService.createAccount(data),
     onSuccess: (response) => {
       console.log("response ======>", response);
-      // const { authToken } = response.data.attributes;
+      const authToken = response.data.attributes.authToken;
 
-      // useAppStore.getState().setAuth(authToken);
+      console.log("Setting auth token to store:", authToken);
+      useAppStore.getState().setAuth(authToken);
       queryClient.invalidateQueries({ queryKey: ["account"] });
       router.push({ pathname: "/home" });
     },
@@ -34,7 +36,11 @@ export const useAuth = () => {
   >({
     mutationFn: (data: IAuth) => AuthService.createSession(data),
     onSuccess: (response) => {
-      console.log("response ======>", response);
+      const authToken = response.data.attributes.authToken;
+
+      console.log("Setting auth token to store:", authToken);
+      useAppStore.getState().setAuth(authToken);
+
       queryClient.invalidateQueries({ queryKey: ["session"] });
       router.push({ pathname: "/home" });
     },

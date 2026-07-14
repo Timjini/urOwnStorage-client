@@ -43,7 +43,7 @@ export default function Index() {
     refetch,
   } = useStorageSpaces(filters);
 
-  console.log("spaces", spaces);
+  // console.log("spaces", spaces);
 
   if (spaces?.length === 0) {
     return <NotFoundScreen />;
