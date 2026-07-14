@@ -53,6 +53,7 @@ export default function Index() {
         latitude: space.address.lat,
         longitude: space.address.lng,
         title: space.title,
+        billingInterval: space.billingInterval,
       }))
     : [];
 

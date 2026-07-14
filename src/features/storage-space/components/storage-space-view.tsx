@@ -1,7 +1,9 @@
 import CustomBadge from "@/components/ui/badge";
+import { StorageSpace } from "@/entities/storage-space/model";
 import { getFullImageUrl } from "@/utils/imageHelpers";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { Key } from "react";
 import {
   Dimensions,
   Image,
@@ -12,7 +14,6 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StorageSpace } from "../types";
 import StorageSpaceMap from "./storage-space-map";
 
 const { width } = Dimensions.get("window");
@@ -28,12 +29,46 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
+  console.log("space =====>", space.features);
   const handleBooking = () => {
     router.push({
       pathname: "/(storage-spaces)/[id]/booking",
       params: { id: space.id },
     });
   };
+
+  // Climate Control => leaf-outline,
+  // 24/7 Access => key-outline
+  // CCTV => videocam-outline
+  // Alarm System => shield-checkmark-outline
+  // Private Entrance => home-outline
+  // Smoke Alarm => alert-circle-outline
+
+  const setIcon = (feature: any) => {
+    switch (feature) {
+      case "Climate Control":
+        return "leaf-outline";
+      case "24/7 Access":
+        return "key-outline";
+      case "CCTV":
+        return "videocam-outline";
+      case "Alarm System":
+        return "shield-checkmark-outline";
+      case "Private Entrance":
+        return "home-outline";
+      case "Smoke Alarm":
+        return "alert-circle-outline";
+      default:
+        console.log(`Sorry, we are out of ${feature}.`);
+    }
+  };
+
+  const featureList = space.features.map((feature: string, index: any) => (
+    <View key={index} style={styles.featureItem}>
+      <Ionicons name={setIcon(feature)} size={20} color={brandOrange} />
+      <Text style={styles.featureLabel}>{feature}</Text>
+    </View>
+  ));
 
   return (
     <View style={styles.container}>
@@ -50,13 +85,15 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
           >
-            {space.imageUrls?.map((img, index) => (
-              <Image
-                key={index}
-                source={{ uri: getFullImageUrl(img) }}
-                style={styles.mainImage}
-              />
-            ))}
+            {space.imageUrls?.map(
+              (img: string | undefined, index: Key | null | undefined) => (
+                <Image
+                  key={index}
+                  source={{ uri: getFullImageUrl(img) }}
+                  style={styles.mainImage}
+                />
+              ),
+            )}
           </ScrollView>
           <View style={styles.imageCounter}>
             <Text style={styles.counterText}>1 / {space.imageUrls.length}</Text>
@@ -119,12 +156,7 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Space Features</Text>
-          <View style={styles.featureGrid}>
-            <Feature icon="thermometer-outline" label="Climate Control" />
-            <Feature icon="shield-checkmark-outline" label="24/7 Security" />
-            <Feature icon="car-outline" label="Easy Loading" />
-            <Feature icon="key-outline" label="Private Access" />
-          </View>
+          <View style={styles.featureGrid}>{featureList}</View>
         </View>
       </ScrollView>
 
@@ -149,13 +181,6 @@ const StorageSpaceView = ({ space }: StorageSpaceProps) => {
     </View>
   );
 };
-
-const Feature = ({ icon, label }: { icon: any; label: string }) => (
-  <View style={styles.featureItem}>
-    <Ionicons name={icon} size={20} color={brandBlue} />
-    <Text style={styles.featureLabel}>{label}</Text>
-  </View>
-);
 
 const styles = StyleSheet.create({
   container: {

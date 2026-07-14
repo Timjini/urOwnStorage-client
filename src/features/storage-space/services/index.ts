@@ -1,6 +1,6 @@
+import { StorageSpace } from "@/entities/storage-space/model";
 import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
 import * as storageSpaceApi from "../api";
-import { StorageSpace } from "../types";
 
 interface IStorageSpaceService {
   getAvailableSpaces(

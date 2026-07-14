@@ -1,8 +1,8 @@
-import { apiClient } from "@/lib/apiClient";
-import { StorageSpace } from "../types";
-import { JsonApiResponse, JsonApiSingleResponse } from "@/types/api";
 import { STORAGE_SPACES } from "@/constants/appGlobal";
+import { StorageSpace } from "@/entities/storage-space/model";
 import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
+import { apiClient } from "@/lib/apiClient";
+import { JsonApiResponse, JsonApiSingleResponse } from "@/types/api";
 
 export const fetchStorageSpaces = async (
   query?: string | StorageSpaceFilters,

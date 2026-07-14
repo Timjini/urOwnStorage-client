@@ -6,7 +6,7 @@ interface MapMarkerData {
   latitude: number;
   longitude: number;
   title?: string;
-  // billingInterval: string;
+  billingInterval: string;
 }
 
 interface StorageSpaceMapProps {
