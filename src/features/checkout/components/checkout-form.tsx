@@ -1,6 +1,6 @@
 import UniversalDatePicker from "@/components/booking/UniversalDatePicker";
 import { Theme } from "@/constants/theme";
-import { StorageSpace } from "@/features/storage-space/types";
+import { StorageSpace } from "@/entities/storage-space/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forwardRef, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";

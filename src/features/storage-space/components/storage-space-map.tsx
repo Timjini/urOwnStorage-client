@@ -43,7 +43,7 @@ export default function StorageSpaceMap({
         markers={formattedMarkers}
         cameraPosition={{
           coordinates: { latitude: centerLat, longitude: centerLng },
-          zoom: markers.length > 1 ? 10 : 13,
+          zoom: markers.length > 1 ? 6 : 13,
         }}
       />
     );

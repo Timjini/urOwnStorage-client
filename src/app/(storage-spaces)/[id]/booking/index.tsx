@@ -2,7 +2,7 @@ import { Theme } from "@/constants/theme";
 import {
   CheckoutForm,
   CheckoutFormRef,
-} from "@/features/checkout/components/checkout-form.native";
+} from "@/features/checkout/components/checkout-form";
 import { BookingStorageInfoCard } from "@/features/checkout/components/checkout-storage-info-card";
 import { PriceBreakDown } from "@/features/checkout/components/price-break-down";
 import { useStorageSpaceDetails } from "@/features/storage-space/hooks/useStorageSpace";
