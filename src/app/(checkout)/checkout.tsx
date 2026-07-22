@@ -54,7 +54,6 @@ export default function CheckoutScreen() {
     ? JSON.parse(params.storageSpace)
     : null;
 
-  console.log("-=========> ", storageSpaceData);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>

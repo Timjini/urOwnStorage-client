@@ -30,7 +30,7 @@ export const useCreateCheckout = () => {
         }
         return;
       }
-
+      console.log("====> checkout response ====>", response);
       router.push({
         pathname: "/(checkout)/checkout",
         params: {

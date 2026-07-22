@@ -46,7 +46,7 @@ export const CheckoutForm = forwardRef<CheckoutFormRef, StorageSpaceProps>(
         storageSpaceId: space.id,
         status: "NOT_STARTED",
         currency: space.currency,
-        totalAmount: space.amount,
+        totalAmount: 0,
         serviceFee: 5,
         fullName: "",
         email: "",

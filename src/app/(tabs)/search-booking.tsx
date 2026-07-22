@@ -1,4 +1,5 @@
 import SearchBox from "@/components/booking/SearchBox";
+import { useLocalSearchParams } from "expo-router";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,6 +14,10 @@ const brandOrange = "#C83803";
 const lightBorder = "#ECEDEE";
 
 export default function BookingSearchScreen() {
+  const { referenceNumber } = useLocalSearchParams<{
+    referenceNumber: string;
+  }>();
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -27,7 +32,7 @@ export default function BookingSearchScreen() {
           </Text>
         </View>
 
-        <SearchBox />
+        <SearchBox referenceNumber={referenceNumber} />
       </ScrollView>
     </KeyboardAvoidingView>
   );

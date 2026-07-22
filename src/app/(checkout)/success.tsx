@@ -1,10 +1,8 @@
+import { Theme } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const brandBlue = "#0a7ea4";
-const mutedText = "#687076";
 
 export default function SuccessScreen() {
   const router = useRouter();
@@ -13,7 +11,10 @@ export default function SuccessScreen() {
   }>();
 
   const navigateToBooking = () => {
-    router.push("/(lease)/search");
+    router.push({
+      pathname: "/(tabs)/search-booking",
+      params: { referenceNumber: referenceNumber },
+    });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   iconContainer: {
-    marginBottom: 24,
+    marginBottom: 10,
     // Soft glow effect behind icon
     shadowColor: "#2e7d32",
     shadowOffset: { width: 0, height: 4 },
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: mutedText,
+    color: Theme.colors.textMuted,
     textAlign: "center",
     lineHeight: 24,
     marginBottom: 30,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   referenceLabel: {
     fontSize: 10,
     fontWeight: "700",
-    color: mutedText,
+    color: Theme.colors.textMuted,
     letterSpacing: 1,
     marginBottom: 4,
   },
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   },
   noticeText: {
     fontSize: 13,
-    color: mutedText,
+    color: Theme.colors.textMuted,
     textAlign: "center",
     lineHeight: 18,
     paddingHorizontal: 10,
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   primaryButton: {
-    backgroundColor: brandBlue,
+    backgroundColor: Theme.colors.primary,
     height: 55,
     borderRadius: 12,
     alignItems: "center",

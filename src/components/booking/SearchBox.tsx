@@ -1,3 +1,4 @@
+import { Theme } from "@/constants/theme";
 import { Lease } from "@/entities/lease/model";
 import { useLease } from "@/features/lease/shared/hooks";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,12 +13,9 @@ import {
   View,
 } from "react-native";
 
-const brandOrange = "#C83803";
-const brandBlue = "#0a7ea4";
-const lightBorder = "#ECEDEE";
-
-export default function SearchBox() {
-  const [refNumber, setRefNumber] = useState("");
+export default function SearchBox(referenceNumber: string) {
+  const reference = Object.values(referenceNumber)[0] || "";
+  const [refNumber, setRefNumber] = useState(reference);
   const [booking, setBooking] = useState<Lease | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +54,7 @@ export default function SearchBox() {
           <Ionicons
             name="receipt-outline"
             size={20}
-            color={brandBlue}
+            color={Theme.colors.secondary}
             style={styles.icon}
           />
           <TextInput
@@ -111,7 +109,11 @@ export default function SearchBox() {
               />
             ) : (
               <View style={styles.miniCardIcon}>
-                <Ionicons name="cube-outline" size={22} color={brandOrange} />
+                <Ionicons
+                  name="cube-outline"
+                  size={22}
+                  color={Theme.colors.primary}
+                />
               </View>
             )}
 
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F7F9",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
     paddingHorizontal: 12,
     marginBottom: 20,
   },
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     color: "#151718",
   },
   searchButton: {
-    backgroundColor: brandOrange,
+    backgroundColor: Theme.colors.primary,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -219,7 +221,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: lightBorder,
+    borderColor: Theme.colors.border,
   },
   miniCardImage: {
     width: 55,
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
   },
   refBadge: {
     fontSize: 11,
-    color: brandBlue,
+    color: Theme.colors.secondary,
     fontWeight: "600",
     marginTop: 4,
   },
