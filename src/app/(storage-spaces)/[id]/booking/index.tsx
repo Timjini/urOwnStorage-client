@@ -4,37 +4,23 @@ import {
   CheckoutFormRef,
 } from "@/features/checkout/components/checkout-form";
 import { BookingStorageInfoCard } from "@/features/checkout/components/checkout-storage-info-card";
-import { PriceBreakDown } from "@/features/checkout/components/price-break-down";
 import { useStorageSpaceDetails } from "@/features/storage-space/hooks/useStorageSpace";
-import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { useRef } from "react";
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function BookingDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const router = useRouter();
   const { data, isLoading } = useStorageSpaceDetails(id);
-  const insets = useSafeAreaInsets();
 
   const formRef = useRef<CheckoutFormRef>(null);
-
-  const [agreedToTerms, setAgreedToTerms] = useState(false);
-  const [isAuthenticated] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (isLoading) {
     return (
@@ -46,115 +32,10 @@ export default function BookingDetailsScreen() {
 
   if (!data) return <Text>Space not found</Text>;
 
-  const handleBottomBarConfirm = () => {
-    if (!agreedToTerms || isSubmitting) return;
-
-    if (formRef.current) {
-      setIsSubmitting(true);
-      formRef.current.requestSubmit();
-    }
-  };
-
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
-        >
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            <BookingStorageInfoCard space={data} />
-
-            <CheckoutForm ref={formRef} space={data} />
-
-            <PriceBreakDown space={data} />
-
-            <View style={styles.authTermsContainer}>
-              <TouchableOpacity
-                style={styles.checkboxRow}
-                onPress={() => setAgreedToTerms(!agreedToTerms)}
-                activeOpacity={0.7}
-                disabled={isSubmitting}
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    agreedToTerms && styles.checkboxChecked,
-                  ]}
-                >
-                  {agreedToTerms && (
-                    <Ionicons name="checkmark" size={16} color="#fff" />
-                  )}
-                </View>
-                <Text style={styles.termsText}>
-                  I agree to the{" "}
-                  <Text style={styles.linkText}>Terms & Conditions</Text> and
-                  accept creating a secure account on Ur Own Storage using my
-                  booking details.
-                </Text>
-              </TouchableOpacity>
-
-              {!isAuthenticated && (
-                <View style={styles.loginOptionContainer}>
-                  <Text style={styles.loginPrompt}>
-                    Already have an account?{" "}
-                  </Text>
-                  <TouchableOpacity onPress={() => router.push("/login")}>
-                    <Text style={[styles.linkText, { fontWeight: "700" }]}>
-                      Log In here
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-
-        {/* <View style={styles.bottomBar}>
-          <TotalToPay
-            price={data.amount}
-            period={data.billingInterval}
-            currencySymbol={data.currencySymbol}
-          />
-
-          <TouchableOpacity
-            style={[
-              styles.confirmButton,
-              (!agreedToTerms || isSubmitting) && styles.disabledButton,
-            ]}
-            onPress={handleBottomBarConfirm}
-            disabled={!agreedToTerms || isSubmitting}
-          >
-            {isSubmitting ? (
-              <ActivityIndicator color="#fff" size="small" />
-            ) : (
-              <Text style={styles.confirmButtonText}>Confirm Booking</Text>
-            )}
-          </TouchableOpacity>
-        </View> */}
-
-        <View
-          style={[
-            styles.bottomBar,
-            { paddingBottom: Math.max(insets.bottom, 16) },
-          ]}
-        >
-          <View>
-            <View style={styles.priceRow}>
-              <Text style={styles.price}>{data.formattedPrice}</Text>
-              <Text style={styles.perMonth}>/ {data.billingInterval}</Text>
-            </View>
-            <Text style={styles.availability}>Available now</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.bookBtn}
-            onPress={handleBottomBarConfirm}
-          >
-            <Text style={styles.bookBtnText}>Reserve Space</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <BookingStorageInfoCard space={data} />
+      <CheckoutForm ref={formRef} space={data} />
     </SafeAreaProvider>
   );
 }

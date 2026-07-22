@@ -1,5 +1,4 @@
 import { DateTimePicker } from "@expo/ui/community/datetime-picker";
-import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
   Modal,
@@ -23,7 +22,6 @@ export default function UniversalPicker({
   date,
   onChangeDate,
 }: UniversalPickerProps) {
-  
   const displayDate = (d: Date) => {
     return d.toLocaleDateString("en-US", {
       month: "short",
@@ -44,7 +42,6 @@ export default function UniversalPicker({
       >
         <Text style={styles.dateLabel}>{label}</Text>
         <View style={styles.dateValueRow}>
-          <Ionicons name="calendar-outline" size={18} color={brandBlue} />
           <Text style={styles.dateValue}>
             {displayDate(date || new Date())}
           </Text>

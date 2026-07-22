@@ -25,6 +25,9 @@ export interface StorageSpace {
   imageUrls: string[];
   address: Address;
   currencySymbol: string;
+  nextCursor: number;
+  prevCursor: number;
+  leaseFee: number;
 }
 
 export interface StorageSpaceFilters {

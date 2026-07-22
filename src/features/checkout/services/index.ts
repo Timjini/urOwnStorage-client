@@ -5,11 +5,13 @@ import { Checkout, CheckoutAttributes } from "../types";
 export const checkoutService = {
   defaultFee: 5,
 
-  getPriceWithFee(price: number): number {
-    return Number(this.defaultFee) + Number(price);
+  getPriceWithFee(price: number, leaseFee: number): number {
+    return Number(leaseFee) + Number(price);
   },
 
-  async create(data: Checkout): Promise<JsonApiSingleResponse<CheckoutAttributes>> {
+  async create(
+    data: Checkout,
+  ): Promise<JsonApiSingleResponse<CheckoutAttributes>> {
     try {
       const response = await createCheckoutSession(data);
       return response;
@@ -17,5 +19,5 @@ export const checkoutService = {
       console.error("CheckoutService.create failed:", error);
       throw error;
     }
-  }
+  },
 };

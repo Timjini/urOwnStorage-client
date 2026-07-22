@@ -1,4 +1,6 @@
+import { Theme } from "@/constants/theme";
 import { useStripePayment } from "@/features/checkout";
+import { formatDate } from "@/utils/dateHelper";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -10,10 +12,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const brandOrange = "#C83803";
-const brandBlue = "#0a7ea4";
-const mutedText = "#687076";
 
 export default function CheckoutScreen() {
   const router = useRouter();
@@ -27,6 +25,7 @@ export default function CheckoutScreen() {
     storageSpace: string;
     paymentIntentClientSecret: string;
     referenceNumber: string;
+    location: string;
   }>();
 
   const { isReady, loading, presentCheckout } = useStripePayment({
@@ -55,7 +54,7 @@ export default function CheckoutScreen() {
     ? JSON.parse(params.storageSpace)
     : null;
 
-  // console.log("-=========> ", storageSpaceData);
+  console.log("-=========> ", storageSpaceData);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -63,8 +62,7 @@ export default function CheckoutScreen() {
         <View style={styles.header}>
           <Text style={styles.mainTitle}>Secure Payment</Text>
           <Text style={styles.subTitle}>
-            Review your rental summary and complete your booking safely via
-            Stripe.
+            Review your lease summary and complete your booking safely.
           </Text>
         </View>
 
@@ -94,7 +92,9 @@ export default function CheckoutScreen() {
               </View>
               <View style={{ alignItems: "flex-end" }}>
                 <Text style={styles.smallLabel}>REFERENCE</Text>
-                <Text style={[styles.detailValue, { color: brandOrange }]}>
+                <Text
+                  style={[styles.detailValue, { color: Theme.colors.primary }]}
+                >
                   {params.referenceNumber}
                 </Text>
               </View>
@@ -104,23 +104,23 @@ export default function CheckoutScreen() {
               <View>
                 <Text style={styles.smallLabel}>START DATE</Text>
                 <Text style={styles.detailValue}>
-                  {params.startDate || "N/A"}
+                  {formatDate(params.startDate) || "N/A"}
                 </Text>
               </View>
               <View style={{ alignItems: "flex-end" }}>
                 <Text style={styles.smallLabel}>END DATE</Text>
                 <Text style={styles.detailValue}>
-                  {params.endDate || "N/A"}
+                  {formatDate(params.endDate) || "N/A"}
                 </Text>
               </View>
             </View>
 
-            <View style={styles.addressSection}>
+            {/* <View style={styles.addressSection}>
               <Text style={styles.smallLabel}>LOCATION</Text>
               <Text style={styles.detailValue}>
-                {storageSpaceData?.address || "Assigned Facility Location"}
+                {storageSpaceData?.location || "Assigned Facility Location"}
               </Text>
-            </View>
+            </View> */}
           </View>
 
           {/* Footer Action */}
@@ -148,19 +148,16 @@ export default function CheckoutScreen() {
             </TouchableOpacity>
 
             <View style={styles.securityNotice}>
-              <Ionicons name="shield-checkmark" size={14} color={mutedText} />
+              <Ionicons
+                name="shield-checkmark"
+                size={14}
+                color={Theme.colors.success}
+              />
               <Text style={styles.securityNoticeText}>
                 Encrypted, secure payment processing
               </Text>
             </View>
           </View>
-        </View>
-
-        <View style={styles.supportLink}>
-          <Text style={styles.supportText}>
-            Secured by{" "}
-            <Text style={{ fontWeight: "700", color: "#635BFF" }}>stripe</Text>
-          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -173,12 +170,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F7F9",
   },
   content: {
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     alignItems: "center",
   },
   header: {
     alignItems: "center",
-    marginVertical: 30,
+    marginBottom: 10,
   },
   mainTitle: {
     fontSize: 26,
@@ -188,7 +186,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontSize: 15,
-    color: mutedText,
+    color: Theme.colors.textMuted,
     textAlign: "center",
     paddingHorizontal: 20,
     lineHeight: 22,
@@ -211,7 +209,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     fontWeight: "700",
-    color: mutedText,
+    color: Theme.colors.textMuted,
     textTransform: "uppercase",
     letterSpacing: 1,
   },
@@ -261,7 +259,7 @@ const styles = StyleSheet.create({
   smallLabel: {
     fontSize: 10,
     fontWeight: "700",
-    color: mutedText,
+    color: Theme.colors.textMuted,
     marginBottom: 4,
   },
   detailValue: {
@@ -277,7 +275,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   primaryButton: {
-    backgroundColor: brandBlue,
+    backgroundColor: Theme.colors.primary,
     height: 55,
     borderRadius: 12,
     flexDirection: "row",
@@ -303,7 +301,7 @@ const styles = StyleSheet.create({
   },
   securityNoticeText: {
     fontSize: 12,
-    color: mutedText,
+    color: Theme.colors.textMuted,
   },
   supportLink: {
     marginTop: 30,
@@ -311,7 +309,7 @@ const styles = StyleSheet.create({
   },
   supportText: {
     fontSize: 13,
-    color: mutedText,
+    color: Theme.colors.textMuted,
     letterSpacing: 0.5,
     textTransform: "uppercase",
   },

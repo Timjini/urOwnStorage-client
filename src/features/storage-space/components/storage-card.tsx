@@ -1,10 +1,10 @@
 import { Theme } from "@/constants/theme";
+import { StorageSpace } from "@/entities/storage-space/model";
 import { formatAddress } from "@/utils/addressHelper";
 import { getFullImageUrl } from "@/utils/imageHelpers";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { StorageSpace } from "../types";
 
 type CardProps = {
   space: StorageSpace;

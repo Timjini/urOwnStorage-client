@@ -34,7 +34,7 @@ async function apiRequest<T>(
         return { data: [] } as T;
       }
 
-      throw new Error(data.message || `API Error: ${response.status}`);
+      throw new Error(data.errors[0] || `API Error: ${response.status}`);
     }
 
     return data as T;

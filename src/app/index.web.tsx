@@ -34,7 +34,7 @@ export default function WelcomeScreen() {
             >
               <View style={styles.logoContainer}>
                 <Text style={styles.logoText}>
-                  Us<Text style={{ color: Theme.colors.primary }}>Own</Text>
+                  Ur<Text style={{ color: Theme.colors.primary }}>Own</Text>
                   <Text style={{ color: "#fff" }}>Storage</Text>
                 </Text>
               </View>

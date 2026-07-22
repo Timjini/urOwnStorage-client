@@ -9,7 +9,7 @@ import { StorageSpaceSkeleton } from "@/features/storage-space/components/storag
 import { useStorageSpaces } from "@/features/storage-space/hooks/useStorageSpace";
 import { getDefaultLocation } from "@/utils/location-helper";
 import { useLocalSearchParams } from "expo-router";
-import { ScrollView, StatusBar, StyleSheet, View } from "react-native";
+import { FlatList, StatusBar, StyleSheet, View } from "react-native";
 
 export default function Index() {
   const params = useLocalSearchParams();
@@ -18,7 +18,7 @@ export default function Index() {
 
   const auth = useAppStore((state) => state.auth);
   console.log("authToken =====>", auth);
-  const logout = useAppStore((state) => state.logout);
+  // const logout = useAppStore((state) => state.logout);
 
   // console.log("latitude =====>", latitude);
   // console.log("longitude =====>", longitude);
@@ -38,6 +38,7 @@ export default function Index() {
     lat: coordinates?.[1],
     lng: coordinates?.[0],
     distance: 10,
+    page: 5,
   };
 
   const {
@@ -70,7 +71,7 @@ export default function Index() {
           />
         </View>
 
-        <ScrollView style={styles.listScroll}>
+        <View style={styles.listScroll}>
           {isPending && (
             <>
               <StorageSpaceSkeleton />
@@ -81,14 +82,16 @@ export default function Index() {
 
           {isError && <ErrorScreen refetch={refetch} />}
 
-          {!isPending &&
-            !isError &&
-            spaces?.map((space) => (
-              <StorageSpaceCard key={space.id} space={space} />
-            ))}
+          <FlatList
+            data={spaces}
+            renderItem={({ item }) => (
+              <StorageSpaceCard key={item.id} space={item} />
+            )}
+            keyExtractor={(item) => item.id}
+          />
 
           {!isPending && !isError && spaces?.length === 0 && <NotFoundScreen />}
-        </ScrollView>
+        </View>
       </View>
     </View>
   );

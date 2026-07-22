@@ -44,11 +44,10 @@ export const useCreateCheckout = () => {
           storageSpace: JSON.stringify(attrs?.storageSpace ?? {}),
           paymentIntentClientSecret: attrs?.stripeClientSecret ?? "",
           stripeCheckoutUrl: stripeUrl,
-          referenceNumber: attrs.reference,
+          referenceNumber: attrs?.reference,
         },
       });
     },
-    onError: (error) =>
-      console.error("useCreateCheckout failed:", error.message),
+    onError: (error) => console.log("useCreateCheckout failed:", error.message),
   });
 };

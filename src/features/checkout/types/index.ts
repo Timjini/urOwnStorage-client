@@ -11,6 +11,7 @@ export interface Checkout {
   itemType: "Furniture" | "Boxes" | "Vehicle" | "Other";
   instructions: string;
   userData: User;
+  agreedToTerms: boolean;
 }
 
 export interface User {

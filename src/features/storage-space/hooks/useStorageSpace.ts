@@ -1,7 +1,20 @@
 "use client";
+import { STORAGE_SPACES } from "@/constants/appGlobal";
+import { StorageSpace } from "@/entities/storage-space/model";
+import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
+import { apiClient } from "@/lib/apiClient";
+import { JsonApiResponse } from "@/types/api";
 import { useQuery } from "@tanstack/react-query";
 import { StorageSpaceService } from "../services";
-import { StorageSpaceFilters } from "@/features/localisation/filter-location/types";
+
+export const storageSpaceApi = {
+  // later convert this url to infinite scrolling
+  fetchAllStorageSpaces: () => async () => {
+    return await apiClient.get<JsonApiResponse<StorageSpace>>(
+      `${STORAGE_SPACES}`,
+    );
+  },
+};
 
 export const useStorageSpaces = (
   filters?: StorageSpaceFilters,
@@ -12,7 +25,7 @@ export const useStorageSpaces = (
     queryFn: ({ pageParam = 1 }) =>
       StorageSpaceService.getAvailableSpaces({
         ...filters,
-        page: pageParam
+        page: pageParam,
       }),
     staleTime: 1000 * 60 * 5,
     ...options,
